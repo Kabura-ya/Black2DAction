@@ -2358,7 +2358,7 @@ MonoBehaviour:
   fallHight: 3
   fallSpeed: 40
   groundHight: 0
-  invincibleTime: 2
+  invincibleTime: 0.2
   blinkInterval: 0.1
   whiteFlashMaterial: {fileID: 0}
 --- !u!95 &1991103949
@@ -2697,6 +2697,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3270835882144238350, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 0b50937c3e2790e459dcc5198fb3af0b, type: 2}
+    - target: {fileID: 3270835882144238350, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
       propertyPath: m_GravityScale
       value: 2
       objectReference: {fileID: 0}
@@ -2725,17 +2729,33 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4810301657318999593, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
+      propertyPath: getEnergy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810301657318999593, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
       propertyPath: jumpForce
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810301657318999593, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
+      propertyPath: maxHoldTime
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4810301657318999593, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
       propertyPath: dashDistance
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4810301657318999593, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
+      propertyPath: energyBullet
+      value: 
+      objectReference: {fileID: 3810131694700324672, guid: b3cc62a8064c90541a1bae04a1dad4ed, type: 3}
+    - target: {fileID: 4810301657318999593, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
       propertyPath: sliderEnergy
       value: 
       objectReference: {fileID: 1636094022}
+    - target: {fileID: 4810301657318999593, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
+      propertyPath: dashRecastTime
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 5822127031027675100, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -2792,6 +2812,9 @@ PrefabInstance:
     - {fileID: 1251787078825045683, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
     m_RemovedGameObjects:
     - {fileID: 7154015987082082238, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
+    - {fileID: 4253612851382398447, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
+    - {fileID: 4216270579467343308, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
+    - {fileID: 8400027321326247478, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6196462469975719966, guid: e5b6b429fc50a3f438db6671de6adf0e, type: 3}
       insertIndex: -1

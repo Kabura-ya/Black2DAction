@@ -37,10 +37,10 @@ public class Attack : MonoBehaviour
 
     public void EnableAttack()
     {
-        StartCoroutine(EnableColliderForOneFrame());
+        StartCoroutine(EnableCollider());
     }
 
-    IEnumerator EnableColliderForOneFrame()
+    IEnumerator EnableCollider()
     {
         // コライダーを有効化
         col.enabled = true;

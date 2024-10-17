@@ -27,7 +27,7 @@ public class Boss1 : MonoBehaviour, IDamageable
 
     private Animator anim;//アニメーター
 
-    public float invincibleTime = 0.5f;  // 無敵時間（点滅時間）
+    public float invincibleTime = 0.2f;  // 無敵時間（点滅時間）
     public float blinkInterval = 0.1f;  // 点滅の間隔
     private SpriteRenderer spriteRenderer;
     private bool isInvincible = false;
@@ -52,9 +52,9 @@ public class Boss1 : MonoBehaviour, IDamageable
 
     private void AnimSet()
     {
-        Debug.Log("AnimSet");
+        //Debug.Log("AnimSet");
         float actionfloat = action;
-        Debug.Log(action);
+        //Debug.Log(action);
         anim.SetFloat("action", actionfloat);
         anim.SetBool("onGround", onGround);
         if (rigidbody2d.velocity.x != 0 || rigidbody2d.velocity.y != 0) {
@@ -127,10 +127,10 @@ public class Boss1 : MonoBehaviour, IDamageable
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.Log("OnTrigger");
+        //Debug.Log("OnTrigger");
         if (collision.gameObject.tag == "Player" && enableHit)
         {
-            Debug.Log("OntrrigerEnter_Player");
+            //Debug.Log("OntrrigerEnter_Player");
             var damageTarget = collision.gameObject.GetComponent<IDamageable>();
             if (damageTarget != null)
             {

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -18,8 +19,16 @@ public class Player : MonoBehaviour, IDamageable
     public float dashRecastTime = 0.5f;//ダッシュをまたできるまでの時間
     private bool dashTimeRecast = false;
     private bool dashGroundRecast = false;
+    private string drainTag = "Enemy";
+    //エナジー関係
     public float maxEnergy = 10;
-    private float energy;
+    public float energy;
+    public float getEnergy = 1;
+    public Slider sliderEnergy;
+    //エナジー攻撃関係
+    public float energyCost = 4;
+    public GameObject energyBullet;
+    public float shootPos = 1; //弾をプレイヤーからどの程度前で撃つか
     //ジャンプ関係
     public float jumpForce = 10f;  // ジャンプ力
     public float holdJumpMultiplier = 0.5f;  // ジャンプボタンを押し続けた場合の力
@@ -40,14 +49,14 @@ public class Player : MonoBehaviour, IDamageable
     public int maxHp = 10;
     public int hp;//体力
     public Slider sliderHp;
-    public Slider sliderEnergy;
-    private bool damaged = false;
-    public float damagedTime = 0.2f;
+    private bool damaged = false;//ダメージを受けたらdamagedTimeの時間分だけtrueになる（ダメージを受けたアニメーションを再生する用）
+    public float damagedTime = 0.2f;//ダメージを受けたアニメーションを再生する時間
 
     public float invincibleTime = 0.5f;  // 無敵時間（点滅時間）
     public float blinkInterval = 0.1f;  // 点滅の間隔
     private SpriteRenderer spriteRenderer;
     private bool isInvincible = false;
+
 
     public enum PlayerState
     {
@@ -64,6 +73,7 @@ public class Player : MonoBehaviour, IDamageable
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         sliderHp.value = maxHp;
+        sliderEnergy.value = 0;
         hp = maxHp;
         energy = 0;
         originagGravity = rb.gravityScale;
@@ -74,9 +84,11 @@ public class Player : MonoBehaviour, IDamageable
     {
         AnimSet();
         Jump();
+        Flip();
         Move();
         Attack();
         Dash();
+        EnergyBullet();
     }
 
     private void FixedUpdate()
@@ -86,6 +98,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             //Debug.Log("PlayerGround");
         }
+
     }
     private void AnimSet()
     {
@@ -107,9 +120,26 @@ public class Player : MonoBehaviour, IDamageable
         else
         {
             countAttack -= Time.deltaTime;
-            if (countAttack < 0) { countAttack = 0; }
-            attack.DisableAttack();
+            if (countAttack <= 0) { countAttack = 0; }
             isAttacking = false;
+            attack.DisableAttack();//今は使ってない
+        }
+    }
+
+    private void Flip()
+    {
+        if (!(isAttacking || dashing)) {
+            if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
+            {
+                //何もしない
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            } else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
         }
     }
 
@@ -122,13 +152,13 @@ public class Player : MonoBehaviour, IDamageable
         }
         else if(Input.GetKey(KeyCode.RightArrow)){
             //transform.position += Vector3.right * speed * Time.deltaTime;
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+            //transform.rotation = Quaternion.Euler(0, 0, 0);
             rb.velocity = new Vector2(speed, rb.velocity.y);
             moving = true;
         }
-        else if (Input.GetKey(KeyCode.LeftArrow)){
-            //transform.position += Vector3.left * speed * Time.deltaTime;
-            transform.rotation = Quaternion.Euler(0, 180, 0);
+        else if(Input.GetKey(KeyCode.LeftArrow)){
+            //transform.position += Vector3.right * speed * Time.deltaTime;
+            //transform.rotation = Quaternion.Euler(0, 180, 0);
             rb.velocity = new Vector2(-1 * speed, rb.velocity.y);
             moving = true;
         }
@@ -137,21 +167,19 @@ public class Player : MonoBehaviour, IDamageable
             rb.velocity = new Vector2(0, rb.velocity.y);
             moving = false;
         }
-        //rb.velocity = new Vector2(speed, );
     }
 
     private void Dash()//ダッシュ用
     {
         if (Input.GetKey(KeyCode.C) && (dashTimeRecast == false))
         {
-            StartCoroutine(DashC());
+            StartCoroutine(DashC());//dashTimeRecastを一定時間trueにしてダッシュできなくするためだけのコルーチン
         }else if (dashing)
         {
             rb.velocity = transform.right * dashSpeed;
         }
     }
-
-    IEnumerator DashC()
+    IEnumerator DashC()//ダッシュ中のコルーチン
     {
         rb.velocity = transform.right * dashSpeed;
         //rb.gravityScale = 0;
@@ -164,6 +192,15 @@ public class Player : MonoBehaviour, IDamageable
         dashTimeRecast = false;
     }
 
+    private void EnergyBullet()
+    {
+        if (Input.GetKey(KeyCode.S) && energyCost <= energy)
+        {
+            Instantiate(energyBullet, transform.position + shootPos * transform.right, transform.rotation);
+            energy -= energyCost;
+            sliderEnergy.value = (float)energy / maxEnergy;
+        }
+    }
     private void Jump()//ジャンプ用
     {
         // ジャンプ開始
@@ -195,17 +232,17 @@ public class Player : MonoBehaviour, IDamageable
             isJumping = false;
         }
     }
-
-    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (dashing)
+        if (collision.tag == "Enemy" && dashing)
         {
             Debug.Log("DashDrain");
+            energy += getEnergy;
+            sliderEnergy.value = (float)energy / maxEnergy;
         }
-        Debug.Log("OntrrigerEnter");
+
+        Debug.Log("OntrrigerEnter_Drain");
     }
-    */
 
     private bool InvincibleJudge()//ダメージを受ける状態ならfalseを返す
     {
@@ -259,8 +296,6 @@ public class Player : MonoBehaviour, IDamageable
         damaged = true;
         yield return new WaitForSeconds(damagedTime);
         damaged = false;
-
-
     }
     public void Death()
     {
