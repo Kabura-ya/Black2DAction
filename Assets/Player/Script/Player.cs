@@ -234,14 +234,29 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
+        if (collision.gameObject.tag == "Enemy" && dashing)
+        {
+            Debug.Log("DashDrain");
+            var drainTarget = collision.gameObject.GetComponent<IDrainable>();
+            if (drainTarget != null && drainTarget.Drain())
+            {
+                Debug.Log("DashDrainSucceed");
+                energy += getEnergy;
+                sliderEnergy.value = (float)energy / maxEnergy;
+            }
+        }
+
+        /*
         if (collision.tag == "Enemy" && dashing)
         {
             Debug.Log("DashDrain");
             energy += getEnergy;
             sliderEnergy.value = (float)energy / maxEnergy;
         }
+        */
 
-        Debug.Log("OntrrigerEnter_Drain");
+        Debug.Log("OntrrigerEnter_Player");
     }
 
     private bool InvincibleJudge()//ƒ_ƒ[ƒW‚ğó‚¯‚éó‘Ô‚È‚çfalse‚ğ•Ô‚·

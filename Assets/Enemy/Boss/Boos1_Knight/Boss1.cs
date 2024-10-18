@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Boss1 : MonoBehaviour, IDamageable
+public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 {
     public int attack = 1;
     public int hp = 10;
@@ -25,6 +25,9 @@ public class Boss1 : MonoBehaviour, IDamageable
     private bool moving = false;
     private int action = 1;
 
+    public AttackEnemy sword;//剣攻撃用のクラス
+    public SightEnemy swordSight;
+
     private Animator anim;//アニメーター
 
     public float invincibleTime = 0.2f;  // 無敵時間（点滅時間）
@@ -42,22 +45,23 @@ public class Boss1 : MonoBehaviour, IDamageable
         spriteRenderer = GetComponent<SpriteRenderer>();
         ChooseAction();
     }
-                                                                       
+
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("OnTrigger");
         AnimSet();
     }
 
     private void AnimSet()
     {
         //Debug.Log("AnimSet");
-        float actionfloat = action;
         //Debug.Log(action);
-        anim.SetFloat("action", actionfloat);
+        anim.SetInteger("action", action);
         anim.SetBool("onGround", onGround);
-        if (rigidbody2d.velocity.x != 0 || rigidbody2d.velocity.y != 0) {
+        if (rigidbody2d.velocity.x != 0 || rigidbody2d.velocity.y != 0)
+        {
             anim.SetBool("moving", true);
         }
         else
@@ -66,10 +70,6 @@ public class Boss1 : MonoBehaviour, IDamageable
         }
     }
 
-    private void OnAnimatorMove()
-    {
-        
-    }
     protected void FlipToPlayer()//Playerの方を向く
     {
         if (playerTrans.position.x > transform.position.x)
@@ -84,12 +84,35 @@ public class Boss1 : MonoBehaviour, IDamageable
 
     private void ChooseAction()
     {
-        action = Random.Range(1, 3);
-        if (action == 1) {
-            StartCoroutine(Dash());
-        } else if (action == 2) {
-            StartCoroutine(Fall());
+
+        if (swordSight.IsPlayerinSight())
+        {
+            if (0.5 < Random.value)//プレイヤーが視界のコライダー内に居たら1/2の確率で剣で攻撃
+            {
+                action = 3;
+                StartCoroutine(Sword());
+                return;
+            }
         }
+        action = Random.Range(1, 3);
+        if (action == 1)
+        {
+            StartCoroutine(Dash());
+            return;
+        }
+        else if (action == 2)
+        {
+            StartCoroutine(Fall());
+            return;
+        }
+        
+        /*
+        else if (action == 3)
+        {
+            StartCoroutine(Sword());
+            return;
+        }*/
+        
     }
 
     private IEnumerator Dash()
@@ -125,7 +148,34 @@ public class Boss1 : MonoBehaviour, IDamageable
         ChooseAction();
     }
 
+    private IEnumerator Sword()
+    {
+        FlipToPlayer();
+        yield return new WaitForSeconds(idleTime);
+        sword.EnableAttack();
+        yield return new WaitForSeconds(idleTime);
+        sword.DisableAttack();
+        action = 0;
+        yield return new WaitForSeconds(idleTime);
+        ChooseAction();
+    }
+
+    /*
     private void OnTriggerStay2D(Collider2D collision)
+    {
+        //Debug.Log("OnTrigger");
+        if (collision.gameObject.tag == "Player" && enableHit)
+        {
+            //Debug.Log("OntrrigerEnter_Player");
+            var damageTarget = collision.gameObject.GetComponent<IDamageable>();
+            if (damageTarget != null)
+            {
+                damageTarget.Damage(attack);
+            }
+        }
+    }
+    */
+    public void BodyStay(Collider2D collision)
     {
         //Debug.Log("OnTrigger");
         if (collision.gameObject.tag == "Player" && enableHit)
@@ -150,7 +200,8 @@ public class Boss1 : MonoBehaviour, IDamageable
 
     public void Damage(int damage)
     {
-        if (enableHit) {
+        if (enableHit)
+        {
             hp -= damage;
 
             if (hp <= 0)
@@ -164,7 +215,7 @@ public class Boss1 : MonoBehaviour, IDamageable
         }
     }
 
-    IEnumerator BlinkCoroutine(float duration)
+    IEnumerator BlinkCoroutine(float duration)//ダメージを受けた時に一瞬点滅する
     {
         float elapsedTime = 0f;
 
@@ -187,5 +238,10 @@ public class Boss1 : MonoBehaviour, IDamageable
     public void Death()
     {
         Destroy(this.gameObject);
+    }
+
+    public bool Drain()
+    {
+        return enableHit;//ダメージ判定とかを有効にしている間のみドレイン可能
     }
 }
