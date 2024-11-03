@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IDamageable
 {
     // Start is called before the first frame update
+    public GameManager gameManager;//ゲームオーバーやクリアなどを処理するGamemanagerについているスクリプトの情報を取得するための関数
+
     public float speed = 10;
     private bool moving = false;
     //ダッシュ関係
@@ -71,6 +73,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         sliderHp.value = maxHp;
         sliderEnergy.value = 0;
@@ -103,12 +106,12 @@ public class Player : MonoBehaviour, IDamageable
     private void AnimSet()
     {
         anim.SetBool("moving", moving);
-        anim.SetBool("jumping", isJumping);
+        anim.SetBool("jumping", !isGround);
         anim.SetBool("attacking", isAttacking);
         anim.SetBool("damage", damaged);
         anim.SetBool("dashing", dashing);
     }
-    private void Attack()
+    private void Attack()//近距離攻撃（攻撃用の子オブジェクトの関数で）
     {
         if (Input.GetKeyDown(KeyCode.X) && (countAttack <= 0))
         {
@@ -126,7 +129,7 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    private void Flip()
+    private void Flip()//反転(ダッシュ中は反転しない)
     {
         if (!(isAttacking || dashing)) {
             if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
@@ -183,8 +186,8 @@ public class Player : MonoBehaviour, IDamageable
     {
         rb.velocity = transform.right * dashSpeed;
         //rb.gravityScale = 0;
-        dashing = true;
-        dashTimeRecast = true;
+        dashing = true;//ダッシュ中はtrueにする
+        dashTimeRecast = true;//ダッシュのリキャスト時間が過ぎるまでtrueにする
         yield return new WaitForSeconds(dashDistance / dashSpeed);
         //rb.gravityScale = originagGravity;
         dashing = false;
@@ -192,9 +195,9 @@ public class Player : MonoBehaviour, IDamageable
         dashTimeRecast = false;
     }
 
-    private void EnergyBullet()
+    private void EnergyBullet()//エネルギー弾（前方に直進する弾）を撃つ
     {
-        if (Input.GetKey(KeyCode.S) && energyCost <= energy)
+        if (Input.GetKeyDown(KeyCode.S) && energyCost <= energy)
         {
             Instantiate(energyBullet, transform.position + shootPos * transform.right, transform.rotation);
             energy -= energyCost;
@@ -232,9 +235,10 @@ public class Player : MonoBehaviour, IDamageable
             isJumping = false;
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void BodyEnter(Collider2D collision)
     {
 
+        Debug.Log("Player_BodyEnter");
         if (collision.gameObject.tag == "Enemy" && dashing)
         {
             Debug.Log("DashDrain");
@@ -314,6 +318,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     public void Death()
     {
+        gameManager.GameOver();
         Destroy(this.gameObject);
     }
 

@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
 public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 {
+    public GameManager gameManager;//ゲームオーバーやクリアなどを処理するGamemanagerについているスクリプトの情報を取得するための関数
+
     public int attack = 1;
     public int hp = 10;
     protected GameObject player;//プレイヤーの情報を使えるようにしておく
@@ -20,10 +23,12 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 
     public float groundHight;
 
+    private bool start = true;
     private bool onGround = true;
-    private bool enableHit = true;//これがtrueの時だけダメージを受けたり与える
+    private bool enableHit = false;//これがtrueの時だけダメージを受けたり与える
     private bool moving = false;
     private int action = 1;
+    private bool dead = false;
 
     public AttackEnemy sword;//剣攻撃用のクラス
     public SightEnemy swordSight;
@@ -35,14 +40,25 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     private SpriteRenderer spriteRenderer;
     private bool isInvincible = false;
     public Material whiteFlashMaterial; // 白く点滅させるためのマテリアル
+
+    Coroutine actionCoroutine;//死亡時などにコルーチンを停止させるために、行動のコルーチンの引数を入れておく
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();//自身のRigidbodyを変数に入れる
+        //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = GameObject.Find("Player");
         playerTrans = player.transform;
         anim = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        StartCoroutine(StartC());
+    }
+
+    IEnumerator StartC()//最初の演出をする
+    {
+        yield return new WaitForSeconds(2);
+        start = false;
+        enableHit = true;
         ChooseAction();
     }
 
@@ -50,7 +66,6 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("OnTrigger");
         AnimSet();
     }
 
@@ -58,16 +73,21 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     {
         //Debug.Log("AnimSet");
         //Debug.Log(action);
+        anim.SetBool("start", start);
         anim.SetInteger("action", action);
         anim.SetBool("onGround", onGround);
-        if (rigidbody2d.velocity.x != 0 || rigidbody2d.velocity.y != 0)
-        {
-            anim.SetBool("moving", true);
-        }
-        else
+        /*
+        if (rigidbody2d.velocity.x == 0 && rigidbody2d.velocity.y == 0)
         {
             anim.SetBool("moving", false);
         }
+        else
+        {
+            anim.SetBool("moving", true);
+        }
+        */
+        anim.SetBool("moving", moving);
+        anim.SetBool("dead", dead);
     }
 
     protected void FlipToPlayer()//Playerの方を向く
@@ -90,19 +110,19 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             if (0.5 < Random.value)//プレイヤーが視界のコライダー内に居たら1/2の確率で剣で攻撃
             {
                 action = 3;
-                StartCoroutine(Sword());
+                actionCoroutine = StartCoroutine(Sword());
                 return;
             }
         }
         action = Random.Range(1, 3);
         if (action == 1)
         {
-            StartCoroutine(Dash());
+            actionCoroutine = StartCoroutine(Dash());
             return;
         }
         else if (action == 2)
         {
-            StartCoroutine(Fall());
+            actionCoroutine = StartCoroutine(Fall());
             return;
         }
         
@@ -115,21 +135,23 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         
     }
 
-    private IEnumerator Dash()
+    private IEnumerator Dash()//突進攻撃
     {
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
         rigidbody2d.velocity = transform.right * dashSpeed;
         dashing = true;
+        moving = true;
         yield return new WaitForSeconds(dashDistance / dashSpeed);
         rigidbody2d.velocity = new Vector2(0, 0);
         dashing = false;
+        moving = false;
         action = 0;
         yield return new WaitForSeconds(idleTime);
         ChooseAction();
     }
 
-    private IEnumerator Fall()
+    private IEnumerator Fall()//落下攻撃
     {
         enableHit = false;
         yield return new WaitForSeconds(idleTime);
@@ -137,18 +159,20 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         transform.position = new Vector2(playerTrans.position.x, fallHight);
         enableHit = true;
         rigidbody2d.velocity = new Vector2(0, 0);
-        moving = true;
+        moving = false;
         yield return new WaitForSeconds(idleTime);
         rigidbody2d.velocity = new Vector2(0, -1 * fallSpeed);
         moving = true;
         yield return new WaitForSeconds(0.2f);
         yield return new WaitForSeconds(idleTime);
+        rigidbody2d.velocity = new Vector2(0, 0);
+        moving = false;
         action = 0;
         yield return new WaitForSeconds(idleTime);
         ChooseAction();
     }
 
-    private IEnumerator Sword()
+    private IEnumerator Sword()//近距離攻撃
     {
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
@@ -175,7 +199,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         }
     }
     */
-    public void BodyStay(Collider2D collision)
+    public void BodyStay(Collider2D collision)//Body部分の子オブジェクトのOnTriggerStayで呼ばれる
     {
         //Debug.Log("OnTrigger");
         if (collision.gameObject.tag == "Player" && enableHit)
@@ -189,7 +213,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)//接地判定（敵が地面に触れたかを判定するためにわざわざEnemyGroundCheckタグを床にだけつけている）
     {
         if (collision.gameObject.tag == "EnemyGroundCheck")
         {
@@ -198,7 +222,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         }
     }
 
-    public void Damage(int damage)
+    public void Damage(int damage)//Bodyの子オブジェクトから呼ばれる
     {
         if (enableHit)
         {
@@ -235,13 +259,23 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         spriteRenderer.enabled = true;
     }
 
-    public void Death()
+    public void Death()//体力が0以下になった時に呼ばれ、消滅する
     {
+        StartCoroutine(DeathC());
+    }
+
+    IEnumerator DeathC()
+    {
+        gameManager.GameClear();
+        StopCoroutine(actionCoroutine);
+        enableHit = false;
+        dead = true;
+        yield return new WaitForSeconds(3);
         Destroy(this.gameObject);
     }
 
-    public bool Drain()
+    public bool Drain()//Bodyの子オブジェクトから呼ばれる
     {
-        return enableHit;//ダメージ判定とかを有効にしている間のみドレイン可能
+        return  enableHit;//ダメージ判定とかを有効にしている間のみドレイン可能
     }
 }
