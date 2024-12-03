@@ -12,6 +12,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public int hp = 10;
     protected GameObject player;//プレイヤーの情報を使えるようにしておく
     protected Transform playerTrans;
+    Player playerScript;//プレイヤーのスクリプトの関数を利用できるようにする
     protected Rigidbody2D rigidbody2d;
     private bool dashing;
     public float dashDistance = 20;
@@ -33,13 +34,17 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public AttackEnemy sword;//剣攻撃用のクラス
     public SightEnemy swordSight;
 
+    public GameObject bullet;//遠距離攻撃で放つやつ
+
     private Animator anim;//アニメーター
 
+    public GameObject damageEffect;
     public float invincibleTime = 0.2f;  // 無敵時間（点滅時間）
     public float blinkInterval = 0.1f;  // 点滅の間隔
     private SpriteRenderer spriteRenderer;
     private bool isInvincible = false;
     public Material whiteFlashMaterial; // 白く点滅させるためのマテリアル
+
 
     Coroutine actionCoroutine;//死亡時などにコルーチンを停止させるために、行動のコルーチンの引数を入れておく
     // Start is called before the first frame update
@@ -48,6 +53,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         rigidbody2d = GetComponent<Rigidbody2D>();//自身のRigidbodyを変数に入れる
         //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = GameObject.Find("Player");
+        playerScript = player.GetComponent<Player>();//プレイヤーのスクリプトに対して操作できるようにする
         playerTrans = player.transform;
         anim = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -56,12 +62,13 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 
     IEnumerator StartC()//最初の演出をする
     {
+        playerScript.StopPlayer();
         yield return new WaitForSeconds(2);
+        playerScript.StopInterruptPlayer();
         start = false;
         enableHit = true;
         ChooseAction();
     }
-
 
     // Update is called once per frame
     void Update()
@@ -114,7 +121,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
                 return;
             }
         }
-        action = Random.Range(1, 3);
+        action = Random.Range(1, 4);
         if (action == 1)
         {
             actionCoroutine = StartCoroutine(Dash());
@@ -123,6 +130,11 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         else if (action == 2)
         {
             actionCoroutine = StartCoroutine(Fall());
+            return;
+        }
+        else if (action == 3)
+        {
+            actionCoroutine = StartCoroutine(LongRange());
             return;
         }
         
@@ -184,6 +196,16 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         ChooseAction();
     }
 
+    private IEnumerator LongRange()
+    {
+        FlipToPlayer();
+        yield return new WaitForSeconds(idleTime);
+        Instantiate(bullet, transform.position, transform.rotation);
+        action = 0;
+        yield return new WaitForSeconds(idleTime);
+        ChooseAction();
+    }
+
     /*
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -227,6 +249,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         if (enableHit)
         {
             hp -= damage;
+            Instantiate(damageEffect, transform.position, transform.rotation);
 
             if (hp <= 0)
             {

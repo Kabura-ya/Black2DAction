@@ -53,6 +53,7 @@ public class Player : MonoBehaviour, IDamageable
     public Slider sliderHp;
     private bool damaged = false;//ダメージを受けたらdamagedTimeの時間分だけtrueになる（ダメージを受けたアニメーションを再生する用）
     public float damagedTime = 0.2f;//ダメージを受けたアニメーションを再生する時間
+    private bool stop = false;//この変数がtrueの時はプレイヤーを停止させる（演出時など用）
 
     public float invincibleTime = 0.5f;  // 無敵時間（点滅時間）
     public float blinkInterval = 0.1f;  // 点滅の間隔
@@ -86,12 +87,15 @@ public class Player : MonoBehaviour, IDamageable
     void Update()
     {
         AnimSet();
-        Jump();
-        Flip();
-        Move();
-        Attack();
-        Dash();
-        EnergyBullet();
+        if (!stop)
+        {
+            Jump();
+            Flip();
+            Move();
+            Attack();
+            Dash();
+            EnergyBullet();
+        }
     }
 
     private void FixedUpdate()
@@ -102,6 +106,15 @@ public class Player : MonoBehaviour, IDamageable
             //Debug.Log("PlayerGround");
         }
 
+    }
+
+    public void StopPlayer()//演出などでプレイヤーの動作を停止させる用
+    {
+        stop = true;
+    }
+    public void StopInterruptPlayer()
+    {
+        stop = false;
     }
     private void AnimSet()
     {
@@ -265,10 +278,10 @@ public class Player : MonoBehaviour, IDamageable
 
     private bool InvincibleJudge()//ダメージを受ける状態ならfalseを返す
     {
-        return !(isInvincible || dashing);//どれか1つでもtrueならfalseを返し、ダメージを受けない
+        return !(isInvincible || dashing || stop);//どれか1つでもtrueならfalseを返し、ダメージを受けない
     } 
 
-    public void Damage(int damage)
+    public void Damage(int damage)//ダメージをくらう処理
     {
         if (InvincibleJudge())//ダメージを受ける状態か判断
         {
