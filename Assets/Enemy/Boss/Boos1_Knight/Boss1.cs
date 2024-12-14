@@ -243,12 +243,13 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             moving = false;
         }
     }
-
-    public void Damage(int damage)//Bodyの子オブジェクトから呼ばれる
+    public void Damage(int value) { Damage(value, Vector2.zero); }
+    public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
+    public void Damage(int value, Vector2 vector, int type)
     {
         if (enableHit)
         {
-            hp -= damage;
+            hp -= value;
             Instantiate(damageEffect, transform.position, transform.rotation);
 
             if (hp <= 0)

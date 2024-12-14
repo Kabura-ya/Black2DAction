@@ -6,6 +6,7 @@ public class Attack : MonoBehaviour
 {
     // Start is called before the first frame update
     public int damage = 1;
+    public float knockBackSpeed = 10;
     public float recastTime = 0.5f;
     public float enableTime = 0.4f;//攻撃コライダーを有効化する時間
     public BoxCollider2D col;
@@ -28,7 +29,7 @@ public class Attack : MonoBehaviour
                     var damageTarget = results[i].gameObject.GetComponent<IDamageable>();
                     if (damageTarget != null)
                     {
-                        damageTarget.Damage(damage);
+                        damageTarget.Damage(damage, transform.right * knockBackSpeed, 0);
                     }
                 }
             }

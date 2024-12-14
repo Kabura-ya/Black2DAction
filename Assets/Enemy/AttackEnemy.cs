@@ -36,15 +36,15 @@ public class AttackEnemy : MonoBehaviour
 
     public void EnableAttack()
     {
+        col.enabled = true;
         StartCoroutine(EnableCollider());
     }
 
     IEnumerator EnableCollider()
     {
         // コライダーを有効化
-        col.enabled = true;
-        yield return new WaitForSeconds(enableTime); ;
-        col.enabled = false;
+        yield return new WaitForSeconds(enableTime);
+        col.enabled = false;//DisableAttack()でもコライダーを無効化できるが、バグなどでDisableAttackが発動しない時のために一応時間経過でもkライダー無効化できるようにしている
     }
 
     public void DisableAttack()

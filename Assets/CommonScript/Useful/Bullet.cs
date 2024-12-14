@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    //まっすぐ飛ぶ弾用
+    //まっすぐ飛ぶだけのコード（色々使いまわす用）
     // Start is called before the first frame update
     private Rigidbody2D rb;
     public float speed = 10;

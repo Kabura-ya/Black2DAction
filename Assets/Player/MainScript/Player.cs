@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+//using System.Drawing;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditor.Tilemaps;
@@ -27,6 +28,8 @@ public class Player : MonoBehaviour, IDamageable
     public float energy;
     public float getEnergy = 1;
     public Slider sliderEnergy;
+    public Image sliderEnergyImage;//エナジーのスライダーの色を変える用
+    private Color originalEnergySliderColor;
     //エナジー攻撃関係
     public float energyCost = 4;
     public GameObject energyBullet;
@@ -35,9 +38,9 @@ public class Player : MonoBehaviour, IDamageable
     public float jumpForce = 10f;  // ジャンプ力
     public float holdJumpMultiplier = 0.5f;  // ジャンプボタンを押し続けた場合の力
     public float maxHoldTime = 0.2f;  // ジャンプボタンを押し続ける最大時間
-    private float jumpTimeCounter;
+    private float jumpTimeCounter;//2弾ジャンプとかする時のためだがまだ使えていない
     private bool isJumping = false;
-    public GroundCheck ground;
+    public GroundCheck ground;//接地判定用のスクリプト
     private bool isGround;
     private float originagGravity;
     //攻撃関係
@@ -46,11 +49,11 @@ public class Player : MonoBehaviour, IDamageable
     private float countAttack = 0;//攻撃のリキャストまでの時間を記録する用の変数
 
     private Animator anim;//アニメーター
-    private Vector2 inputDirection;
-    private Rigidbody2D rb;
-    public int maxHp = 10;
+    private Vector2 inputDirection;//インプットシステムを使って実装しようとしただけでまだ使っていない
+    private Rigidbody2D rb;//プレイヤーのリジッドボディを入れる変数、速度とか重力とかリジッドボディを使う必要のある操作のために変数を作ってある
+    public int maxHp = 10;//体力の最大値
     public int hp;//体力
-    public Slider sliderHp;
+    public Slider sliderHp;//HPバー
     private bool damaged = false;//ダメージを受けたらdamagedTimeの時間分だけtrueになる（ダメージを受けたアニメーションを再生する用）
     public float damagedTime = 0.2f;//ダメージを受けたアニメーションを再生する時間
     private bool stop = false;//この変数がtrueの時はプレイヤーを停止させる（演出時など用）
@@ -78,6 +81,16 @@ public class Player : MonoBehaviour, IDamageable
         spriteRenderer = GetComponent<SpriteRenderer>();
         sliderHp.value = maxHp;
         sliderEnergy.value = 0;
+        sliderEnergyImage = sliderEnergy.fillRect.GetComponent<Image>();
+        originalEnergySliderColor = sliderEnergyImage.color;
+        if (energyCost > energy)
+        {
+            sliderEnergyImage.color = originalEnergySliderColor / 3;
+        }//energyが技を放てない量ならスライダーの色を暗くする
+        if (sliderEnergyImage == null)
+        {
+            Debug.Log("sliderEnergyImage == null");
+        }
         hp = maxHp;
         energy = 0;
         originagGravity = rb.gravityScale;
@@ -213,8 +226,32 @@ public class Player : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.S) && energyCost <= energy)
         {
             Instantiate(energyBullet, transform.position + shootPos * transform.right, transform.rotation);
+            useEnergy(energyCost);
+        }
+    }
+
+    private bool useEnergy(float useEnergy)//エナジー消費用
+    {
+        if (energy >= useEnergy)
+        {
             energy -= energyCost;
             sliderEnergy.value = (float)energy / maxEnergy;
+            if (energyCost > energy)
+            {
+                sliderEnergyImage.color = originalEnergySliderColor / 3;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void recoverEnergy()//エナジー回復、現状一回のドレインで回復するエナジーの値は一定なので引数なしにしている
+    {
+        energy += getEnergy;
+        sliderEnergy.value = (float)energy / maxEnergy;
+        if (energyCost <= energy)
+        {
+            sliderEnergyImage.color = originalEnergySliderColor;
         }
     }
     private void Jump()//ジャンプ用
@@ -250,17 +287,15 @@ public class Player : MonoBehaviour, IDamageable
     }
     public void BodyEnter(Collider2D collision)
     {
-
         Debug.Log("Player_BodyEnter");
-        if (collision.gameObject.tag == "Enemy" && dashing)
+        if (dashing)//ダッシュ中か
         {
             Debug.Log("DashDrain");
-            var drainTarget = collision.gameObject.GetComponent<IDrainable>();
+            var drainTarget = collision.gameObject.GetComponent<IDrainable>();//触れた相手にドレイン用インターフェースがあるか
             if (drainTarget != null && drainTarget.Drain())
             {
                 Debug.Log("DashDrainSucceed");
-                energy += getEnergy;
-                sliderEnergy.value = (float)energy / maxEnergy;
+                recoverEnergy();
             }
         }
 
@@ -276,29 +311,33 @@ public class Player : MonoBehaviour, IDamageable
         Debug.Log("OntrrigerEnter_Player");
     }
 
-    private bool InvincibleJudge()//ダメージを受ける状態ならfalseを返す
+    private bool InvincibleJudge()//ダメージを受ける状態ならtrueを返す、攻撃にtypeを設定した影響で現在は無意味
     {
         return !(isInvincible || dashing || stop);//どれか1つでもtrueならfalseを返し、ダメージを受けない
-    } 
-
-    public void Damage(int damage)//ダメージをくらう処理
+    }
+    public void Damage(int value) { Damage(value, Vector2.zero); }
+    public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
+    public void Damage(int damage, Vector2 vector, int type)
     {
-        if (InvincibleJudge())//ダメージを受ける状態か判断
+        Debug.Log("PlayerDamage");
+        if (!(isInvincible || stop))
         {
-            Debug.Log("PlayerDamage");
-            hp -= damage;
-            sliderHp.value = (float) hp / maxHp;
-            if (hp <= 0)
-            {
-                Death();
-            }
-            else
-            {
-                StartCoroutine(BlinkCoroutine(invincibleTime));
+            if (!dashing || (type > 0)){//ダッシュしていなかったり、typeが0でなかったらダメージを受ける
+                Debug.Log("PlayerDamage_Get");
+                hp -= damage;
+                sliderHp.value = (float)hp / maxHp;
+                if (hp <= 0)
+                {
+                    Death();
+                }
+                else
+                {
+                    StartCoroutine(BlinkCoroutine(invincibleTime));
+                }
             }
         }
+        rb.velocity = vector; 
     }
-
     IEnumerator BlinkCoroutine(float duration)//ダメージを受けた時に点滅したり一定時間無敵にしたりする
     {
         Debug.Log("BlinkCoroutine");
