@@ -12,6 +12,7 @@ public class Attack : MonoBehaviour
     public BoxCollider2D col;
     Collider2D[] results = new Collider2D[10];  // 最大10個のコライダーを検出
     
+    /*
     private void Update()
     {
         if (col.enabled)
@@ -35,6 +36,7 @@ public class Attack : MonoBehaviour
             }
         }        
     }
+    */
 
     public void EnableAttack()
     {
@@ -54,7 +56,7 @@ public class Attack : MonoBehaviour
         col.enabled = false;
     }
 
-    /*
+    
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
@@ -62,11 +64,11 @@ public class Attack : MonoBehaviour
             var damageTarget = collision.gameObject.GetComponent<IDamageable>();
             if (damageTarget != null)
             {
-                damageTarget.Damage(damage);
+                damageTarget.Damage(damage, transform.right * knockBackSpeed, 0);
             }
         }
     }
-    */
+    
 
     /*
     void OnDrawGizmos()

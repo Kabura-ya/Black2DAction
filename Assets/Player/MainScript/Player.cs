@@ -23,6 +23,7 @@ public class Player : MonoBehaviour, IDamageable
     private bool dashTimeRecast = false;
     private bool dashGroundRecast = false;
     private string drainTag = "Enemy";
+    public GameObject drainEffect;//吸収できた時に出るエフェクト
     //エナジー関係
     public float maxEnergy = 10;
     public float energy;
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour, IDamageable
     public Attack attack;
     private bool isAttacking = false;
     private float countAttack = 0;//攻撃のリキャストまでの時間を記録する用の変数
+    private bool notFlipAttack = false;//攻撃中は反転しない用
 
     private Animator anim;//アニメーター
     private Vector2 inputDirection;//インプットシステムを使って実装しようとしただけでまだ使っていない
@@ -142,22 +144,39 @@ public class Player : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.X) && (countAttack <= 0))
         {
             countAttack = attack.GetComponent<Attack>().recastTime;
-            attack.EnableAttack();
-            isAttacking = true;
+            //attack.EnableAttack();
+            isAttacking = true;//アニメーション遷移用;
+            notFlipAttack = true;
             Debug.Log("Attack");
         }
         else
         {
             countAttack -= Time.deltaTime;
-            if (countAttack <= 0) { countAttack = 0; }
             isAttacking = false;
-            attack.DisableAttack();//今は使ってない
+            if (countAttack <= 0)
+            {
+                countAttack = 0;
+                notFlipAttack = false;//アニメーションでDisableAttackを呼んでfalseにするが、念のためおいてある
+                attack.DisableAttack();//アニメーションで攻撃コライダーを無効化するが、念のためおいてある
+            }
         }
+
+    }
+
+    private void EnableAttack()//通常攻撃時に、アニメーションの方から呼ぶ
+    {
+        attack.EnableAttack();
+        //notFlipAttack = true;
+    }
+    private void DisableAttack()
+    {
+        //notFlipAttack = false;
+        attack.DisableAttack();//今は使ってない
     }
 
     private void Flip()//反転(ダッシュ中は反転しない)
     {
-        if (!(isAttacking || dashing)) {
+        if (!(notFlipAttack || dashing)) {
             if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
             {
                 //何もしない
@@ -220,6 +239,8 @@ public class Player : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(dashRecastTime);
         dashTimeRecast = false;
     }
+
+
 
     private void EnergyBullet()//エネルギー弾（前方に直進する弾）を撃つ
     {
@@ -294,6 +315,7 @@ public class Player : MonoBehaviour, IDamageable
             var drainTarget = collision.gameObject.GetComponent<IDrainable>();//触れた相手にドレイン用インターフェースがあるか
             if (drainTarget != null && drainTarget.Drain())
             {
+                Instantiate(drainEffect, transform.position, transform.rotation);
                 Debug.Log("DashDrainSucceed");
                 recoverEnergy();
             }

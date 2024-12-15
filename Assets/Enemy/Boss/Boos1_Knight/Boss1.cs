@@ -188,12 +188,19 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     {
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
-        sword.EnableAttack();
+        moving = true;
+        //アニメーションの方でsword.EnableAttack();を実行
         yield return new WaitForSeconds(idleTime);
-        sword.DisableAttack();
+        sword.DisableAttack();//
+        moving = false;
         action = 0;
         yield return new WaitForSeconds(idleTime);
         ChooseAction();
+    }
+
+    private void EnabeleAttack_Sword()
+    {
+        sword.EnableAttack();
     }
 
     private IEnumerator LongRange()
