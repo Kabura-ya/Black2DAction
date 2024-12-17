@@ -17,13 +17,24 @@ public class Player : MonoBehaviour, IDamageable
     //ダッシュ関係
     public float dashSpeed = 20;
     public float dashDistance = 50;
-    private float dashY;//ダッシュするときに高さが変わらないように
-    private bool dashing = false;
+    private float dashY;//（今はつかっていない）ダッシュするときに高さが変わらないように
+    private bool dashing = false;//ダッシュ（とチャージダッシュ）中にtrueになる
     public float dashRecastTime = 0.5f;//ダッシュをまたできるまでの時間
     private bool dashTimeRecast = false;
     private bool dashGroundRecast = false;
-    private string drainTag = "Enemy";
-    public GameObject drainEffect;//吸収できた時に出るエフェクト
+    public GameObject dashDrainEffect;//吸収できた時に出るエフェクト
+
+    //チャージダッシュ関係
+    public float chargeDash_chargeTime;//チャージダッシュ用のチャージ時間
+    private float chargeDashTimeCount = 0;//チャージ時間のカウント
+    public float chargeDashSpeed = 20;
+    public float chargeDashDistance = 50;
+    private float chargeDashY;//（今はつかっていない）チャージ中とダッシュするときに高さが変わらないように
+    private bool chargeDashing = false;//チャージダッシュ中にtrueになる
+    public float chargeDashRecastTime = 0.5f;//ダッシュをまたできるまでの時間
+    private bool chargeDashTimeRecast = false;
+    private bool chargeDashGroundRecast = false;
+    public GameObject chargeDashdrainEffect;//吸収できた時に出るエフェクト
     //エナジー関係
     public float maxEnergy = 10;
     public float energy;
@@ -65,9 +76,10 @@ public class Player : MonoBehaviour, IDamageable
     private SpriteRenderer spriteRenderer;
     private bool isInvincible = false;
 
-
-    public enum PlayerState
+    
+    public enum PlayerState//プレイヤーの状態
     {
+        Stop,       //停止中（演出中などで動かない）        
         Idle,       // 待機中
         Moving,     // 移動中
         Jumping,    // ジャンプ中
@@ -75,8 +87,11 @@ public class Player : MonoBehaviour, IDamageable
         Dashing,    // ダッシュ中
         Stunned     // スタン中（例として追加）
     }
+
+    private PlayerState playerState = PlayerState.Idle;
     void Start()
     {
+
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -113,6 +128,11 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+    private bool JudgeNormalState()//攻撃やダッシュ中は他の動作ができないようにしたいので、他の動作をしてもいいIdle,Moving,Jumping中のみtrueを返す関数
+    {
+        return (playerState == PlayerState.Idle || playerState == PlayerState.Moving || playerState == PlayerState.Jumping);
+    }
+
     private void FixedUpdate()
     {
         isGround = ground.IsGround();//設置判定
@@ -123,11 +143,11 @@ public class Player : MonoBehaviour, IDamageable
 
     }
 
-    public void StopPlayer()//演出などでプレイヤーの動作を停止させる用
+    public void StopPlayer()//演出などでプレイヤーを操作できなくさせる用
     {
         stop = true;
     }
-    public void StopInterruptPlayer()
+    public void StopInterruptPlayer()//StopPlayer()で止めたのを戻す用
     {
         stop = false;
     }
@@ -144,9 +164,9 @@ public class Player : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.X) && (countAttack <= 0))
         {
             countAttack = attack.GetComponent<Attack>().recastTime;
-            //attack.EnableAttack();
-            isAttacking = true;//アニメーション遷移用;
-            notFlipAttack = true;
+            //EnableAttack()をアニメーションの方で呼ぶ
+            isAttacking = true;//アニメーション遷移用に一瞬だけtrueにする
+            notFlipAttack = true;//これがtrueの間は振り向かない
             Debug.Log("Attack");
         }
         else
@@ -156,21 +176,19 @@ public class Player : MonoBehaviour, IDamageable
             if (countAttack <= 0)
             {
                 countAttack = 0;
-                notFlipAttack = false;//アニメーションでDisableAttackを呼んでfalseにするが、念のためおいてある
-                attack.DisableAttack();//アニメーションで攻撃コライダーを無効化するが、念のためおいてある
+                notFlipAttack = false;//攻撃が終わったので振り向けるようにするアニメーションでDisableAttackを呼んでfalseにするが、念のためおいてある
+                attack.DisableAttack();//アニメーションでDisableAttack()を呼んで攻撃コライダーを無効化するが、念のためおいてある
             }
         }
 
     }
 
-    private void EnableAttack()//通常攻撃時に、アニメーションの方から呼ぶ
+    private void EnableAttack()//通常攻撃用のコライダーを有効化する、通常攻撃時に、アニメーションの方から呼ぶ
     {
         attack.EnableAttack();
-        //notFlipAttack = true;
     }
     private void DisableAttack()
     {
-        //notFlipAttack = false;
         attack.DisableAttack();//今は使ってない
     }
 
@@ -221,13 +239,37 @@ public class Player : MonoBehaviour, IDamageable
     {
         if (Input.GetKey(KeyCode.C) && (dashTimeRecast == false))
         {
-            StartCoroutine(DashC());//dashTimeRecastを一定時間trueにしてダッシュできなくするためだけのコルーチン
+            StartCoroutine(DashCoroutine());//dashTimeRecastを一定時間trueにしてダッシュできなくするためだけのコルーチン
         }else if (dashing)
         {
             rb.velocity = transform.right * dashSpeed;
         }
     }
-    IEnumerator DashC()//ダッシュ中のコルーチン
+    IEnumerator DashCoroutine()//ダッシュ中のコルーチン
+    {
+        rb.velocity = transform.right * dashSpeed;
+        //rb.gravityScale = 0;
+        dashing = true;//ダッシュ中はtrueにする
+        dashTimeRecast = true;//ダッシュのリキャスト時間が過ぎるまでtrueにする
+        yield return new WaitForSeconds(dashDistance / dashSpeed /*ダッシュ中の時間*/);
+        //rb.gravityScale = originagGravity;
+        dashing = false;
+        yield return new WaitForSeconds(dashRecastTime);
+        dashTimeRecast = false;
+    }
+
+    private void ChargeDash()//チャージダッシュ用
+    {
+        if (Input.GetKey(KeyCode.D) && (dashTimeRecast == false))
+        {
+            StartCoroutine(ChargeDashC());//dashTimeRecastを一定時間trueにしてダッシュできなくするためだけのコルーチン
+        }
+        else if (chargeDashing)
+        {
+            rb.velocity = transform.right * dashSpeed;
+        }
+    }
+    IEnumerator ChargeDashC()//チャージダッシュ中のコルーチン
     {
         rb.velocity = transform.right * dashSpeed;
         //rb.gravityScale = 0;
@@ -239,7 +281,6 @@ public class Player : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(dashRecastTime);
         dashTimeRecast = false;
     }
-
 
 
     private void EnergyBullet()//エネルギー弾（前方に直進する弾）を撃つ
@@ -315,7 +356,7 @@ public class Player : MonoBehaviour, IDamageable
             var drainTarget = collision.gameObject.GetComponent<IDrainable>();//触れた相手にドレイン用インターフェースがあるか
             if (drainTarget != null && drainTarget.Drain())
             {
-                Instantiate(drainEffect, transform.position, transform.rotation);
+                Instantiate(dashDrainEffect, transform.position, transform.rotation);
                 Debug.Log("DashDrainSucceed");
                 recoverEnergy();
             }

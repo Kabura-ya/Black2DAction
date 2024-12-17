@@ -1558,7 +1558,7 @@ MonoBehaviour:
   hp: 30
   dashDistance: 10
   dashSpeed: 40
-  idleTime: 1
+  idleTime: 0.6
   fallHight: 3
   fallSpeed: 40
   groundHight: 0
@@ -1741,6 +1741,10 @@ PrefabInstance:
       propertyPath: sliderEnergy
       value: 
       objectReference: {fileID: 1636094022}
+    - target: {fileID: 2389818080915464826, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
+      propertyPath: dashDrainEffect
+      value: 
+      objectReference: {fileID: 1363578755080005832, guid: e5f0566aa183a17469007ac52284401f, type: 3}
     - target: {fileID: 9193364928099671391, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: recastTime
       value: 0.25
