@@ -168,7 +168,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     private void Attack()//近距離攻撃（攻撃用の子オブジェクトの関数で）
     {
-        if (!JudgeNormalState())
+        if (!(JudgeNormalState() || playerState == PlayerState.NormalAttacking))
         {
             return;
         }
@@ -227,24 +227,24 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Move()//左右移動（ジャンプ中でも移動できる）
     {
-        if (JudgeMovable()) {
+        if (JudgeNormalState() || playerState == PlayerState.NormalAttacking) {
             if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
-                if (isGround) { playerState = PlayerState.Idle; }
+                if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Idle; }
             }
             else if (Input.GetKey(KeyCode.RightArrow)) {
                 rb.velocity = new Vector2(speed, rb.velocity.y);
-                playerState = PlayerState.Moving;
+                if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Moving; }
             }
             else if (Input.GetKey(KeyCode.LeftArrow)) {
                 rb.velocity = new Vector2(-1 * speed, rb.velocity.y);
-                playerState = PlayerState.Moving;
+                if (isGround && playerState != PlayerState.NormalAttacking){ playerState = PlayerState.Moving;}
             }
             else
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
-                if (isGround) {playerState = PlayerState.Idle;}
+                if (isGround && playerState != PlayerState.NormalAttacking) {playerState = PlayerState.Idle;}
             }
         }
     }
