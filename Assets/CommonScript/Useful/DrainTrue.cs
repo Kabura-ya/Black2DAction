@@ -10,4 +10,9 @@ public class DrainTrue : MonoBehaviour, IDrainable
     {
         return true;
     }
+
+    public bool SuperDrain()
+    {
+        return true; 
+    }
 }

@@ -22,4 +22,9 @@ public class Boss1_Body : MonoBehaviour, IDamageable, IDrainable //ƒ{ƒX‚Ì“·‘Ì
     {
         return transform.root.gameObject.GetComponent<Boss1>().Drain();
     }
+
+    public bool SuperDrain()
+    {
+        return transform.root.gameObject.GetComponent<Boss1>().SuperDrain();
+    }
 }

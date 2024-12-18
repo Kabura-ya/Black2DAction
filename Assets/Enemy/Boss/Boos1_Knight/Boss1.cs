@@ -63,7 +63,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     IEnumerator StartC()//最初の演出をする
     {
         playerScript.StopPlayer();
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         playerScript.StopInterruptPlayer();
         start = false;
         enableHit = true;
@@ -189,7 +189,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
         moving = true;
-        //アニメーションの方でsword.EnableAttack();を実行
+        //アニメーションの方で EnabeleAttack_Sword()を実行
         yield return new WaitForSeconds(idleTime);
         sword.DisableAttack();//
         moving = false;
@@ -308,5 +308,9 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public bool Drain()//Bodyの子オブジェクトから呼ばれる
     {
         return  enableHit;//ダメージ判定とかを有効にしている間のみドレイン可能
+    }
+    public bool SuperDrain()
+    {
+        return Drain();
     }
 }

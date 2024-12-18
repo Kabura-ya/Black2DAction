@@ -23,4 +23,9 @@ public class Enemy_Body1 : MonoBehaviour, IDamageable, IDrainable //ƒ{ƒX‚Ì“·‘Ì
     {
         return transform.root.gameObject.GetComponent<EnemyBase1>().Drain();
     }
+
+    public bool SuperDrain()
+    {
+        return transform.root.gameObject.GetComponent<EnemyBase1>().SuperDrain();
+    }
 }

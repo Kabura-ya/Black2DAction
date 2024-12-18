@@ -36,7 +36,7 @@ public class EnemyBase1 : MonoBehaviour
 
     protected void Update()
     {
-        
+
     }
     protected void FlipToPlayer()//Playerの方を向く
     {
@@ -118,5 +118,10 @@ public class EnemyBase1 : MonoBehaviour
     public bool Drain()//Bodyの子オブジェクトから呼ばれる
     {
         return enableHit;//ダメージ判定とかを有効にしている間のみドレイン可能
+    }
+
+    public bool SuperDrain()//Bodyの子オブジェクトから呼ばれる
+    {
+        return Drain();
     }
 }
