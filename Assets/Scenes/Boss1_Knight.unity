@@ -1556,7 +1556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 84460106}
   attack: 1
-  hp: 30
+  hp: 200
   dashDistance: 10
   dashSpeed: 40
   idleTime: 0.6
@@ -1570,6 +1570,7 @@ MonoBehaviour:
   invincibleTime: 0.2
   blinkInterval: 0.1
   whiteFlashMaterial: {fileID: 0}
+  defeatEffect: {fileID: 2772992349487112764, guid: 381925703bfbc1741ad93b005b116d00, type: 3}
 --- !u!95 &1991103949
 Animator:
   serializedVersion: 5
@@ -1785,7 +1786,7 @@ PrefabInstance:
     - target: {fileID: 2389818080915464826, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: superDashDrainEffect
       value: 
-      objectReference: {fileID: 1363578755080005832, guid: e5f0566aa183a17469007ac52284401f, type: 3}
+      objectReference: {fileID: 1061140667664793003, guid: 8eeba0eb9d92ee94caafed65a7425a40, type: 3}
     - target: {fileID: 2389818080915464826, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: superDashdrainEffect
       value: 
@@ -1793,6 +1794,18 @@ PrefabInstance:
     - target: {fileID: 2389818080915464826, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: energyBulletRecastTime
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890904473455004876, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
+      propertyPath: m_Mass
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890904473455004876, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
+      propertyPath: m_GravityScale
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9193364928099671391, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
+      propertyPath: damage
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9193364928099671391, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: recastTime
@@ -1915,7 +1928,8 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2867439713879664808, guid: 50f2d1e28a627fc4092d696014c377a5, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 //using System.Drawing;
 using System.Runtime.CompilerServices;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.Tilemaps;
+#endif
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -37,7 +39,6 @@ public class Player : MonoBehaviour, IDamageable
     public float dashSpeed = 20;
     public float dashDistance = 50;
     private float dashY;//（今はつかっていない）ダッシュするときに高さが変わらないように
-    private bool dashing = false;//ダッシュ（とスーパーダッシュ）中にtrueになる
     public float dashRecastTime = 0.3f;//ダッシュをまたできるまでの時間
     private bool dashTimeRecast = false;
     private bool dashGroundRecast = false;
@@ -49,9 +50,7 @@ public class Player : MonoBehaviour, IDamageable
     public float superDashSpeed = 20;
     public float superDashDistance = 60;
     private float superDashY;//（今はつかっていない）チャージ中とスーパーダッシュするときに高さが変わらないように
-    private bool superDashing = false;//スーパーダッシュ中にtrueになる
     public float superDashRecastTime = 0.5f;//ダッシュをまたできるまでの時間
-    private bool superDashTimeRecast = false;
     private bool superDashGroundRecast = false;
     public GameObject superDashDrainEffect;//スーパーダッシュで吸収できた時に出るエフェクト
     //エナジー関係
@@ -525,17 +524,10 @@ public class Player : MonoBehaviour, IDamageable
             
             if (drainTarget != null && (drainTarget.Drain() || drainTarget.SuperDrain()))//ドレイン可能時
             {
-                Instantiate(dashDrainEffect, transform.position, transform.rotation);
-                Debug.Log("SuperDashDrainSucceed");
-                recoverEnergy(getSuperEnergy);
-            }
-            /*
-            if (drainTarget != null && (drainTarget.Drain() || drainTarget.SuperDrain()))//SuperDrainがtrueならDrain()もtrueなはずだが、SuperDrain()の記述にミスがあったときのためにこうしているドレイン可能時
-            {
                 Instantiate(superDashDrainEffect, transform.position, transform.rotation);
                 Debug.Log("SuperDashDrainSucceed");
                 recoverEnergy(getSuperEnergy);
-            }*/
+            }
         }
 
         Debug.Log("OntrrigerEnter_Player");

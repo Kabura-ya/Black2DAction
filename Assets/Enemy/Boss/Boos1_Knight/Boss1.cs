@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 
@@ -14,7 +16,6 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     protected Transform playerTrans;
     Player playerScript;//プレイヤーのスクリプトの関数を利用できるようにする
     protected Rigidbody2D rigidbody2d;
-    private bool dashing;
     public float dashDistance = 20;
     public float dashSpeed = 10;
     public float idleTime = 1;
@@ -30,6 +31,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     private bool moving = false;
     private int action = 1;
     private bool dead = false;
+    private bool last = false;
 
     public AttackEnemy sword;//剣攻撃用のクラス
     public SightEnemy swordSight;
@@ -42,11 +44,12 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public float invincibleTime = 0.2f;  // 無敵時間（点滅時間）
     public float blinkInterval = 0.1f;  // 点滅の間隔
     private SpriteRenderer spriteRenderer;
-    private bool isInvincible = false;
     public Material whiteFlashMaterial; // 白く点滅させるためのマテリアル
 
 
     Coroutine actionCoroutine;//死亡時などにコルーチンを停止させるために、行動のコルーチンの引数を入れておく
+
+    public GameObject defeatEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -95,6 +98,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         */
         anim.SetBool("moving", moving);
         anim.SetBool("dead", dead);
+        anim.SetBool("last", last);
     }
 
     protected void FlipToPlayer()//Playerの方を向く
@@ -152,11 +156,9 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
         rigidbody2d.velocity = transform.right * dashSpeed;
-        dashing = true;
         moving = true;
         yield return new WaitForSeconds(dashDistance / dashSpeed);
         rigidbody2d.velocity = new Vector2(0, 0);
-        dashing = false;
         moving = false;
         action = 0;
         yield return new WaitForSeconds(idleTime);
@@ -285,7 +287,6 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             // 経過時間を更新
             elapsedTime += blinkInterval;
         }
-        isInvincible = false;
         // 点滅終了後にスプライトを表示する
         spriteRenderer.enabled = true;
     }
@@ -297,12 +298,23 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 
     IEnumerator DeathC()
     {
+        FlipToPlayer();
+        Instantiate(defeatEffect, transform.position, transform.rotation);
         gameManager.GameClear();
         StopCoroutine(actionCoroutine);
         enableHit = false;
         dead = true;
+        action = 10;
+        rigidbody2d.gravityScale = 1;
+        rigidbody2d.velocity = transform.right * -7 + transform.up * 4;
+        yield return new WaitForSeconds(0.2f);
+        rigidbody2d.velocity = transform.right * -6;
+        yield return new WaitForSeconds(0.2f);
+        rigidbody2d.velocity = Vector2.zero;
+        dead = false;
+        last = true;
         yield return new WaitForSeconds(3);
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
     }
 
     public bool Drain()//Bodyの子オブジェクトから呼ばれる

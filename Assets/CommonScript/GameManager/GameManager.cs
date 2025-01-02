@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ClearC()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(4);
         SceneManager.LoadScene("Title");
     }
 }

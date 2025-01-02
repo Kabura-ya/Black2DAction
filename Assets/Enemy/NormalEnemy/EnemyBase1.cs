@@ -21,7 +21,7 @@ public class EnemyBase1 : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator anim;//アニメーター
     // Start is called before the first frame update
-    protected void Start()
+    protected virtual void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();//自身のRigidbodyを変数に入れる
         //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -34,7 +34,7 @@ public class EnemyBase1 : MonoBehaviour
 
     // Update is called once per frame
 
-    protected void Update()
+    protected virtual void Update()
     {
 
     }
