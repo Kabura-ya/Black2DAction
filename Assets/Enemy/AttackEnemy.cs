@@ -8,6 +8,8 @@ public class AttackEnemy : MonoBehaviour
     public int damage = 1;
     public float enableTime = 0.4f;//攻撃コライダーを有効化する時間
     public Collider2D col;
+    public Vector2 vector = Vector2.zero;
+    public int damageType = 0;
     /*
     private void Update()
     {
@@ -59,7 +61,7 @@ public class AttackEnemy : MonoBehaviour
             var damageTarget = collision.gameObject.GetComponent<IDamageable>();
             if (damageTarget != null)
             {
-                damageTarget.Damage(damage);
+                damageTarget.Damage(damage, vector, damageType);
             }
         }
     }

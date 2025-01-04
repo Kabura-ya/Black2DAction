@@ -31,7 +31,7 @@ public class Player : MonoBehaviour, IDamageable
         Stunned     // スタン中、ダメージを受けた直後一瞬操作できない
     }
 
-    private PlayerState playerState = PlayerState.Idle;
+    PlayerState playerState = PlayerState.Idle;
     private PlayerState previousPlayerState = PlayerState.Idle;//1フレーム前のplayerStateを記録し、アニメ‐ション遷移に使うだけ
 
     public float speed = 10;
@@ -124,8 +124,11 @@ public class Player : MonoBehaviour, IDamageable
     void Update()
     {
         rb.gravityScale = originagGravity;
-        if (playerState != PlayerState.Stop)
+        if (playerState == PlayerState.Stop)
         {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+        else{
             Jump();
             Flip();
             Attack();
@@ -137,7 +140,7 @@ public class Player : MonoBehaviour, IDamageable
             EnergyBullet();
         }
         AnimSet();//アニメーション用なので上の色々な関数の下である必要がある
-        PrintPlayerState();
+        //PrintPlayerState();
 
         previousPlayerState = playerState;//Updateの最後に置く
     }
@@ -544,7 +547,9 @@ public class Player : MonoBehaviour, IDamageable
         if (!JudgeInvincible() && JudgeGetDamageType(type))
         {
             GetDamage(damage);
+            if (type == 1) { Debug.Log("Player_DamageRed"); } ;
         }
+        rb.velocity = vector;
         if (vector != Vector2.zero) { rb.velocity = vector; }//ノックバック 
     }
 
@@ -565,6 +570,11 @@ public class Player : MonoBehaviour, IDamageable
             StartCoroutine(StuuneTime());
             StartCoroutine(BlinkCoroutine(invincibleTime));
         }
+    }
+
+    public bool StateSuperDashing()//スーパーダッシュ中だったらtrueを返すだけ、敵にスーパーダッシュでぶつかったらスタンとかに使う
+    {
+        return playerState == PlayerState.SuperDashing;
     }
     IEnumerator BlinkCoroutine(float duration)//ダメージを受けた時に点滅したり一定時間無敵にしたりする
     {

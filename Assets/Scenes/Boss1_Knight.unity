@@ -401,6 +401,107 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &250422453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 250422456}
+  - component: {fileID: 250422454}
+  - component: {fileID: 250422455}
+  m_Layer: 8
+  m_Name: SwordRed
+  m_TagString: EnemyAttack
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &250422454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250422453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4d45fb2a5ad54f438fcc30f16e2268f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  enableTime: 10
+  col: {fileID: 250422455}
+  vector: {x: 0, y: 0}
+  damageType: 1
+--- !u!60 &250422455
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250422453}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.5808377, y: 1.3239255}
+      - {x: -3.8506148, y: 0.04163614}
+      - {x: -0.87175137, y: -1.7032018}
+      - {x: 3.8290854, y: -1.7828642}
+      - {x: 9.8683605, y: 0.18163744}
+      - {x: 3.8138704, y: 1.2267665}
+  m_UseDelaunayMesh: 0
+--- !u!4 &250422456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250422453}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1991103946}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &251935313
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,8 +916,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  enableTime: 0.4
+  enableTime: 0.1
   col: {fileID: 1507535489}
+  vector: {x: 0, y: 0}
+  damageType: 0
 --- !u!60 &1507535489
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1539,6 +1642,7 @@ Transform:
   m_Children:
   - {fileID: 1682627483}
   - {fileID: 1507535487}
+  - {fileID: 250422456}
   - {fileID: 1842422116}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -1556,20 +1660,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 84460106}
   attack: 1
-  hp: 200
+  maxHp: 300
+  hp: 300
   dashDistance: 10
-  dashSpeed: 40
+  dashSpeed: 20
   idleTime: 0.6
   fallHight: 3
   fallSpeed: 40
   groundHight: 0
   sword: {fileID: 1507535488}
   swordSight: {fileID: 6185694}
+  redSword: {fileID: 250422454}
   bullet: {fileID: 5014670985075617, guid: 5d5b26c78f6248d4b8d1afb4ce6b8fce, type: 3}
+  bulletRed: {fileID: 4018925489292197852, guid: 8034e48738024224db58a7b2b5a0ff68, type: 3}
   damageEffect: {fileID: 8495619054844228353, guid: 7fa56603d4b6cf3448e0a44b41ea5267, type: 3}
   invincibleTime: 0.2
   blinkInterval: 0.1
   whiteFlashMaterial: {fileID: 0}
+  stunnTime: 3
+  stunnMaxCount: 1
+  stunnCount: 0
   defeatEffect: {fileID: 2772992349487112764, guid: 381925703bfbc1741ad93b005b116d00, type: 3}
 --- !u!95 &1991103949
 Animator:
@@ -1794,6 +1904,10 @@ PrefabInstance:
     - target: {fileID: 2389818080915464826, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: energyBulletRecastTime
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3335716893275582259, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3890904473455004876, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: m_Mass

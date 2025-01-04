@@ -11,7 +11,8 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public GameManager gameManager;//ゲームオーバーやクリアなどを処理するGamemanagerについているスクリプトの情報を取得するための関数
 
     public int attack = 1;
-    public int hp = 10;
+    public int maxHp = 300;
+    public int hp = 300;
     protected GameObject player;//プレイヤーの情報を使えるようにしておく
     protected Transform playerTrans;
     Player playerScript;//プレイヤーのスクリプトの関数を利用できるようにする
@@ -28,6 +29,8 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     private bool start = true;
     private bool onGround = true;
     private bool enableHit = false;//これがtrueの時だけダメージを受けたり与える
+    private bool superDashStunn = false;//これがtrueの時（主に一部の赤攻撃中）にスーパーダッシュでぶつかられるとスタンする。
+    private bool stunn =false;//スタン中にtrue、ダメージを受けるがプレイヤーに触れてもダメージを与えない
     private bool moving = false;
     private int action = 1;
     private bool dead = false;
@@ -36,7 +39,10 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public AttackEnemy sword;//剣攻撃用のクラス
     public SightEnemy swordSight;
 
+    public AttackEnemy redSword;//赤攻撃用
+
     public GameObject bullet;//遠距離攻撃で放つやつ
+    public GameObject bulletRed;//赤遠距離攻撃で放つやつ
 
     private Animator anim;//アニメーター
 
@@ -46,6 +52,9 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     private SpriteRenderer spriteRenderer;
     public Material whiteFlashMaterial; // 白く点滅させるためのマテリアル
 
+    public float stunnTime = 3;//スタン時間
+    public int stunnMaxCount = 1;
+    public int stunnCount = 0;//これまで何回スタンしたかを記録（体力がある程度減るごとにスタンするようにするため）
 
     Coroutine actionCoroutine;//死亡時などにコルーチンを停止させるために、行動のコルーチンの引数を入れておく
 
@@ -53,6 +62,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     // Start is called before the first frame update
     void Start()
     {
+        hp = maxHp;
         rigidbody2d = GetComponent<Rigidbody2D>();//自身のRigidbodyを変数に入れる
         //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = GameObject.Find("Player");
@@ -99,6 +109,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         anim.SetBool("moving", moving);
         anim.SetBool("dead", dead);
         anim.SetBool("last", last);
+        anim.SetBool("stunn", stunn);
     }
 
     protected void FlipToPlayer()//Playerの方を向く
@@ -118,17 +129,17 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 
         if (swordSight.IsPlayerinSight())
         {
-            if (0.5 < Random.value)//プレイヤーが視界のコライダー内に居たら1/2の確率で剣で攻撃
+            if (0.7 < Random.value)//プレイヤーが視界のコライダー内に居たら3/10の確率で剣で攻撃
             {
-                action = 3;
+                action = 9;
                 actionCoroutine = StartCoroutine(Sword());
                 return;
             }
         }
-        action = Random.Range(1, 4);
+        action = Random.Range(1, 5);
         if (action == 1)
         {
-            actionCoroutine = StartCoroutine(Dash());
+            actionCoroutine = StartCoroutine(DashRed());//テスト用に赤の方にしているので後で直す
             return;
         }
         else if (action == 2)
@@ -141,14 +152,23 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             actionCoroutine = StartCoroutine(LongRange());
             return;
         }
-        
+        else if (action == 4)
+        {
+            actionCoroutine = StartCoroutine(LongRangeRed());
+            return;
+        }
+        else if (action == 5)
+        {
+            actionCoroutine = StartCoroutine(DashRed());
+            return;
+        }
         /*
         else if (action == 3)
         {
             StartCoroutine(Sword());
             return;
         }*/
-        
+
     }
 
     private IEnumerator Dash()//突進攻撃
@@ -159,6 +179,26 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         moving = true;
         yield return new WaitForSeconds(dashDistance / dashSpeed);
         rigidbody2d.velocity = new Vector2(0, 0);
+        moving = false;
+        action = 0;
+        yield return new WaitForSeconds(idleTime);
+        ChooseAction();
+    }
+
+    private IEnumerator DashRed()//赤突進攻撃
+    {
+
+        FlipToPlayer();
+        yield return new WaitForSeconds(idleTime);
+        yield return new WaitForSeconds(0.8f);
+        rigidbody2d.velocity = transform.right * dashSpeed;
+        superDashStunn = true;
+        redSword.EnableAttack();
+        moving = true;
+        yield return new WaitForSeconds(dashDistance / dashSpeed);
+        rigidbody2d.velocity = new Vector2(0, 0);
+        redSword.DisableAttack();
+        superDashStunn = false;
         moving = false;
         action = 0;
         yield return new WaitForSeconds(idleTime);
@@ -195,24 +235,58 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         yield return new WaitForSeconds(idleTime);
         sword.DisableAttack();//
         moving = false;
-        action = 0;
         yield return new WaitForSeconds(idleTime);
+        action = 0;
+        sword.DisableAttack();
+        yield return new WaitForSeconds(0.1f);
         ChooseAction();
     }
+
+
 
     private void EnabeleAttack_Sword()
     {
         sword.EnableAttack();
     }
 
-    private IEnumerator LongRange()
+    private IEnumerator LongRange()//遠距離攻撃
     {
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
-        Instantiate(bullet, transform.position, transform.rotation);
-        action = 0;
+        //このへんでアニメーションの方からLongRangeSpawn();が呼ばれて弾が出る
         yield return new WaitForSeconds(idleTime);
+        action = 0;
+        yield return new WaitForSeconds(0.1f);
+        if (0.7 < Random.value)//通常遠距離攻撃後3/10の確率で赤遠距離攻撃をする
+        {
+            action = 4;
+            actionCoroutine = StartCoroutine(LongRangeRed());
+        }
+        else
+        {
+            ChooseAction();
+        }
+    }
+
+    private void LongRangeSpawn()//弾を発射するための関数、アニメーションの方で呼ぶ
+    {
+        Instantiate(bullet, transform.position, transform.rotation);
+    }
+
+    private IEnumerator LongRangeRed()//赤の遠距離攻撃
+    {
+        FlipToPlayer();
+        yield return new WaitForSeconds(2.5f);
+        //このへんでアニメーションの方からLongRangeSpawn();が呼ばれて弾が出る
+        yield return new WaitForSeconds(idleTime);
+        action = 0;
+        yield return new WaitForSeconds(0.1f);
         ChooseAction();
+    }
+
+    private void LongRangeRedSpawn()//弾を発射するための関数、アニメーションの方で呼ぶ
+    {
+        Instantiate(bulletRed, transform.position, transform.rotation);
     }
 
     /*
@@ -233,7 +307,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public void BodyStay(Collider2D collision)//Body部分の子オブジェクトのOnTriggerStayで呼ばれる
     {
         //Debug.Log("OnTrigger");
-        if (collision.gameObject.tag == "Player" && enableHit)
+        if (collision.gameObject.tag == "Player" && enableHit && !stunn)
         {
             //Debug.Log("OntrrigerEnter_Player");
             var damageTarget = collision.gameObject.GetComponent<IDamageable>();
@@ -241,6 +315,11 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             {
                 damageTarget.Damage(attack);
             }
+        }
+        if (superDashStunn && collision.gameObject.tag == "Player" && playerScript.StateSuperDashing())//一部の赤攻撃中などにスーパーダッシュでぶつかられるとスタンする
+        {
+            StopCoroutine(actionCoroutine);
+            actionCoroutine = StartCoroutine(StunnCoroutine());
         }
     }
 
@@ -264,6 +343,12 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             if (hp <= 0)
             {
                 Death();
+            }else if (hp <= maxHp / 2 && stunnCount == 0)//HPが半分になったらスタン(スタンのテスト用なので後で消すかも)
+            {
+                FlipToPlayer();
+                StopCoroutine(actionCoroutine);
+                actionCoroutine = StartCoroutine(StunnCoroutine());
+                stunnCount++;
             }
             else
             {
@@ -291,6 +376,41 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         spriteRenderer.enabled = true;
     }
 
+    private void DisableAllAttack()//スタン時などに全ての攻撃用コライダーを無効化する
+    {
+        sword.DisableAttack();
+        redSword.DisableAttack();
+
+    }
+
+    /*
+    StopCoroutine(actionCoroutine);//これを実行してからスタンさせる
+    actionCoroutine = StartCoroutine(StunnCoroutine());
+    */
+    IEnumerator StunnCoroutine()
+    {
+        superDashStunn = false;
+        DisableAllAttack();
+        action = -1;
+        stunn = true;
+        enableHit = true;
+        moving = false;
+        rigidbody2d.velocity = transform.right * -12 + transform.up * 3;
+        rigidbody2d.gravityScale = 1;
+        yield return new WaitForSeconds(0.2f);
+        rigidbody2d.velocity = transform.right * -3 ;
+        yield return new WaitForSeconds(0.4f);
+        action = -2;
+        rigidbody2d.velocity = Vector2.zero;
+        yield return new WaitForSeconds(stunnTime);
+        rigidbody2d.gravityScale = 0;
+        action = 0;
+        yield return new WaitForSeconds(0.1f);
+        stunn = false;
+        ChooseAction();
+    }
+
+
     public void Death()//体力が0以下になった時に呼ばれ、消滅する
     {
         StartCoroutine(DeathC());
@@ -299,6 +419,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     IEnumerator DeathC()
     {
         FlipToPlayer();
+        DisableAllAttack();
         Instantiate(defeatEffect, transform.position, transform.rotation);
         gameManager.GameClear();
         StopCoroutine(actionCoroutine);
@@ -307,15 +428,14 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         action = 10;
         rigidbody2d.gravityScale = 1;
         rigidbody2d.velocity = transform.right * -7 + transform.up * 4;
-        yield return new WaitForSeconds(0.2f);
-        rigidbody2d.velocity = transform.right * -6;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         rigidbody2d.velocity = Vector2.zero;
         dead = false;
         last = true;
         yield return new WaitForSeconds(3);
         //Destroy(this.gameObject);
     }
+
 
     public bool Drain()//Bodyの子オブジェクトから呼ばれる
     {
