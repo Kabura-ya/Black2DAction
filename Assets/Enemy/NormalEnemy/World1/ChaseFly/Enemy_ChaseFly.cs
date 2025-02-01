@@ -16,7 +16,7 @@ public class Enemy_ChaseFly : EnemyBase1
         base.Update();
     }
 
-    private IEnumerator Idle()
+    private IEnumerator Idle()//待機状態
     {
         while (true)
         {
@@ -25,10 +25,10 @@ public class Enemy_ChaseFly : EnemyBase1
                 StartCoroutine(Chase());
                 yield break;
             }
-            yield return null;
+            yield return null;//1フレームだけ待つ
         }
     }
-    private IEnumerator Chase()
+    private IEnumerator Chase()//追跡状態、待機中に視界のコライダーにプレイヤーが入るとこの状態に遷移
     {
         while (true)
         {

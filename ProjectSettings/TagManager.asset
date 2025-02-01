@@ -23,8 +23,8 @@ TagManager:
   - Ground
   - EnemyGround
   - PlayerGround
-  - 
-  - 
+  - PlayerEffect1
+  - EnemyEffect1
   - 
   - 
   - 
@@ -46,9 +46,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: playerEffect
-    uniqueID: 3252881803
+  - name: enemy
+    uniqueID: 282375091
+    locked: 0
+  - name: enemyEffect1
+    uniqueID: 2975340731
+    locked: 0
+  - name: boss
+    uniqueID: 2604008455
+    locked: 0
+  - name: bossEffect1
+    uniqueID: 3370752617
     locked: 0
   - name: player
     uniqueID: 3669484771
+    locked: 0
+  - name: playerEffect1
+    uniqueID: 3252881803
     locked: 0

@@ -75,7 +75,7 @@ public class Player : MonoBehaviour, IDamageable
     private bool isJumping = false;
     public GroundCheck ground;//接地判定用のスクリプト
     private bool isGround;
-    private float originagGravity;
+    private float originagGravity = 4;
     //攻撃関係
     public Attack attack;
     private bool beginAttack = false;//攻撃のアニメーションを始めるためだけのもの、攻撃開始時の一瞬だけtrueになる
@@ -195,7 +195,7 @@ public class Player : MonoBehaviour, IDamageable
     private void FixedUpdate()
     {
         isGround = ground.IsGround();//設地判定
-        if (isGround){Debug.Log("PlayerGround");}
+        //if (isGround){Debug.Log("PlayerGround");}
         
         if (!isGround && JudgeNormalState())
         { 
@@ -506,7 +506,7 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    public void BodyEnter(Collider2D collision)
+    public void BodyEnter(Collider2D collision)//体の当たり判定用のコライダーにつけたスクリプトから呼ばれる
     {
         Debug.Log("Player_BodyEnter");
         if (playerState == PlayerState.Dashing)
@@ -525,7 +525,7 @@ public class Player : MonoBehaviour, IDamageable
             Debug.Log("SuperDashDrain");
             var drainTarget = collision.gameObject.GetComponent<IDrainable>();//触れた相手にドレイン用インターフェースがあるか
             
-            if (drainTarget != null && (drainTarget.Drain() || drainTarget.SuperDrain()))//ドレイン可能時
+            if (drainTarget != null && (drainTarget.Drain() || drainTarget.SuperDrain()))//ドレイン可能時。通常のDrain()がTrueならばSuperDrain()もTrueなはずだが、ミスがあった時のために
             {
                 Instantiate(superDashDrainEffect, transform.position, transform.rotation);
                 Debug.Log("SuperDashDrainSucceed");

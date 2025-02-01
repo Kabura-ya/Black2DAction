@@ -58,7 +58,8 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 
     Coroutine actionCoroutine;//死亡時などにコルーチンを停止させるために、行動のコルーチンの引数を入れておく
 
-    public GameObject defeatEffect;
+    public GameObject redDashEffect;//赤突進を開始した時の衝撃波のエフェクト
+    public GameObject defeatEffect;//倒したときのエフェクト
     // Start is called before the first frame update
     void Start()
     {
@@ -139,7 +140,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         action = Random.Range(1, 5);
         if (action == 1)
         {
-            actionCoroutine = StartCoroutine(DashRed());//テスト用に赤の方にしているので後で直す
+            actionCoroutine = StartCoroutine(DashRed());
             return;
         }
         else if (action == 2)
@@ -157,11 +158,6 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             actionCoroutine = StartCoroutine(LongRangeRed());
             return;
         }
-        else if (action == 5)
-        {
-            actionCoroutine = StartCoroutine(DashRed());
-            return;
-        }
         /*
         else if (action == 3)
         {
@@ -171,7 +167,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 
     }
 
-    private IEnumerator Dash()//突進攻撃
+    private IEnumerator Dash()//通常突進攻撃、赤突進をかわりにするので多分もう使わない
     {
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
@@ -191,6 +187,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
         yield return new WaitForSeconds(0.8f);
+        Instantiate(redDashEffect, transform.position, transform.rotation);
         rigidbody2d.velocity = transform.right * dashSpeed;
         superDashStunn = true;
         redSword.EnableAttack();
@@ -198,10 +195,11 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         yield return new WaitForSeconds(dashDistance / dashSpeed);
         rigidbody2d.velocity = new Vector2(0, 0);
         redSword.DisableAttack();
-        superDashStunn = false;
         moving = false;
-        action = 0;
         yield return new WaitForSeconds(idleTime);
+        superDashStunn = false;
+        action = 0;
+        yield return new WaitForSeconds(0.1f);
         ChooseAction();
     }
 
