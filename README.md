@@ -62,3 +62,9 @@ CommonScript/Interface/IDrainable.cs
 Drain()がtrueのものは通常ダッシュでもチャージダッシュでもドレイン可能
 
 チャージダッシュでのみドレイン可能な赤い攻撃などは、SuperDrain()のみtrueでDrain()がfalseにする
+
+## ファイル等の位置
+
+各ボスのプレファブやスクリプトやアニメーションなどは、Assets/Enemy/Boss の中に新しくフォルダーを作ってその中に置いておく
+
+各Sceneは Assets/Scenes フォルダの中に保存
