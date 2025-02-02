@@ -36,6 +36,7 @@ public class Player : MonoBehaviour, IDamageable
 
     public float speed = 10;
     //ダッシュ関係
+    private bool beginDash = false;
     public float dashSpeed = 20;
     public float dashDistance = 50;
     private float dashY;//（今はつかっていない）ダッシュするときに高さが変わらないように
@@ -221,6 +222,7 @@ public class Player : MonoBehaviour, IDamageable
         anim.SetBool("jumping", !isGround);
         anim.SetBool("attacking", beginAttack);
         anim.SetBool("damage", playerState == PlayerState.Stunned);
+        anim.SetBool("beginDash", beginDash);
         anim.SetBool("dashing", playerState == PlayerState.Dashing);
         anim.SetBool("charging", playerState == PlayerState.SuperDashCharging);
         anim.SetBool("charged", playerState == PlayerState.SuperDashCharged);
@@ -316,6 +318,12 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Jump()//ジャンプ用
     {
+        if (Input.GetKeyUp(KeyCode.Z) || playerState == PlayerState.Dashing || playerState == PlayerState.SuperDashCharging)
+        {
+            isJumping = false;
+            jumpTimeCounter = 0;
+        }
+
         if (!(JudgeNormalState() || playerState == PlayerState.Jumping))
         {
             return;
@@ -330,6 +338,8 @@ public class Player : MonoBehaviour, IDamageable
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
 
+        // ジャンプボタンを離したり、ダッシュとかチャージとかしたらジャンプ終了
+
         // ジャンプボタンを押し続けた場合の処理
         if (Input.GetKey(KeyCode.Z) && isJumping)
         {
@@ -342,13 +352,8 @@ public class Player : MonoBehaviour, IDamageable
             else
             {
                 isJumping = false;
+                jumpTimeCounter = 0;
             }
-        }
-
-        // ジャンプボタンを離したらジャンプ終了
-        if (Input.GetKeyUp(KeyCode.Z))
-        {
-            isJumping = false;
         }
     }
 
@@ -360,10 +365,12 @@ public class Player : MonoBehaviour, IDamageable
         }
         if (Input.GetKeyDown(KeyCode.C) && (dashTimeRecast == false))
         {
+            beginDash = true;//アニメーション遷移用に一瞬だけtrueにする
             StartCoroutine(DashRecastCoroutine()); //ダッシュのリキャスト部分だけをやる、dashTimeRecastを一定時間trueにしてダッシュできなくしたりするコルーチン
             actionCoroutine = StartCoroutine(DashCoroutine());//状態を一定時間Dashingにする
         }else if (playerState == PlayerState.Dashing)
         {
+            beginDash = false;
             rb.velocity = transform.right * dashSpeed;//速度を設定
             rb.gravityScale = 0;
             Debug.Log("PlayerState.Dashing");
