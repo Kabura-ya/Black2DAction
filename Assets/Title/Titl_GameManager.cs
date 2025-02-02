@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Titl_GameManager : MonoBehaviour
 {
+    public string loadSceneName;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +32,6 @@ public class Titl_GameManager : MonoBehaviour
     }
     public void StartButton()
     {
-        SceneManager.LoadScene("Boss1_Knight");
+        SceneManager.LoadScene(loadSceneName);
     }
 }

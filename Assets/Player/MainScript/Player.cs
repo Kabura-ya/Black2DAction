@@ -318,6 +318,8 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Jump()//ジャンプ用
     {
+
+        // ジャンプボタンを離したり、ダッシュとかチャージとかしたらジャンプ終了
         if (Input.GetKeyUp(KeyCode.Z) || playerState == PlayerState.Dashing || playerState == PlayerState.SuperDashCharging)
         {
             isJumping = false;
@@ -337,8 +339,6 @@ public class Player : MonoBehaviour, IDamageable
             //rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
-
-        // ジャンプボタンを離したり、ダッシュとかチャージとかしたらジャンプ終了
 
         // ジャンプボタンを押し続けた場合の処理
         if (Input.GetKey(KeyCode.Z) && isJumping)

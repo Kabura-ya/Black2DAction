@@ -413,6 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cd432a2acdc3ad48a21772c513b9a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadSceneName: WorldMap
 --- !u!4 &575973722
 Transform:
   m_ObjectHideFlags: 0

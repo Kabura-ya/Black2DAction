@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public Player player;
+    public string loseLoadSceneName;
+    public string winLoadSceneName;
     void Start()
     {
         
@@ -21,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        SceneManager.LoadScene("Title");
+        SceneManager.LoadScene(loseLoadSceneName);
     }
 
     public void GameClear()
@@ -32,6 +34,6 @@ public class GameManager : MonoBehaviour
     IEnumerator ClearC()
     {
         yield return new WaitForSeconds(4);
-        SceneManager.LoadScene("Title");
+        SceneManager.LoadScene(winLoadSceneName);
     }
 }

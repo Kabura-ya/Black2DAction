@@ -36,7 +36,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Dash
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -7132123903596600392}
@@ -370,7 +370,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: NormalDash
+  m_Name: SuperDash
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -534,7 +534,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player_Guard
+  m_Name: DashCharging
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -736,7 +736,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: JustGurd
+  m_Name: DashCharged
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
