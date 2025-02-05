@@ -86,7 +86,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
         start = false;
         enableHit = true;
         action = 0;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.3f);
         ChooseAction();
     }
 
