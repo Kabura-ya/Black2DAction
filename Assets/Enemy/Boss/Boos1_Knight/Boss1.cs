@@ -75,7 +75,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
         playerTrans = player.transform;
         anim = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        StartCoroutine(StartC());
+        actionCoroutine = StartCoroutine(StartC());
     }
 
     IEnumerator StartC()//最初の演出をする
@@ -86,7 +86,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
         start = false;
         enableHit = true;
         action = 0;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.1f);
         ChooseAction();
     }
 
@@ -94,8 +94,8 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
     void Update()
     {
         AnimSet();
-
-        //なぜか赤突進の終わり際にスーパーダッシュでぶつかるとスタンしない上にダッシュし続けるバグがあるのでその対策
+        /*
+        //なぜか赤突進の終わり際にスーパーダッシュでぶつかるとスタンしない上にダッシュし続けるバグがある(もう治ったのでコメントアウト)のでその対策
         if (actionCoroutine == null)//バグで長時間行動していない場合行動させる
         {
             noActionCoroutineTime += Time.deltaTime;
@@ -105,6 +105,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
                 ChooseAction();
             }
         }
+        */
     }
 
     private void AnimSet()
