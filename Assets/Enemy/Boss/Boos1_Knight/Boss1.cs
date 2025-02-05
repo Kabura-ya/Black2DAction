@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-public class Boss1 : MonoBehaviour, IDamageable, IDrainable
+public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
 {
     public GameManager gameManager;//ゲームオーバーやクリアなどを処理するGamemanagerについているスクリプトの情報を取得するための関数
 
@@ -37,6 +37,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     private bool last = false;
 
     public AttackEnemy sword;//剣攻撃用のクラス
+    public AttackEnemy swordFall;//落下攻撃の時の当たり判定
     public SightEnemy swordSight;
 
     public AttackEnemy redSword;//赤攻撃用
@@ -57,6 +58,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public int stunnCount = 0;//これまで何回スタンしたかを記録（体力がある程度減るごとにスタンするようにするため）
 
     Coroutine actionCoroutine;//死亡時などにコルーチンを停止させるために、行動のコルーチンの引数を入れておく
+    float noActionCoroutineTime = 0;//actionCoroutineがバグで長時間nullになっていた際に、その時間を記録する
 
     public GameObject redDashEffect;//赤突進を開始した時の衝撃波のエフェクト
     public GameObject defeatEffect;//倒したときのエフェクト
@@ -88,6 +90,17 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     void Update()
     {
         AnimSet();
+
+        //なぜか赤突進の終わり際にスーパーダッシュでぶつかるとスタンしない上にダッシュし続けるバグがあるのでその対策
+        if (actionCoroutine == null)//バグで長時間行動していない場合行動させる
+        {
+            noActionCoroutineTime += Time.deltaTime;
+            if (noActionCoroutineTime > 1)
+            {
+                noActionCoroutineTime = 0;
+                ChooseAction();
+            }
+        }
     }
 
     private void AnimSet()
@@ -127,7 +140,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 
     private void ChooseAction()
     {
-
+        if (actionCoroutine != null) { StopCoroutine(actionCoroutine); actionCoroutine = null;}
         if (swordSight.IsPlayerinSight())
         {
             if (0.7 < Random.value)//プレイヤーが視界のコライダー内に居たら3/10の確率で剣で攻撃
@@ -181,25 +194,25 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         ChooseAction();
     }
 
-    private IEnumerator DashRed()//赤突進攻撃
+    private IEnumerator DashRed()//赤突進攻撃、なぜか終わり際にスーパーダッシュでぶつかるとスタンしない上にダッシュし続けるバグがある
     {
-
+        Debug.Log("DashRedBegin");
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
         yield return new WaitForSeconds(0.8f);
+        superDashStunn = true;
         Instantiate(redDashEffect, transform.position, transform.rotation);
         rigidbody2d.velocity = transform.right * dashSpeed;
-        superDashStunn = true;
         redSword.EnableAttack();
         moving = true;
         yield return new WaitForSeconds(dashDistance / dashSpeed);
         rigidbody2d.velocity = new Vector2(0, 0);
         redSword.DisableAttack();
         moving = false;
-        yield return new WaitForSeconds(idleTime);
         superDashStunn = false;
         action = 0;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(idleTime);
+        Debug.Log("DashRedEnd");
         ChooseAction();
     }
 
@@ -209,6 +222,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         yield return new WaitForSeconds(idleTime);
         onGround = false;
         transform.position = new Vector2(playerTrans.position.x, fallHight);
+        swordFall.EnableAttack();
         enableHit = true;
         rigidbody2d.velocity = new Vector2(0, 0);
         moving = false;
@@ -217,11 +231,22 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         moving = true;
         yield return new WaitForSeconds(0.2f);
         yield return new WaitForSeconds(idleTime);
+        //アニメーションの方でも、着地した際のアニメーションでコライダーを無効化している
+        swordFall.DisableAttack();
         rigidbody2d.velocity = new Vector2(0, 0);
         moving = false;
         action = 0;
         yield return new WaitForSeconds(idleTime);
         ChooseAction();
+    }
+
+    private void EnabelAttack_Fall()
+    {
+        swordFall.EnableAttack();
+    }
+    private void DisableAttack_Fall()
+    {
+        swordFall.DisableAttack();
     }
 
     private IEnumerator Sword()//近距離攻撃
@@ -239,12 +264,13 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         yield return new WaitForSeconds(0.1f);
         ChooseAction();
     }
-
-
-
-    private void EnabeleAttack_Sword()
+    private void EnableAttack_Sword()
     {
         sword.EnableAttack();
+    }
+    private void DisableAttack_Sword()
+    {
+        sword.DisableAttack();
     }
 
     private IEnumerator LongRange()//遠距離攻撃
@@ -305,19 +331,20 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public void BodyStay(Collider2D collision)//Body部分の子オブジェクトのOnTriggerStayで呼ばれる
     {
         //Debug.Log("OnTrigger");
+        
         if (collision.gameObject.tag == "Player" && enableHit && !stunn)
         {
             //Debug.Log("OntrrigerEnter_Player");
             var damageTarget = collision.gameObject.GetComponent<IDamageable>();
             if (damageTarget != null)
             {
-                damageTarget.Damage(attack);
+                //damageTarget.Damage(attack);プレイヤーへの接触ダメージ
             }
         }
+        
         if (superDashStunn && collision.gameObject.tag == "Player" && playerScript.StateSuperDashing())//一部の赤攻撃中などにスーパーダッシュでぶつかられるとスタンする
         {
-            StopCoroutine(actionCoroutine);
-            actionCoroutine = StartCoroutine(StunnCoroutine());
+            //Stunn();
         }
     }
 
@@ -344,8 +371,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             }else if (hp <= maxHp / 2 && stunnCount == 0)//HPが半分になったらスタン(スタンのテスト用なので後で消すかも)
             {
                 FlipToPlayer();
-                StopCoroutine(actionCoroutine);
-                actionCoroutine = StartCoroutine(StunnCoroutine());
+                Stunn();
                 stunnCount++;
             }
             else
@@ -377,22 +403,44 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     private void DisableAllAttack()//スタン時などに全ての攻撃用コライダーを無効化する
     {
         sword.DisableAttack();
+        swordFall.DisableAttack();
         redSword.DisableAttack();
 
     }
 
-    /*
-    StopCoroutine(actionCoroutine);//これを実行してからスタンさせる
-    actionCoroutine = StartCoroutine(StunnCoroutine());
-    */
+    private void NextAction(IEnumerator nextAction)//まだ使っていない後から使いたい
+    {
+        if (actionCoroutine != null) { StopCoroutine(actionCoroutine); }//現在の行動を中止させてからスタンさせる
+        actionCoroutine = null;
+        actionCoroutine = StartCoroutine(nextAction);
+    }
+    public void SuperDashStunn()
+    {
+        if (superDashStunn)//一部の赤攻撃中などにスーパーダッシュでぶつかられるとスタンする
+        {
+            Debug.Log("SuperDashStunn");
+            Stunn();
+        }
+    }
+    private void Stunn()
+    {
+        if (actionCoroutine != null){ StopCoroutine(actionCoroutine);}//現在の行動を中止させてからスタンさせる
+        actionCoroutine = null;
+        actionCoroutine = StartCoroutine(StunnCoroutine());
+    }
+
     IEnumerator StunnCoroutine()
     {
+        Debug.Log("StunnCoroutine");
+
+        //スタン時に様々な要素をリセット
         superDashStunn = false;
         DisableAllAttack();
         action = -1;
         stunn = true;
         enableHit = true;
         moving = false;
+
         rigidbody2d.velocity = transform.right * -12 + transform.up * 3;
         rigidbody2d.gravityScale = 1;
         yield return new WaitForSeconds(0.2f);
@@ -407,8 +455,6 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         stunn = false;
         ChooseAction();
     }
-
-
     public void Death()//体力が0以下になった時に呼ばれ、消滅する
     {
         StartCoroutine(DeathC());
@@ -420,7 +466,10 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         DisableAllAttack();
         Instantiate(defeatEffect, transform.position, transform.rotation);
         gameManager.GameClear();
-        StopCoroutine(actionCoroutine);
+        if (actionCoroutine != null)
+        {
+            StopCoroutine(actionCoroutine);
+        }
         enableHit = false;
         dead = true;
         action = 10;

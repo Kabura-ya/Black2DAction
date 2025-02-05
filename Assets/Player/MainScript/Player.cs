@@ -34,6 +34,7 @@ public class Player : MonoBehaviour, IDamageable
     PlayerState playerState = PlayerState.Idle;
     private PlayerState previousPlayerState = PlayerState.Idle;//1フレーム前のplayerStateを記録し、アニメ‐ション遷移に使うだけ
 
+    public bool printLog = false;//これがtrueの時に色々なLogを出力する
     public float speed = 10;
     //ダッシュ関係
     private bool beginDash = false;
@@ -141,50 +142,53 @@ public class Player : MonoBehaviour, IDamageable
             EnergyBullet();
         }
         AnimSet();//アニメーション用なので上の色々な関数の下である必要がある
-        //PrintPlayerState();
+        PrintPlayerState();
 
         previousPlayerState = playerState;//Updateの最後に置く
     }
     private void PrintPlayerState()
     {
-        switch (playerState)
+        if (printLog)
         {
-            case PlayerState.Stop:
-                Debug.Log("PlayerState.Stop");
-                break;
-            case PlayerState.Idle:
-                Debug.Log("PlayerState.Idle");
-                break;
-            case PlayerState.Moving:
-                Debug.Log("PlayerState.Moving");
-                break;
-            case PlayerState.Jumping:
-                Debug.Log("PlayerState.Jumping");
-                break;
-            case PlayerState.NormalAttacking:
-                Debug.Log("PlayerState.NormalAttacking");
-                break;
-            case PlayerState.EnergyBullet:
-                Debug.Log("PlayerState.EnergyBullet");
-                break;
-            case PlayerState.Dashing:
-                Debug.Log("PlayerState.Dashing");
-                break;
-            case PlayerState.SuperDashCharging:
-                Debug.Log("PlayerState.SuperDashCharging");
-                break;
-            case PlayerState.SuperDashCharged:
-                Debug.Log("PlayerState.SuperDashCharged");
-                break;
-            case PlayerState.SuperDashing:
-                Debug.Log("PlayerState.SuperDashing");
-                break;
-            case PlayerState.Stunned:
-                Debug.Log("PlayerState.Stunned");
-                break;
-            default:
-                Debug.Log("Unknown PlayerState");
-                break;
+            switch (playerState)
+            {
+                case PlayerState.Stop:
+                    Debug.Log("PlayerState.Stop");
+                    break;
+                case PlayerState.Idle:
+                    Debug.Log("PlayerState.Idle");
+                    break;
+                case PlayerState.Moving:
+                    Debug.Log("PlayerState.Moving");
+                    break;
+                case PlayerState.Jumping:
+                    Debug.Log("PlayerState.Jumping");
+                    break;
+                case PlayerState.NormalAttacking:
+                    Debug.Log("PlayerState.NormalAttacking");
+                    break;
+                case PlayerState.EnergyBullet:
+                    Debug.Log("PlayerState.EnergyBullet");
+                    break;
+                case PlayerState.Dashing:
+                    Debug.Log("PlayerState.Dashing");
+                    break;
+                case PlayerState.SuperDashCharging:
+                    Debug.Log("PlayerState.SuperDashCharging");
+                    break;
+                case PlayerState.SuperDashCharged:
+                    Debug.Log("PlayerState.SuperDashCharged");
+                    break;
+                case PlayerState.SuperDashing:
+                    Debug.Log("PlayerState.SuperDashing");
+                    break;
+                case PlayerState.Stunned:
+                    Debug.Log("PlayerState.Stunned");
+                    break;
+                default:
+                    Debug.Log("Unknown PlayerState");
+                    break;
+            }
         }
     }
 
@@ -196,7 +200,7 @@ public class Player : MonoBehaviour, IDamageable
     private void FixedUpdate()
     {
         isGround = ground.IsGround();//設地判定
-        //if (isGround){Debug.Log("PlayerGround");}
+        if(printLog)//if (isGround){Debug.Log("PlayerGround");}
         
         if (!isGround && JudgeNormalState())
         { 
@@ -240,7 +244,7 @@ public class Player : MonoBehaviour, IDamageable
             //EnableAttack()をアニメーションの方で呼ぶ
             beginAttack = true;//アニメーション遷移用に一瞬だけtrueにする
             playerState = PlayerState.NormalAttacking;//状態を攻撃中に
-            Debug.Log("Attack");
+            //Debug.Log("Attack");
         }
         else
         {
@@ -373,7 +377,7 @@ public class Player : MonoBehaviour, IDamageable
             beginDash = false;
             rb.velocity = transform.right * dashSpeed;//速度を設定
             rb.gravityScale = 0;
-            Debug.Log("PlayerState.Dashing");
+            if(printLog) Debug.Log("PlayerState.Dashing");
         }
     }
     IEnumerator DashCoroutine()//ダッシュ中のコルーチン
@@ -515,32 +519,39 @@ public class Player : MonoBehaviour, IDamageable
 
     public void BodyEnter(Collider2D collision)//体の当たり判定用のコライダーにつけたスクリプトから呼ばれる
     {
-        Debug.Log("Player_BodyEnter");
+        if(printLog) Debug.Log("Player_BodyEnter");
         if (playerState == PlayerState.Dashing)
         {
-            Debug.Log("DashDrain");
+            if (printLog) Debug.Log("DashDrain");
             var drainTarget = collision.gameObject.GetComponent<IDrainable>();//触れた相手にドレイン用インターフェースがあるか
             if (drainTarget != null && drainTarget.Drain())//ドレイン可能時
             {
                 Instantiate(dashDrainEffect, transform.position, transform.rotation);
-                Debug.Log("DashDrainSucceed");
+                if (printLog) Debug.Log("DashDrainSucceed");
                 recoverEnergy(getEnergy);
             }
         }
         if (playerState == PlayerState.SuperDashing)
         {
-            Debug.Log("SuperDashDrain");
+            if (printLog) Debug.Log("SuperDashDrain");
             var drainTarget = collision.gameObject.GetComponent<IDrainable>();//触れた相手にドレイン用インターフェースがあるか
-            
             if (drainTarget != null && (drainTarget.Drain() || drainTarget.SuperDrain()))//ドレイン可能時。通常のDrain()がTrueならばSuperDrain()もTrueなはずだが、ミスがあった時のために
             {
                 Instantiate(superDashDrainEffect, transform.position, transform.rotation);
-                Debug.Log("SuperDashDrainSucceed");
+                if (printLog) Debug.Log("SuperDashDrainSucceed");
                 recoverEnergy(getSuperEnergy);
+            }
+
+            //スタンさせる用の処理
+            var stunnTarget = collision.gameObject.GetComponent<ISuperDashStunn>();
+            if (stunnTarget != null)//スタン可能時
+            {
+                if (printLog) Debug.Log("SuperDasStunnSucceed");
+                stunnTarget.SuperDashStunn();
             }
         }
 
-        Debug.Log("OntrrigerEnter_Player");
+        if (printLog) Debug.Log("OntrrigerEnter_Player");
     }
     private bool JudgeInvincible()//絶対にダメージを受けない状態ならtrueを返す
     {
@@ -550,11 +561,11 @@ public class Player : MonoBehaviour, IDamageable
     public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
     public void Damage(int damage, Vector2 vector, int type)
     {
-        Debug.Log("PlayerDamage");
+        if (printLog) Debug.Log("PlayerDamage");
         if (!JudgeInvincible() && JudgeGetDamageType(type))
         {
             GetDamage(damage);
-            if (type == 1) { Debug.Log("Player_DamageRed"); } ;
+            if (type == 1) { if (printLog) { Debug.Log("Player_DamageRed"); } } ;
         }
         rb.velocity = vector;
         if (vector != Vector2.zero) { rb.velocity = vector; }//ノックバック 
@@ -585,7 +596,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     IEnumerator BlinkCoroutine(float duration)//ダメージを受けた時に点滅したり一定時間無敵にしたりする
     {
-        Debug.Log("BlinkCoroutine");
+        if (printLog) Debug.Log("BlinkCoroutine");
         isInvincible = true;  // 一定時間無敵状態にする
         float elapsedTime = 0f;
         while (elapsedTime < duration)

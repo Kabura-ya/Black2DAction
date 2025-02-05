@@ -180,7 +180,7 @@ MonoBehaviour:
   damageTag: Player
   attack: 1
   type: 0
-  vector: {x: 0, y: 0}
+  vector: {x: 10, y: 5}
 --- !u!60 &8955382078477846829
 PolygonCollider2D:
   m_ObjectHideFlags: 0

@@ -6,10 +6,11 @@ public class AttackEnemy : MonoBehaviour
 {
     // Start is called before the first frame update
     public int damage = 1;
-    public float enableTime = 0.4f;//攻撃コライダーを有効化する時間
+    public float enableTime = 2f;//攻撃コライダーを有効化する時間
     public Collider2D col;
-    public Vector2 vector = Vector2.zero;
+    public Vector2 vector = new Vector2(10,5);
     public int damageType = 0;
+    Coroutine disableTimeCoroutine;
     /*
     private void Update()
     {
@@ -39,7 +40,7 @@ public class AttackEnemy : MonoBehaviour
     public void EnableAttack()
     {
         col.enabled = true;
-        StartCoroutine(EnableCollider());
+        disableTimeCoroutine = StartCoroutine(EnableCollider());
     }
 
     IEnumerator EnableCollider()
@@ -51,6 +52,8 @@ public class AttackEnemy : MonoBehaviour
 
     public void DisableAttack()
     {
+        if (disableTimeCoroutine != null) { StopCoroutine(disableTimeCoroutine); }//時間経過で自動的にコライダーを無効化するコルーチンを中止
+        disableTimeCoroutine = null;
         col.enabled = false;
     }
 
@@ -61,7 +64,7 @@ public class AttackEnemy : MonoBehaviour
             var damageTarget = collision.gameObject.GetComponent<IDamageable>();
             if (damageTarget != null)
             {
-                damageTarget.Damage(damage, vector, damageType);
+                damageTarget.Damage(damage, transform.right * vector.x + transform.up * vector.y, damageType);
             }
         }
     }
