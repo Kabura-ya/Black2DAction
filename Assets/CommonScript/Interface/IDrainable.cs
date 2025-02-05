@@ -9,4 +9,5 @@ public interface IDrainable
     public bool Drain();//これがtrueの時はエナジー吸収できる
     public bool SuperDrain();//これがtrueのときはスーパーダッシュでドレインできる
                              //（通常のダッシュで回避できる攻撃しかしない敵ならばDrain()の結果をそのまま返せばよい）
+
 }

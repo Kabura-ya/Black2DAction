@@ -1,3 +1,4 @@
+//using System;
 using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
@@ -27,6 +28,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
     public float groundHight;
 
     private bool start = true;
+    private float startTime = 1.3f;//なぜか最初のアニメーションよりも長い秒数にすると行こうのアニメーションの再生が正常にできない事がある
     private bool onGround = true;
     private bool enableHit = false;//これがtrueの時だけダメージを受けたり与える
     private bool superDashStunn = false;//これがtrueの時（主に一部の赤攻撃中）にスーパーダッシュでぶつかられるとスタンする。
@@ -79,10 +81,12 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
     IEnumerator StartC()//最初の演出をする
     {
         playerScript.StopPlayer();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(startTime);
         playerScript.StopInterruptPlayer();
         start = false;
         enableHit = true;
+        action = 0;
+        yield return new WaitForSeconds(0.1f);
         ChooseAction();
     }
 
