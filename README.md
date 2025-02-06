@@ -105,7 +105,13 @@ Enemy/Effect/DamageEffect/Effect_Damage_Enemy.prefab がダメージを受けた
 
 Enemy/Effect/DamageEffect/Effect_Defeat.prefab　が倒したときのエフェクト
 
-## 未実装の要素
+# 入れるとゲーム的に面白くなるかもしれない要素
+
+## スタン
+
+体力を減らしたり、ボスの一部の攻撃中にチャージダッシュでぶつかるとスタンし、一定時間攻撃を加えるチャンスができる。
+
+## 未実装の要素(必須)
 
 ### 1:ワールドマップ
 
