@@ -236,8 +236,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableHit: 1
   attack: 1
-  hp: 10
-  speed: 10
+  hp: 20
+  speed: 1
   damageEffect: {fileID: 8495619054844228353, guid: 7fa56603d4b6cf3448e0a44b41ea5267, type: 3}
   invincibleTime: 0.2
   blinkInterval: 0.1
@@ -617,8 +617,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableHit: 1
   attack: 1
-  hp: 10
-  speed: 10
+  hp: 20
+  speed: 1
   damageEffect: {fileID: 8495619054844228353, guid: 7fa56603d4b6cf3448e0a44b41ea5267, type: 3}
   invincibleTime: 0.2
   blinkInterval: 0.1
