@@ -93,6 +93,18 @@ Drain()がtrueのものは通常ダッシュでもチャージダッシュでも
 
 難易度は初プレイの人が5回以内にクリアできるぐらい、難しくても10回ぐらい。
 
+# やらなくても動くがやってほしいこと
+
+## エフェクト
+
+敵がダメージを受けたり倒された時にはダメージエフェクトを出すように
+
+エフェクトを出すには、public GameObject damageEffect;　のようにGameobject 型のpublic変数を作り、変数にエフェクト用のプレファブを入れ、Damage関数にの中で　Instantiate(damageEffect, transform.position, transform.rotation);　を実行すればよい
+
+Enemy/Effect/DamageEffect/Effect_Damage_Enemy.prefab がダメージを受けた時のエフェクト
+
+Enemy/Effect/DamageEffect/Effect_Defeat.prefab　が倒したときのエフェクト
+
 ## 未実装の要素
 
 ### 1:ワールドマップ
