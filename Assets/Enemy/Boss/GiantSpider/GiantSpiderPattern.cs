@@ -39,6 +39,7 @@ public class GiantSpiderPattern : MonoBehaviour
                         bottomCollider2D.enabled = false;
                         giantSpiderMove.JumpUp();
                         giantSpiderStatus.JumpSwitch(1);
+                        giantSpiderAttack.GenerateWebShot();
                         coolTime = giantSpiderStatus.CoolTime;
                         bottomCollider2D.enabled = true;
                     }
