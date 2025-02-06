@@ -21,6 +21,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
     public float dashDistance = 20;
     public float dashSpeed = 10;
     public float idleTime = 1;
+    public float slashIdleTimeMlutiply = 0.8f;//斬撃の待機時間が通常の何倍か
 
     public float fallHight = 3;
     public float fallSpeed = 10;
@@ -28,7 +29,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
     public float groundHight;
 
     private bool start = true;
-    private float startTime = 1.3f;//なぜか最初のアニメーションよりも長い秒数にすると行こうのアニメーションの再生が正常にできない事がある
+    public float startTime = 2;
     private bool onGround = true;
     private bool enableHit = false;//これがtrueの時だけダメージを受けたり与える
     private bool superDashStunn = false;//これがtrueの時（主に一部の赤攻撃中）にスーパーダッシュでぶつかられるとスタンする。
@@ -56,7 +57,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
     public Material whiteFlashMaterial; // 白く点滅させるためのマテリアル
 
     public float stunnTime = 3;//スタン時間
-    public int stunnMaxCount = 1;
+    public int stunnMaxCount = 1;//体力を削ることによりスタンさせられる回数
     public int stunnCount = 0;//これまで何回スタンしたかを記録（体力がある程度減るごとにスタンするようにするため）
 
     Coroutine actionCoroutine;//死亡時などにコルーチンを停止させるために、行動のコルーチンの引数を入れておく
@@ -257,7 +258,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
     private IEnumerator Sword()//近距離攻撃
     {
         FlipToPlayer();
-        yield return new WaitForSeconds(idleTime);
+        yield return new WaitForSeconds(idleTime * slashIdleTimeMlutiply);
         moving = true;
         //アニメーションの方で EnabeleAttack_Sword()を実行
         yield return new WaitForSeconds(idleTime);
@@ -278,23 +279,17 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
         sword.DisableAttack();
     }
 
-    private IEnumerator LongRange()//遠距離攻撃
+    private IEnumerator LongRange()//通常遠距離攻撃
     {
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
-        //このへんでアニメーションの方からLongRangeSpawn();が呼ばれて弾が出る
+        moving = true;
+        //このへんでアニメーションの方からFlipToPlyayerとLongRangeSpawn();が呼ばれて弾が出る
         yield return new WaitForSeconds(idleTime);
+        moving = false;
         action = 0;
         yield return new WaitForSeconds(0.1f);
-        if (0.7 < Random.value)//通常遠距離攻撃後3/10の確率で赤遠距離攻撃をする
-        {
-            action = 4;
-            actionCoroutine = StartCoroutine(LongRangeRed());
-        }
-        else
-        {
-            ChooseAction();
-        }
+        ChooseAction();
     }
 
     private void LongRangeSpawn()//弾を発射するための関数、アニメーションの方で呼ぶ
@@ -306,7 +301,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
     {
         FlipToPlayer();
         yield return new WaitForSeconds(2.5f);
-        //このへんでアニメーションの方からLongRangeSpawn();が呼ばれて弾が出る
+        //このへんでアニメーションの方からFlipToPlyayerとLongRangeRedSpawn();が呼ばれて弾が出る
         yield return new WaitForSeconds(idleTime);
         action = 0;
         yield return new WaitForSeconds(0.1f);
