@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-//巨大蜘蛛の行動パターン
+//巨大蜘蛛の行動パターン。状態遷移制御。
+//設定回数分回ジャンプ＞突進＞特殊行動のループ。各行動には後隙が存在。
 public class GiantSpiderPattern : MonoBehaviour
 {
     [SerializeField] private GiantSpiderStatus giantSpiderStatus = null;
+    [SerializeField] private GiantSpiderAttack giantSpiderAttack = null;
     [SerializeField] private GroundCheck bottomGroundChecker = null;
     [SerializeField] private Collider2D bottomCollider2D = null;
     [SerializeField] private GiantSpiderMove giantSpiderMove = null;
-    [SerializeField] private Animator anim = null;
 
-    [SerializeField] private float coolTime = 0;//ステータスで攻撃ごとにクールタイム付けたい
+    private int jumpCount = 0;
     private float walkTime = 0;
-    private int actionNum = 0;
+    private float coolTime = 0;
 
     void Awake()
     {
-        coolTime = 0;
+        jumpCount = giantSpiderStatus.JumpCount;
+        walkTime = giantSpiderStatus.WalkTime;
+        coolTime = giantSpiderStatus.CoolTime;
     }
 
     void Update()
@@ -30,20 +33,27 @@ public class GiantSpiderPattern : MonoBehaviour
                 coolTime -= Time.deltaTime;
                 if (coolTime < 0)
                 {
-                    actionNum = Random.Range(0, 10);
-                    if (actionNum > 5)
+                    if (jumpCount > 0)
                     {
+                        jumpCount--;
                         bottomCollider2D.enabled = false;
                         giantSpiderMove.JumpUp();
-                        anim.SetBool("jump", true);
-                        coolTime = 0.5f;
+                        giantSpiderStatus.JumpSwitch(1);
+                        coolTime = giantSpiderStatus.CoolTime;
                         bottomCollider2D.enabled = true;
+                    }
+                    else if(walkTime > 0) 
+                    {
+                        giantSpiderStatus.WalkSwitch(1);
+                        giantSpiderAttack.TackleSwitch(1);
+                        coolTime = giantSpiderStatus.CoolTime;
                     }
                     else
                     {
-                        anim.SetBool("walk", true);
-                        walkTime = 2;
-                        coolTime = 0.2f;
+                        giantSpiderStatus.GuillotineTrigger();
+                        jumpCount = giantSpiderStatus.JumpCount;
+                        walkTime = giantSpiderStatus.WalkTime;
+                        coolTime = giantSpiderStatus.CoolTime;
                     }
                 }
             }
@@ -52,7 +62,7 @@ public class GiantSpiderPattern : MonoBehaviour
         {
             if(bottomGroundChecker.IsGround())
             {
-                anim.SetBool("jump", false);
+                giantSpiderStatus.JumpSwitch(0);
             }
         }
         else if (giantSpiderStatus.IsWalk())
@@ -60,7 +70,8 @@ public class GiantSpiderPattern : MonoBehaviour
             walkTime -= Time.deltaTime;
             if (walkTime < 0)
             {
-                anim.SetBool("walk", false);
+                giantSpiderStatus.WalkSwitch(0);
+                giantSpiderAttack.TackleSwitch(0);
             }
         }
     }

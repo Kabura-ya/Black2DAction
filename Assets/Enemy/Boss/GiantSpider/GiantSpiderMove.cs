@@ -14,8 +14,6 @@ public class GiantSpiderMove : MonoBehaviour
 
     private Vector3 originScale = new Vector3 (0, 0, 0);
 
-    private Transform playerTrans = null;
-
     void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -33,45 +31,39 @@ public class GiantSpiderMove : MonoBehaviour
             originScale = new Vector3(this.transform.localScale.x, this.transform.localScale.y, -this.transform.localScale.z);
         }
     }
-    void Start()
-    {
-        playerTrans = GameObject.Find("Player").transform;
-    }
 
     void Update()
     {
-        if (giantSpiderStatus.IsStand())
+        if (giantSpiderStatus.PlayerTrans != null)
         {
-            if (this.transform.position.x < playerTrans.position.x)
+            if (giantSpiderStatus.IsStand())
             {
-                this.transform.localScale = originScale;
+                if (this.transform.position.x < giantSpiderStatus.PlayerTrans.position.x)
+                {
+                    this.transform.localScale = originScale;
+                }
+                else
+                {
+                    this.transform.localScale = new Vector3(-originScale.x, originScale.y, originScale.z);
+                }
             }
-            else
+            if ((giantSpiderStatus.IsJump() || giantSpiderStatus.IsWalk()) && wallGroundChecker.IsGround())
             {
-                this.transform.localScale = new Vector3(-originScale.x, originScale.y, originScale.z);
-            }
-        }
-        if((giantSpiderStatus.IsJump() || giantSpiderStatus.IsWalk()) && wallGroundChecker.IsGround())
-        {
-            if(this.transform.localScale.x < 0)
-            {
-                this.transform.localScale = originScale;
-            }
-            else
-            {
-                this.transform.localScale = new Vector3(-originScale.x, originScale.y, originScale.z);
+                if (this.transform.localScale.x < 0)
+                {
+                    this.transform.localScale = originScale;
+                }
+                else
+                {
+                    this.transform.localScale = new Vector3(-originScale.x, originScale.y, originScale.z);
+                }
             }
         }
     }
 
     void FixedUpdate()
     {
-        if(giantSpiderStatus.IsSpawn() || giantSpiderStatus.IsDead())
-        {
-            xSpeed = 0;
-            ySpeed = 0;
-        }
-        else if(giantSpiderStatus.IsStand())
+        if(giantSpiderStatus.IsStand())
         {
             xSpeed = 0;
             if (bottomGroundChecker.IsGround())
@@ -100,6 +92,11 @@ public class GiantSpiderMove : MonoBehaviour
             {
                 ySpeed = -giantSpiderStatus.VerSpeed;
             }
+        }
+        else
+        {
+            xSpeed = 0;
+            ySpeed = 0;
         }
         rb2D.velocity = new Vector2(xSpeed, ySpeed);
     }

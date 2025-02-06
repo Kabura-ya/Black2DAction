@@ -6,6 +6,10 @@ using UnityEngine;
 //アニメーターコントローラーを付けたオブジェクトに付ける。
 public class GiantSpiderAnimationEvent : MonoBehaviour
 {
-    [SerializeField] private GiantSpiderStatus giantSpiderStatus = null;
-
+    [SerializeField] private GiantSpiderAttack giantSpiderAttack = null;
+    
+    void GuillotineAttack()
+    {
+        giantSpiderAttack.GenerateGuillotine();
+    }
 }
