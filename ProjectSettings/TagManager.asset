@@ -46,6 +46,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: ground
+    uniqueID: 2325498101
+    locked: 0
   - name: enemy
     uniqueID: 282375091
     locked: 0
@@ -63,4 +66,7 @@ TagManager:
     locked: 0
   - name: playerEffect1
     uniqueID: 3252881803
+    locked: 0
+  - name: groundFront
+    uniqueID: 3639556987
     locked: 0
