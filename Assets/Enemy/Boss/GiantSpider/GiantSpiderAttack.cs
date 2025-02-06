@@ -8,6 +8,8 @@ public class GiantSpiderAttack : MonoBehaviour
     [SerializeField] private GiantSpiderStatus giantSpiderStatus = null;
     [SerializeField] private GameObject tackle = null;
     [SerializeField] private GameObject guillotine = null;
+    [SerializeField] private GameObject webShot = null;
+    [SerializeField] private Transform webShotPos = null;
 
     void Awake()
     {
@@ -36,5 +38,10 @@ public class GiantSpiderAttack : MonoBehaviour
         {
             Instantiate(guillotine, giantSpiderStatus.PlayerTrans.position, Quaternion.identity);
         }
+    }
+
+    public void GenerateWebShot()
+    {
+        Instantiate(webShot, webShotPos.position, Quaternion.identity);
     }
 }

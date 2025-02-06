@@ -1,0 +1,56 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class WebShot : MonoBehaviour
+{
+    [SerializeField] private GroundCheck groundChecker = null;
+    [SerializeField] private GameObject webTrap = null;
+    private Rigidbody2D rb2D = null;
+    [SerializeField] private float maxSpeed = 5;
+    private float verSpeed = 0;
+    private Vector3 originScale = new Vector3(0, 0, 0);
+
+    void Awake()
+    {
+        rb2D = GetComponent<Rigidbody2D>();
+        verSpeed = maxSpeed;
+        originScale = this.transform.localScale;
+        if (originScale.x < 0)
+        {
+            originScale = new Vector3(-this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
+        }
+        if (originScale.y < 0)
+        {
+            originScale = new Vector3(this.transform.localScale.x, -this.transform.localScale.y, this.transform.localScale.z);
+        }
+        if (originScale.z < 0)
+        {
+            originScale = new Vector3(this.transform.localScale.x, this.transform.localScale.y, -this.transform.localScale.z);
+        }
+    }
+
+    void Update()
+    {
+        if(groundChecker.IsGround())
+        {
+            Instantiate(webTrap, this.transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        verSpeed -= maxSpeed * Time.deltaTime;
+        if(verSpeed < 0)
+        {
+            this.transform.localScale = new Vector3(originScale.x, -originScale.y, originScale.z);
+        }
+        if(verSpeed < -maxSpeed)
+        {
+            verSpeed = -maxSpeed;
+        }
+
+        rb2D.velocity = new Vector2(0, verSpeed);
+    }
+}
