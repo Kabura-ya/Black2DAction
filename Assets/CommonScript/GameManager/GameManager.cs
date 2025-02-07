@@ -10,6 +10,26 @@ public class GameManager : MonoBehaviour
     public Player player;
     public string loseLoadSceneName;
     public string winLoadSceneName;
+    public bool[] DefeatedBosses = new bool[50];//倒したボスの番号のところをtrueにする
+    private int numOfBosses = 20;//ボスが何体いるか
+    public static GameManager instance = null;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+            for (int i = 0; i < numOfBosses; i++)
+            {
+                DefeatedBosses[i] = false;
+            }
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
     void Start()
     {
         
@@ -26,8 +46,9 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(loseLoadSceneName);
     }
 
-    public void GameClear()
+    public void GameClear(int bossNum)//ボスを倒したら各ボスの番号を引数としてこの関数が呼ばれる
     {
+        DefeatedBosses[bossNum] =true;//
         StartCoroutine(ClearC());
     }
 
