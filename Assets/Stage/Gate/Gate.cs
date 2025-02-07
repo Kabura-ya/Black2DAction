@@ -26,6 +26,11 @@ public class Gate : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if ((openBossnum == -1 || GameManager.instance.DefeatedBosses[openBossnum]) &&  collision.gameObject.tag == "Player" ) {
+            if (openBossnum != -1) {
+                Debug.Log("DefeatedBosses[openBossnum]");
+                Debug.Log(GameManager.instance.DefeatedBosses[openBossnum]);
+                Debug.Log(openBossnum);
+            }
             playerEnter = true;
             guide.SetActive(true);
         }

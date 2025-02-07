@@ -49,6 +49,8 @@ public class GameManager : MonoBehaviour
     public void GameClear(int bossNum)//ボスを倒したら各ボスの番号を引数としてこの関数が呼ばれる
     {
         DefeatedBosses[bossNum] =true;//
+        Debug.Log("DefeatBoss");
+        Debug.Log(bossNum);
         StartCoroutine(ClearC());
     }
 
