@@ -8,7 +8,8 @@ public class Gate : MonoBehaviour
 {
     public string sceneName;
     private bool playerEnter = false;
-    public GameObject guide;//ボタンを押すとボス戦が始まるとかボスのシルエットとか
+    public GameObject guide;//どのボタンを押すとボス戦が始まるかの案内とかボスの画像とか
+    public int openBossnum = 0;//この番号のボスが倒されていれば扉が解放される(-1ならば最初から解放)
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +25,7 @@ public class Gate : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player") {
+        if ((openBossnum == -1 || GameManager.instance.DefeatedBosses[openBossnum]) &&  collision.gameObject.tag == "Player" ) {
             playerEnter = true;
             guide.SetActive(true);
         }

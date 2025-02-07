@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WorldMap.unity
     guid: 9399d98bc0e36304da3a680528a02931
+  - enabled: 1
+    path: Assets/Scenes/TanemaruTestStage.unity
+    guid: af0067aacb24d3b44b8852553e18de78
   m_configObjects: {}
