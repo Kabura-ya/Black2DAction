@@ -11,7 +11,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
 {
     public GameManager gameManager;//ゲームオーバーやクリアなどを処理するGamemanagerについているスクリプトの情報を取得するための関数
 
-    public int thisBossNum = 0;//このボスの番号、ボスが倒されたらGameManager.Instance.GameCrearに
+    public int thisBossNum = 1;//このボスの番号、ボスが倒されたらGameManager.Instance.GameCrearに
     public int attack = 1;
     public int maxHp = 300;
     public int hp = 300;
