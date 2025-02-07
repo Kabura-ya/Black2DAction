@@ -330,7 +330,7 @@ public class Player : MonoBehaviour, IDamageable
             jumpTimeCounter = 0;
         }
 
-        if (!(JudgeNormalState() || playerState == PlayerState.Jumping))
+        if (!(JudgeNormalState() || playerState == PlayerState.Jumping || playerState == PlayerState.NormalAttacking))
         {
             return;
         }
