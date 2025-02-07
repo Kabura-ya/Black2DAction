@@ -542,12 +542,12 @@ public class Player : MonoBehaviour, IDamageable
                 recoverEnergy(getSuperEnergy);
             }
 
-            //スタンさせる用の処理
-            var stunnTarget = collision.gameObject.GetComponent<ISuperDashStunn>();
+            //スーパーダッシュでぶつかった敵をスタンさせる用の処理（一部の敵や攻撃パターン中じゃないとスタンしない）
+            var stunnTarget = collision.gameObject.GetComponent<IDashHit>();
             if (stunnTarget != null)//スタン可能時
             {
                 if (printLog) Debug.Log("SuperDasStunnSucceed");
-                stunnTarget.SuperDashStunn();
+                stunnTarget.SuperDashHit();
             }
         }
 

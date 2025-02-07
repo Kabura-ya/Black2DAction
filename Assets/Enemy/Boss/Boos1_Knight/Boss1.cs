@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
+public class Boss1 : MonoBehaviour, IDamageable, IDrainable, IDashHit
 {
     public GameManager gameManager;//ゲームオーバーやクリアなどを処理するGamemanagerについているスクリプトの情報を取得するための関数
 
@@ -415,7 +415,8 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn
         actionCoroutine = null;
         actionCoroutine = StartCoroutine(nextAction);
     }
-    public void SuperDashStunn()
+    public void NormalDashHit() { }//IDashHitインターフェースに入れてるからおいてるだけで何もしない
+    public void SuperDashHit()
     {
         if (superDashStunn)//一部の赤攻撃中などにスーパーダッシュでぶつかられるとスタンする
         {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss1_Body : MonoBehaviour, IDamageable, IDrainable, ISuperDashStunn //ボスの胴体
+public class Boss1_Body : MonoBehaviour, IDamageable, IDrainable, IDashHit //ボスの胴体
 {
     // Start is called before the first frame update
     private void OnTriggerStay2D(Collider2D collision)//Bodyに触れたものを親オブジェクトに渡すだけ
@@ -27,9 +27,12 @@ public class Boss1_Body : MonoBehaviour, IDamageable, IDrainable, ISuperDashStun
     {
         return transform.root.gameObject.GetComponent<Boss1>().SuperDrain();
     }
-
-    public void SuperDashStunn()
+    public void NormalDashHit()
     {
-        transform.root.gameObject.GetComponent<Boss1>().SuperDashStunn();
+        transform.root.gameObject.GetComponent<Boss1>().NormalDashHit();
+    }
+    public void SuperDashHit()
+    {
+        transform.root.gameObject.GetComponent<Boss1>().SuperDashHit();
     }
 }
