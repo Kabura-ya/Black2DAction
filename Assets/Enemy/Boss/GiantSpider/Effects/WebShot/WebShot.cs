@@ -8,13 +8,13 @@ public class WebShot : MonoBehaviour
     [SerializeField] private GameObject webTrap = null;
     private Rigidbody2D rb2D = null;
     [SerializeField] private float maxSpeed = 5;
+    private float holSpeed = 0;
     private float verSpeed = 0;
     private Vector3 originScale = new Vector3(0, 0, 0);
 
     void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
-        verSpeed = maxSpeed;
         originScale = this.transform.localScale;
         if (originScale.x < 0)
         {
@@ -51,6 +51,16 @@ public class WebShot : MonoBehaviour
             verSpeed = -maxSpeed;
         }
 
-        rb2D.velocity = new Vector2(0, verSpeed);
+        rb2D.velocity = new Vector2(holSpeed, verSpeed);
+
+        Vector2 derection = new Vector2(rb2D.velocity.x, rb2D.velocity.y).normalized;
+        this.transform.rotation = Quaternion.FromToRotation(Vector2.right, derection);
+    }
+
+    public void Launch(Vector2 launchVec)
+    {
+        launchVec = launchVec.normalized;
+        holSpeed = launchVec.x * maxSpeed;
+        verSpeed = launchVec.y * maxSpeed;
     }
 }

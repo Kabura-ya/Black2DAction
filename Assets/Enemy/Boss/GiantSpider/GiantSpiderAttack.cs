@@ -9,7 +9,7 @@ public class GiantSpiderAttack : MonoBehaviour
     [SerializeField] private GameObject tackle = null;
     [SerializeField] private GameObject guillotine = null;
     [SerializeField] private GameObject webShot = null;
-    [SerializeField] private Transform webShotPos = null;
+    [SerializeField] private Transform webShotTrans = null;
 
     void Awake()
     {
@@ -42,6 +42,10 @@ public class GiantSpiderAttack : MonoBehaviour
 
     public void GenerateWebShot()
     {
-        Instantiate(webShot, webShotPos.position, Quaternion.identity);
+        GameObject shot = Instantiate(webShot, webShotTrans.position, Quaternion.identity);
+        shot.GetComponent<WebShot>().Launch(new Vector2(2, 10));
+
+        shot = Instantiate(webShot, webShotTrans.position, Quaternion.identity);
+        shot.GetComponent<WebShot>().Launch(new Vector2(-2, 10));
     }
 }
