@@ -47,7 +47,9 @@ MPを消費して**大技**（エネルギー弾とか）を放てる
 
 Groundタグにプレイヤーの足元のコライダーが触れたかで着地判定を行う。Groundタグのついてない足場ではジャンプできない
 
-## ダメージ用インターフェース
+## インターフェース
+
+### ダメージ用インターフェース
 
 CommonScript/Interface/IDamageable.cs
 
@@ -57,7 +59,7 @@ CommonScript/Interface/IDamageable.cs
 
 敵が受けるダメージ：
 
-## ドレイン(ダッシュで当たるとMP吸収ができるもの)用インターフェース
+### ドレイン(ダッシュで当たるとMP吸収ができるもの)用インターフェース
 
 CommonScript/Interface/IDrainable.cs
 
@@ -67,7 +69,7 @@ Drain()がtrueのものは通常ダッシュでもチャージダッシュでも
 
 チャージダッシュでのみドレイン可能な赤い攻撃などは、SuperDrain()のみtrueでDrain()がfalseにする
 
-## プレイヤーがダッシュでぶつかった相手に何かする用インターフェース
+### プレイヤーがダッシュでぶつかった相手に何かする用インターフェース
 
 CommonScript/Interface/IDashHit.cs
 
