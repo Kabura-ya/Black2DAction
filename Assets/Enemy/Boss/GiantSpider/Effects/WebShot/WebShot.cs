@@ -28,6 +28,10 @@ public class WebShot : MonoBehaviour
         {
             originScale = new Vector3(this.transform.localScale.x, this.transform.localScale.y, -this.transform.localScale.z);
         }
+
+        Vector2 initderection = transform.right;
+        holSpeed = initderection.x * maxSpeed;
+        verSpeed = initderection.y * maxSpeed;
     }
 
     void Update()
@@ -55,12 +59,5 @@ public class WebShot : MonoBehaviour
 
         Vector2 derection = new Vector2(rb2D.velocity.x, rb2D.velocity.y).normalized;
         this.transform.rotation = Quaternion.FromToRotation(Vector2.right, derection);
-    }
-
-    public void Launch(Vector2 launchVec)
-    {
-        launchVec = launchVec.normalized;
-        holSpeed = launchVec.x * maxSpeed;
-        verSpeed = launchVec.y * maxSpeed;
     }
 }

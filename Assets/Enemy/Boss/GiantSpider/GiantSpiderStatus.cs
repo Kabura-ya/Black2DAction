@@ -26,9 +26,13 @@ public class GiantSpiderStatus : MonoBehaviour
     private Transform playerTrans = null;
     public Transform PlayerTrans => playerTrans;
 
+    private Transform cameraTrans = null;
+    public Transform CameraTrans => cameraTrans;
+
     void Start()
     {
         playerTrans = GameObject.Find("Player").transform;
+        cameraTrans = GameObject.Find("Main Camera").transform;
     }
 
     public bool IsSpawn()
@@ -80,6 +84,24 @@ public class GiantSpiderStatus : MonoBehaviour
     public void GuillotineTrigger()
     {
         anim.SetTrigger("guillotine");
+    }
+
+    public bool IsPreWebBeem()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PreWebBeem");
+    }
+    public void PreWebBeemTrigger()
+    {
+        anim.SetTrigger("prewebbeem");
+    }
+
+    public bool IsWebBeem()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("WebBeem");
+    }
+    public void WebBeemTrigger()
+    {
+        anim.SetTrigger("webbeem");
     }
 
     public bool IsDead()
