@@ -26,7 +26,7 @@ public class GiantSpiderPattern : MonoBehaviour
 
     void Update()
     {
-        if(giantSpiderStatus.IsStand())
+        if (giantSpiderStatus.IsStand())
         {
             if (bottomGroundChecker.IsGround())
             {
@@ -51,7 +51,16 @@ public class GiantSpiderPattern : MonoBehaviour
                     }
                     else
                     {
-                        giantSpiderStatus.GuillotineTrigger();
+                        float randomValue = Random.Range(0f, 1f);
+                        if (randomValue >= 0.5f)
+                        {
+                            giantSpiderStatus.GuillotineTrigger();
+                        }
+                        else
+                        {
+                            giantSpiderStatus.PreWebBeemTrigger();
+                            giantSpiderMove.BeemStandby();
+                        }
                         jumpCount = giantSpiderStatus.JumpCount;
                         walkTime = giantSpiderStatus.WalkTime;
                         coolTime = giantSpiderStatus.CoolTime;
@@ -73,6 +82,13 @@ public class GiantSpiderPattern : MonoBehaviour
             {
                 giantSpiderStatus.WalkSwitch(0);
                 giantSpiderAttack.TackleSwitch(0);
+            }
+        }
+        else if(giantSpiderStatus.IsPreWebBeem())
+        {
+            if(giantSpiderMove.IsReachCentral())
+            {
+                giantSpiderStatus.WebBeemTrigger();
             }
         }
     }

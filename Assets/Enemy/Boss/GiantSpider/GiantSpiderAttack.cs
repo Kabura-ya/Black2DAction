@@ -10,6 +10,7 @@ public class GiantSpiderAttack : MonoBehaviour
     [SerializeField] private GameObject guillotine = null;
     [SerializeField] private GameObject webShot = null;
     [SerializeField] private Transform webShotTrans = null;
+    [SerializeField] private GameObject webBeem = null;
 
     void Awake()
     {
@@ -42,10 +43,12 @@ public class GiantSpiderAttack : MonoBehaviour
 
     public void GenerateWebShot()
     {
-        GameObject shot = Instantiate(webShot, webShotTrans.position, Quaternion.identity);
-        shot.GetComponent<WebShot>().Launch(new Vector2(2, 10));
+        Instantiate(webShot, webShotTrans.position, Quaternion.Euler(0f, 0f, 80f));
+        Instantiate(webShot, webShotTrans.position, Quaternion.Euler(0f, 0f, 100f));
+    }
 
-        shot = Instantiate(webShot, webShotTrans.position, Quaternion.identity);
-        shot.GetComponent<WebShot>().Launch(new Vector2(-2, 10));
+    public void GenerateWebBeem()
+    {
+        Instantiate(webBeem, webShotTrans.position, Quaternion.Euler(0f, 0f, 90f));
     }
 }

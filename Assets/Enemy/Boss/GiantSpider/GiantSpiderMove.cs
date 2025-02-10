@@ -12,6 +12,10 @@ public class GiantSpiderMove : MonoBehaviour
     [SerializeField] private GroundCheck bottomGroundChecker = null;
     [SerializeField] private GroundCheck wallGroundChecker = null;
 
+    private Vector2 beemStartPos = Vector2.zero;//ビーム発射に移る前の位置
+    private Vector2 toCentralVec = Vector2.zero;//画面中央
+    private float progress = 0;//ビーム発射準備位置と発射位置までの進行度
+
     private Vector3 originScale = new Vector3 (0, 0, 0);
 
     void Awake()
@@ -93,6 +97,11 @@ public class GiantSpiderMove : MonoBehaviour
                 ySpeed = -giantSpiderStatus.VerSpeed;
             }
         }
+        else if(giantSpiderStatus.IsPreWebBeem())
+        {
+            progress += Time.deltaTime * 2;
+            this.transform.position = Vector2.Lerp(beemStartPos, (Vector2)giantSpiderStatus.CameraTrans.position, progress);
+        }
         else
         {
             xSpeed = 0;
@@ -117,6 +126,23 @@ public class GiantSpiderMove : MonoBehaviour
     public void JumpUp()
     {
         ySpeed = giantSpiderStatus.VerSpeed;
-        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 0.1f, this.transform.position.z);
+        this.transform.position = this.transform.position + new Vector3(0, 0.1f, 0);
+    }
+
+    //ウェブビームの予備動作開始時
+    public void BeemStandby()
+    {
+        progress = 0;
+        this.transform.position = this.transform.position + new Vector3(0, 0.1f, 0);
+        beemStartPos = this.transform.position;
+        toCentralVec = ((Vector2)(giantSpiderStatus.CameraTrans.position) - beemStartPos).normalized;
+    }
+    public bool IsReachCentral()
+    {
+        if (progress > 0.9f)
+        {
+            return true;
+        }
+        return false;
     }
 }

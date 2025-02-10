@@ -558,6 +558,7 @@ MonoBehaviour:
   guillotine: {fileID: 3594464801918504700, guid: e0104cf109709f943b91fdb323689004, type: 3}
   webShot: {fileID: 7235642637931753702, guid: 0359d298b156f7f42a8a172fa29c1f22, type: 3}
   webShotTrans: {fileID: 3382495973902289720}
+  webBeem: {fileID: 5820098634140277997, guid: 7e0ff238744ba0244b8abb607e5eb84a, type: 3}
 --- !u!1 &7034140196580344411
 GameObject:
   m_ObjectHideFlags: 0

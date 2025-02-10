@@ -12,4 +12,9 @@ public class GiantSpiderAnimationEvent : MonoBehaviour
     {
         giantSpiderAttack.GenerateGuillotine();
     }
+
+    void WebBeemAttack()
+    {
+        giantSpiderAttack.GenerateWebBeem();
+    }
 }
