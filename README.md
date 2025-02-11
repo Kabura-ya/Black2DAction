@@ -53,7 +53,7 @@ Groundタグにプレイヤーの足元のコライダーが触れたかで着�
 
 CommonScript/Interface/IDamageable.cs
 
-ダメージ量：Int value、攻撃の方向（ノックバックなどに使う）：Vector2 vector、ダメージの種類：Int type（ダッシュで避けられるかどうか）
+public void Damage(int value/*ダメージの値*/, Vector2 vector/*ノックバックの方向*/, int type/*ダメージの種類*/);
 
 プレイヤーが受けるダメージ:ダメージの種類typeは、0なら通常ダッシュで避けられる、1は赤攻撃用で、通常ダッシュでは避けられずチャージダッシュを使えば避けられる、2なら何があっても避けられない（現状敵の攻撃に使うつもりはなく、地形などのダメージを想定）。
 
