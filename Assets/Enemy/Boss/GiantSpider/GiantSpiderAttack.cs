@@ -12,32 +12,31 @@ public class GiantSpiderAttack : MonoBehaviour
     [SerializeField] private Transform webShotTrans = null;
     [SerializeField] private GameObject webBeem = null;
 
+    private List<GameObject> generateObjects = new List<GameObject> ();
+
     void Awake()
     {
-        TackleSwitch(0);
+        TackleOff();
     }
 
-    public void TackleSwitch(int i)
+    public void TackleOn()
     {
-        if(i > 0)
-        {
-            tackle.SetActive(true);
-        }
-        else
-        {
-            tackle.SetActive(false);
-        }
+        tackle.SetActive(true);
+    }
+    public void TackleOff()
+    {
+        tackle.SetActive(false);
     }
 
     public void GenerateGuillotine()
     {
         if (giantSpiderStatus.PlayerTrans == null)
         {
-            Instantiate(guillotine, this.transform.position, Quaternion.identity);
+            Instantiate(guillotine, this.transform.position, Quaternion.Euler(0f, 0f, 0f));
         }
         else
         {
-            Instantiate(guillotine, giantSpiderStatus.PlayerTrans.position, Quaternion.identity);
+            Instantiate(guillotine, giantSpiderStatus.PlayerTrans.position, Quaternion.Euler(0f, 0f, 0f));
         }
     }
 
@@ -49,6 +48,18 @@ public class GiantSpiderAttack : MonoBehaviour
 
     public void GenerateWebBeem()
     {
-        Instantiate(webBeem, webShotTrans.position, Quaternion.Euler(0f, 0f, 90f));
+        GameObject beem = Instantiate(webBeem, webShotTrans.position, Quaternion.Euler(0f, 0f, 90f));
+        generateObjects.Add(beem);
+    }
+
+    //独立している攻撃オブジェクトをすべて破壊する。
+    public void AllClear()
+    {
+        for(int i = 0; i < generateObjects.Count; i++)
+        {
+            GameObject destroyObject = generateObjects[0];
+            generateObjects.Remove(destroyObject);
+            Destroy(destroyObject);
+        }
     }
 }

@@ -7,6 +7,9 @@ using UnityEngine;
 //アニメーションのクリップ名から現状態を取得。
 public class GiantSpiderStatus : MonoBehaviour
 {
+    [Header("後隙"), SerializeField] private int maxHp = 100;
+    public int MaxHp => maxHp;
+
     [Header("並行速度"),SerializeField] private float horSpeed = 5;
     public float HorSpeed => horSpeed;//外部取得だけ可能
     [Header("垂直速度"), SerializeField] private float verSpeed = 10;
@@ -15,8 +18,8 @@ public class GiantSpiderStatus : MonoBehaviour
     [Header("ジャンプ回数"), SerializeField] private int jumpCount = 3;
     public int JumpCount => jumpCount;
 
-    [Header("突進時間"), SerializeField] private float walkTime = 1.5f;
-    public float WalkTime => walkTime;
+    [Header("突進時間"), SerializeField] private float tackleTime = 1.5f;
+    public float TackleTime => tackleTime;
 
     [Header("後隙"), SerializeField] private float coolTime = 0.3f;
     public float CoolTime => coolTime;
@@ -45,19 +48,27 @@ public class GiantSpiderStatus : MonoBehaviour
         return anim.GetCurrentAnimatorStateInfo(0).IsName("Stand");
     }
 
-    public bool IsWalk()
+    public bool IsPreTackle()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("Walk");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PreTackle");
     }
-    public void WalkSwitch(int i)
+    public bool IsTackle()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Tackle");
+    }
+    public bool IsPostTackle()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PostTackle");
+    }
+    public void TackleSwitch(int i)
     {
         if(i > 0)
         {
-            anim.SetBool("walk", true);
+            anim.SetBool("tackle", true);
         }
         else
         {
-            anim.SetBool("walk", false);
+            anim.SetBool("tackle", false);
         }
     }
 
@@ -107,5 +118,9 @@ public class GiantSpiderStatus : MonoBehaviour
     public bool IsDead()
     {
         return anim.GetCurrentAnimatorStateInfo(0).IsName("Dead");
+    }
+    public void DeadPlay()
+    {
+        anim.Play("Dead");
     }
 }
