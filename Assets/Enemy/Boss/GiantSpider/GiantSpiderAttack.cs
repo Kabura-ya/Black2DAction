@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 //攻撃オブジェクトを出したりオンオフしたり。
 public class GiantSpiderAttack : MonoBehaviour
@@ -12,7 +13,7 @@ public class GiantSpiderAttack : MonoBehaviour
     [SerializeField] private Transform webShotTrans = null;
     [SerializeField] private GameObject webBeem = null;
 
-    private List<GameObject> generateObjects = new List<GameObject> ();
+    public UnityEvent clearEvent;
 
     void Awake()
     {
@@ -42,24 +43,30 @@ public class GiantSpiderAttack : MonoBehaviour
 
     public void GenerateWebShot()
     {
-        Instantiate(webShot, webShotTrans.position, Quaternion.Euler(0f, 0f, 80f));
-        Instantiate(webShot, webShotTrans.position, Quaternion.Euler(0f, 0f, 100f));
+        GameObject shot = Instantiate(webShot, webShotTrans.position, Quaternion.Euler(0f, 0f, 80f));
+        shot.GetComponent<WebShot>().RegistGSA(this);
+        DestroyRegist(shot);
+
+        shot = Instantiate(webShot, webShotTrans.position, Quaternion.Euler(0f, 0f, 100f));
+        shot.GetComponent<WebShot>().RegistGSA(this);
+        DestroyRegist(shot);
     }
 
     public void GenerateWebBeem()
     {
         GameObject beem = Instantiate(webBeem, webShotTrans.position, Quaternion.Euler(0f, 0f, 90f));
-        generateObjects.Add(beem);
+        DestroyRegist(beem);
+    }
+
+    //攻撃オブジェクトは死亡、スタン時に消去させたい。
+    public void DestroyRegist(GameObject attackObject)
+    {
+        clearEvent.AddListener(() => { Destroy(attackObject); });
     }
 
     //独立している攻撃オブジェクトをすべて破壊する。
     public void AllClear()
     {
-        for(int i = 0; i < generateObjects.Count; i++)
-        {
-            GameObject destroyObject = generateObjects[0];
-            generateObjects.Remove(destroyObject);
-            Destroy(destroyObject);
-        }
+        clearEvent.Invoke();
     }
 }

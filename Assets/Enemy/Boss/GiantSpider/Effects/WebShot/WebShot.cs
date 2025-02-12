@@ -12,6 +12,8 @@ public class WebShot : MonoBehaviour
     private float verSpeed = 0;
     private Vector3 originScale = new Vector3(0, 0, 0);
 
+    GiantSpiderAttack giantSpiderAttack = null;
+
     void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -38,7 +40,8 @@ public class WebShot : MonoBehaviour
     {
         if(groundChecker.IsGround())
         {
-            Instantiate(webTrap, this.transform.position, Quaternion.identity);
+            GameObject trap = Instantiate(webTrap, this.transform.position, Quaternion.identity);
+            giantSpiderAttack.DestroyRegist(trap);
             Destroy(this.gameObject);
         }
     }
@@ -59,5 +62,10 @@ public class WebShot : MonoBehaviour
 
         Vector2 derection = new Vector2(rb2D.velocity.x, rb2D.velocity.y).normalized;
         this.transform.rotation = Quaternion.FromToRotation(Vector2.right, derection);
+    }
+
+    public void RegistGSA(GiantSpiderAttack giantSpiderAttack)
+    {
+        this.giantSpiderAttack = giantSpiderAttack;
     }
 }
