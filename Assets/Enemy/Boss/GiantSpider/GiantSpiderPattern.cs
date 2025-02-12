@@ -14,13 +14,13 @@ public class GiantSpiderPattern : MonoBehaviour
     [SerializeField] private GiantSpiderMove giantSpiderMove = null;
 
     private int jumpCount = 0;
-    private float walkTime = 0;
+    private float tackleTime = 0;
     private float coolTime = 0;
 
     void Awake()
     {
         jumpCount = giantSpiderStatus.JumpCount;
-        walkTime = giantSpiderStatus.WalkTime;
+        tackleTime = giantSpiderStatus.TackleTime;
         coolTime = giantSpiderStatus.CoolTime;
     }
 
@@ -43,10 +43,9 @@ public class GiantSpiderPattern : MonoBehaviour
                         coolTime = giantSpiderStatus.CoolTime;
                         bottomCollider2D.enabled = true;
                     }
-                    else if(walkTime > 0) 
+                    else if(tackleTime > 0) 
                     {
-                        giantSpiderStatus.WalkSwitch(1);
-                        giantSpiderAttack.TackleSwitch(1);
+                        giantSpiderStatus.TackleSwitch(1);
                         coolTime = giantSpiderStatus.CoolTime;
                     }
                     else
@@ -62,7 +61,7 @@ public class GiantSpiderPattern : MonoBehaviour
                             giantSpiderMove.BeemStandby();
                         }
                         jumpCount = giantSpiderStatus.JumpCount;
-                        walkTime = giantSpiderStatus.WalkTime;
+                        tackleTime = giantSpiderStatus.TackleTime;
                         coolTime = giantSpiderStatus.CoolTime;
                     }
                 }
@@ -75,13 +74,12 @@ public class GiantSpiderPattern : MonoBehaviour
                 giantSpiderStatus.JumpSwitch(0);
             }
         }
-        else if (giantSpiderStatus.IsWalk())
+        else if (giantSpiderStatus.IsTackle())
         {
-            walkTime -= Time.deltaTime;
-            if (walkTime < 0)
+            tackleTime -= Time.deltaTime;
+            if (tackleTime < 0)
             {
-                giantSpiderStatus.WalkSwitch(0);
-                giantSpiderAttack.TackleSwitch(0);
+                giantSpiderStatus.TackleSwitch(0);
             }
         }
         else if(giantSpiderStatus.IsPreWebBeem())

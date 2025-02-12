@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Dead
+  m_Name: PreTackle
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,9 +21,9 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 1681370151, guid: 2d4f2a522a828ef42973ed3be91dc4fe, type: 3}
+      value: {fileID: 2060104589, guid: 0222b49ace34235458d23ad60022eb59, type: 3}
     - time: 1
-      value: {fileID: 1681370151, guid: 2d4f2a522a828ef42973ed3be91dc4fe, type: 3}
+      value: {fileID: 2060104589, guid: 0222b49ace34235458d23ad60022eb59, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -46,8 +46,8 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 1681370151, guid: 2d4f2a522a828ef42973ed3be91dc4fe, type: 3}
-    - {fileID: 1681370151, guid: 2d4f2a522a828ef42973ed3be91dc4fe, type: 3}
+    - {fileID: 2060104589, guid: 0222b49ace34235458d23ad60022eb59, type: 3}
+    - {fileID: 2060104589, guid: 0222b49ace34235458d23ad60022eb59, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -73,15 +73,8 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0
-    functionName: PreDead
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
   - time: 1
-    functionName: Dead
+    functionName: TackleOn
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

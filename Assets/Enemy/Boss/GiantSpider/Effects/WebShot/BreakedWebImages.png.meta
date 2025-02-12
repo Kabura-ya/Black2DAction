@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0222b49ace34235458d23ad60022eb59
+guid: 8d788fe40753aa849a20aaae233a642f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GiantSpiderImages3_0
+      name: BreakedWebImages_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dedd14c06fd385a4f84e40371ce8336a
-      internalID: 2060104589
+      spriteID: 900076ac07afd9b4e845241d85f8a949
+      internalID: 405038427
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GiantSpiderImages3_1
+      name: BreakedWebImages_1
       rect:
         serializedVersion: 2
         x: 256
@@ -132,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 70e2c765d4cbddc48b730c4835eaa0ac
-      internalID: -1286066243
+      spriteID: 156476922885d084eb989349a3229bd0
+      internalID: 270172275
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GiantSpiderImages3_2
+      name: BreakedWebImages_2
       rect:
         serializedVersion: 2
         x: 512
@@ -153,8 +153,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cbae441bb7fb4ab47a965af8ffab067f
-      internalID: -1757644733
+      spriteID: 314834ab16d242242af72463518a57ed
+      internalID: 1422698649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BreakedWebImages_3
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5c54660fb41f1545a7137892f08fe0b
+      internalID: -1489561097
       vertices: []
       indices: 
       edges: []
@@ -170,9 +191,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      GiantSpiderImages3_0: 2060104589
-      GiantSpiderImages3_1: -1286066243
-      GiantSpiderImages3_2: -1757644733
+      BreakedWebImages_0: 405038427
+      BreakedWebImages_1: 270172275
+      BreakedWebImages_2: 1422698649
+      BreakedWebImages_3: -1489561097
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

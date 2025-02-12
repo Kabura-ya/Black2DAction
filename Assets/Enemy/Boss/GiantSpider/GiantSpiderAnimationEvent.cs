@@ -7,7 +7,32 @@ using UnityEngine;
 public class GiantSpiderAnimationEvent : MonoBehaviour
 {
     [SerializeField] private GiantSpiderAttack giantSpiderAttack = null;
-    
+    [SerializeField] private GameObject web = null;
+    [SerializeField] private GameObject brake = null;
+
+    void Awake()
+    {
+        WebOff();
+        BrakeOff();
+    }
+
+    void TackleOn()
+    {
+        giantSpiderAttack.TackleOn();
+    }
+    void TackleOff()
+    {
+        giantSpiderAttack.TackleOff();
+    }
+    void BrakeOn()
+    {
+        brake.SetActive(true);
+    }
+    void BrakeOff()
+    {
+        brake.SetActive(false);
+    }
+
     void GuillotineAttack()
     {
         giantSpiderAttack.GenerateGuillotine();
@@ -16,5 +41,26 @@ public class GiantSpiderAnimationEvent : MonoBehaviour
     void WebBeemAttack()
     {
         giantSpiderAttack.GenerateWebBeem();
+    }
+
+    void WebOn()
+    {
+        web.SetActive(true);
+    }
+    void WebOff()
+    {
+        web.SetActive(false);
+    }
+
+    void PreDead()
+    {
+        WebOff();
+        TackleOff();
+        BrakeOff();
+        giantSpiderAttack.AllClear();
+    }
+    void Dead()
+    {
+        Destroy(transform.root.gameObject);
     }
 }
