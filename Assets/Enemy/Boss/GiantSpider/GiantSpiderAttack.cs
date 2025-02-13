@@ -31,19 +31,26 @@ public class GiantSpiderAttack : MonoBehaviour
 
     public void GenerateGuillotine()
     {
+        GameObject guill = null;
         if (giantSpiderStatus.PlayerTrans == null)
         {
-            Instantiate(guillotine, this.transform.position, Quaternion.Euler(0f, 0f, 0f));
+            guill = Instantiate(guillotine, this.transform.position, Quaternion.Euler(0f, 0f, 0f));
+            DestroyRegist(guill);
         }
         else
         {
-            Instantiate(guillotine, giantSpiderStatus.PlayerTrans.position, Quaternion.Euler(0f, 0f, 0f));
+            guill = Instantiate(guillotine, giantSpiderStatus.PlayerTrans.position, Quaternion.Euler(0f, 0f, 0f));
+            DestroyRegist(guill);
         }
     }
 
     public void GenerateWebShot()
     {
         GameObject shot = Instantiate(webShot, webShotTrans.position, Quaternion.Euler(0f, 0f, 80f));
+        shot.GetComponent<WebShot>().RegistGSA(this);
+        DestroyRegist(shot);
+
+        shot = Instantiate(webShot, webShotTrans.position, Quaternion.Euler(0f, 0f, 90f));
         shot.GetComponent<WebShot>().RegistGSA(this);
         DestroyRegist(shot);
 

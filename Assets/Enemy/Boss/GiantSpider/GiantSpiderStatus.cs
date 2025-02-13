@@ -7,7 +7,7 @@ using UnityEngine;
 //アニメーションのクリップ名から現状態を取得。
 public class GiantSpiderStatus : MonoBehaviour
 {
-    [Header("後隙"), SerializeField] private int maxHp = 100;
+    [Header("体力"), SerializeField] private int maxHp = 200;
     public int MaxHp => maxHp;
 
     [Header("並行速度"),SerializeField] private float horSpeed = 5;

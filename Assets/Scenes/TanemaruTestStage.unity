@@ -191,11 +191,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6774143984862546298, guid: eb74f6baa50582d4396af7f50075e059, type: 3}
       propertyPath: maxHp
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6774143984862546298, guid: eb74f6baa50582d4396af7f50075e059, type: 3}
-      propertyPath: coolTime
-      value: 0.3
+      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

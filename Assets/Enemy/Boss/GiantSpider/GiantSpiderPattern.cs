@@ -51,7 +51,7 @@ public class GiantSpiderPattern : MonoBehaviour
                     else
                     {
                         float randomValue = Random.Range(0f, 1f);
-                        if (randomValue >= 0.5f)
+                        if (randomValue >= 0.3f)
                         {
                             giantSpiderStatus.GuillotineTrigger();
                         }

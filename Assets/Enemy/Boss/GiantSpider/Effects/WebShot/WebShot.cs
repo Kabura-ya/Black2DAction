@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WebShot : MonoBehaviour
+public class WebShot : MonoBehaviour, IDrainable
 {
-    [SerializeField] private GroundCheck groundChecker = null;
+    [SerializeField] private int power = 1;
     [SerializeField] private GameObject webTrap = null;
+    [SerializeField] private GameObject breakedWeb = null;
     private Rigidbody2D rb2D = null;
     [SerializeField] private float maxSpeed = 5;
     private float holSpeed = 0;
@@ -36,16 +37,6 @@ public class WebShot : MonoBehaviour
         verSpeed = initderection.y * maxSpeed;
     }
 
-    void Update()
-    {
-        if(groundChecker.IsGround())
-        {
-            GameObject trap = Instantiate(webTrap, this.transform.position, Quaternion.identity);
-            giantSpiderAttack.DestroyRegist(trap);
-            Destroy(this.gameObject);
-        }
-    }
-
     void FixedUpdate()
     {
         verSpeed -= maxSpeed * Time.deltaTime;
@@ -67,5 +58,35 @@ public class WebShot : MonoBehaviour
     public void RegistGSA(GiantSpiderAttack giantSpiderAttack)
     {
         this.giantSpiderAttack = giantSpiderAttack;
+    }
+
+    void OnTriggerEnter2D(Collider2D collider2D)
+    {
+        if (collider2D.gameObject.tag == "Player")
+        {
+            IDamageable idamageable = collider2D.gameObject.GetComponent<IDamageable>();
+            if (idamageable != null)
+            {
+                idamageable.Damage(power);
+            }
+            GameObject trap = Instantiate(webTrap, this.transform.position, Quaternion.identity);
+            giantSpiderAttack.DestroyRegist(trap);
+            Destroy(this.gameObject);
+        }
+        else if (collider2D.gameObject.tag == "Ground")
+        {
+            GameObject trap = Instantiate(webTrap, this.transform.position, Quaternion.identity);
+            giantSpiderAttack.DestroyRegist(trap);
+            Destroy(this.gameObject);
+        }
+    }
+
+    public bool Drain()
+    {
+        return false;
+    }
+    public bool SuperDrain()
+    {
+        return false;
     }
 }
