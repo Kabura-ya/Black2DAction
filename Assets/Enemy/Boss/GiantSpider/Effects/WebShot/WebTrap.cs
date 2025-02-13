@@ -37,10 +37,16 @@ public class WebTrap : MonoBehaviour, IDrainable
 
     public bool Drain()
     {
+        Destroy(this.gameObject);
+        GameObject breaked = Instantiate(breakedWeb, this.transform.position, Quaternion.identity);
+        breaked.transform.localScale = this.transform.localScale;
         return false;
     }
     public bool SuperDrain()
     {
+        Destroy(this.gameObject);
+        GameObject breaked = Instantiate(breakedWeb, this.transform.position, Quaternion.identity);
+        breaked.transform.localScale = this.transform.localScale;
         return false;
     }
 }
