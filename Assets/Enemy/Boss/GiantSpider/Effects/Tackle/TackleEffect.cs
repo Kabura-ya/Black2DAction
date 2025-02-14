@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TackleEffect : MonoBehaviour, IDrainable
+public class TackleEffect : MonoBehaviour
 {
     [SerializeField] private int power = 1;
     private Animator anim = null;
@@ -27,14 +27,5 @@ public class TackleEffect : MonoBehaviour, IDrainable
                 idamageable.Damage(power);
             }
         }
-    }
-
-    public bool Drain()
-    {
-        return true;
-    }
-    public bool SuperDrain()
-    {
-        return true;
     }
 }

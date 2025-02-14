@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GiantSpiderDamage : MonoBehaviour, IDamageable
+public class GiantSpiderDamage : MonoBehaviour, IDamageable, IDrainable
 {
     [SerializeField] private GiantSpiderStatus giantSpiderStatus = null;
     [SerializeField] GameObject damageEffect = null;
@@ -33,5 +33,14 @@ public class GiantSpiderDamage : MonoBehaviour, IDamageable
     void Dead()
     {
         giantSpiderStatus.DeadPlay();
+    }
+
+    public bool Drain()
+    {
+        return true;
+    }
+    public bool SuperDrain()
+    {
+        return true;
     }
 }
