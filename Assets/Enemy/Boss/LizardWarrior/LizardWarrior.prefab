@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1091057695066589111
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3382495973902289720}
-  m_Layer: 0
-  m_Name: WebShotPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3382495973902289720
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1091057695066589111}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2657950067605750736}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3593559830040419343
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +237,7 @@ Transform:
   m_GameObject: {fileID: 4340916396964033840}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 0.03, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -508,10 +477,10 @@ GameObject:
   - component: {fileID: 2657950067605750736}
   - component: {fileID: 1906867222096836513}
   - component: {fileID: 3651281828744123467}
-  - component: {fileID: 6774143984862546298}
-  - component: {fileID: 4308700335893261284}
-  - component: {fileID: 3383804425540941561}
-  - component: {fileID: 8933812952085198330}
+  - component: {fileID: 5840176544531095226}
+  - component: {fileID: 7296565865100053739}
+  - component: {fileID: 5240564556406550046}
+  - component: {fileID: 420572811208854103}
   m_Layer: 8
   m_Name: LizardWarrior
   m_TagString: Enemy
@@ -539,7 +508,6 @@ Transform:
   - {fileID: 7151408913511337992}
   - {fileID: 2344503668360815596}
   - {fileID: 365662120489517606}
-  - {fileID: 3382495973902289720}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1906867222096836513
@@ -585,7 +553,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 1.5, y: 0.5}
   m_EdgeRadius: 1
 --- !u!50 &3651281828744123467
 Rigidbody2D:
@@ -614,7 +582,7 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &6774143984862546298
+--- !u!114 &5840176544531095226
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -623,17 +591,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4860959192105878313}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4ecbe4101ad014e934badd9a911b8a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2de17927779408d4b9b7ad99548d63cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 100
+  maxHp: 200
   horSpeed: 5
-  verSpeed: 5
-  jumpCount: 3
-  tackleTime: 1.5
+  verSpeed: 10
+  runTime: 1.5
   coolTime: 0.3
   anim: {fileID: 6992060317623918466}
---- !u!114 &4308700335893261284
+--- !u!114 &7296565865100053739
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -642,13 +609,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4860959192105878313}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b060ce124e361f741a0c7de439bb3e60, type: 3}
+  m_Script: {fileID: 11500000, guid: 0585f347983ad6341a85829040949e0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  giantSpiderStatus: {fileID: 6774143984862546298}
+  lizardWarriorStatus: {fileID: 5840176544531095226}
   bottomGroundChecker: {fileID: 1076332445470265955}
   wallGroundChecker: {fileID: 7199094668905080092}
---- !u!114 &3383804425540941561
+--- !u!114 &5240564556406550046
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -657,15 +624,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4860959192105878313}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd37512de37d0bc4dad5d21da7bceb09, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bfcc66a51e70ab4da097591961c6d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  giantSpiderStatus: {fileID: 6774143984862546298}
-  giantSpiderAttack: {fileID: 8933812952085198330}
+  lizardWarriorStatus: {fileID: 5840176544531095226}
+  lizardWarriorAttack: {fileID: 420572811208854103}
   bottomGroundChecker: {fileID: 1076332445470265955}
   bottomCollider2D: {fileID: 7041948974200791828}
-  giantSpiderMove: {fileID: 4308700335893261284}
---- !u!114 &8933812952085198330
+  lizardWarriorMove: {fileID: 7296565865100053739}
+--- !u!114 &420572811208854103
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -674,18 +641,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4860959192105878313}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b393030d5ab5ece43ab9e2893262502a, type: 3}
+  m_Script: {fileID: 11500000, guid: d894d495020e7f14781bf456f1ee669a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  giantSpiderStatus: {fileID: 6774143984862546298}
-  tackle: {fileID: 4527766051860696745}
-  guillotine: {fileID: 3594464801918504700, guid: e0104cf109709f943b91fdb323689004, type: 3}
-  webShot: {fileID: 7235642637931753702, guid: 0359d298b156f7f42a8a172fa29c1f22, type: 3}
-  webShotTrans: {fileID: 3382495973902289720}
-  webBeem: {fileID: 5820098634140277997, guid: 7e0ff238744ba0244b8abb607e5eb84a, type: 3}
-  clearEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &7034140196580344411
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,8 +654,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7151408913511337992}
   - component: {fileID: 5630534419291687869}
-  - component: {fileID: 6622955071807313276}
-  - component: {fileID: 810785382847369774}
+  - component: {fileID: 1760090779368281965}
   m_Layer: 8
   m_Name: HitBody
   m_TagString: Enemy
@@ -752,7 +709,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.275}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -763,54 +720,9 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.45}
+  m_Size: {x: 2, y: 1}
   m_EdgeRadius: 0
---- !u!61 &6622955071807313276
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7034140196580344411}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.2275}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.55}
-  m_EdgeRadius: 0
---- !u!114 &810785382847369774
+--- !u!114 &1760090779368281965
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -819,10 +731,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7034140196580344411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 028d9856440f23046a1a21375554902c, type: 3}
+  m_Script: {fileID: 11500000, guid: ad671028786fc72478f215303d369319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  giantSpiderStatus: {fileID: 6774143984862546298}
+  lizardWarriorStatus: {fileID: 5840176544531095226}
   damageEffect: {fileID: 8495619054844228353, guid: 7fa56603d4b6cf3448e0a44b41ea5267, type: 3}
 --- !u!1 &7160945379962565122
 GameObject:
@@ -919,7 +831,7 @@ GameObject:
   - component: {fileID: 7194442563124975833}
   - component: {fileID: 6992060317623918466}
   - component: {fileID: 7333407274128025214}
-  - component: {fileID: 2732701240164474704}
+  - component: {fileID: 3483576131993140341}
   m_Layer: 8
   m_Name: Animation
   m_TagString: Untagged
@@ -1004,7 +916,7 @@ SpriteRenderer:
   m_SortingLayerID: 282375091
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1175151547, guid: 5f3f81bb28a82424cb16ca4aa938b807, type: 3}
+  m_Sprite: {fileID: 72682709, guid: 5f3f81bb28a82424cb16ca4aa938b807, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1015,7 +927,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2732701240164474704
+--- !u!114 &3483576131993140341
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1024,9 +936,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8580581392574513132}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 016d770f59129114f894d0228fe4ff9a, type: 3}
+  m_Script: {fileID: 11500000, guid: cba4cf50259822e4dba7c98c5cd81acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  giantSpiderAttack: {fileID: 8933812952085198330}
-  web: {fileID: 7160945379962565122}
-  brake: {fileID: 4173908913676558557}
+  lizardWarriorAttack: {fileID: 420572811208854103}

@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class LizardWarriorAnimationEvent : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private LizardWarriorAttack lizardWarriorAttack = null;
+
+    void Awake()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    void PreDead()
     {
-        
+
+    }
+    void Dead()
+    {
+        Destroy(transform.root.gameObject);
     }
 }
