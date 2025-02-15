@@ -1,5 +1,5 @@
 # UnityRoomのURL
-https://unityroom.com/games/boss_dash/settings/publish
+https://unityroom.com/games/boss_dash
 
 ここからボス1体分は遊べます。
 
