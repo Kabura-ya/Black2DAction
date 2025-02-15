@@ -1,3 +1,8 @@
+#UnityRoomのURL
+https://unityroom.com/games/boss_dash/settings/publish
+
+ここからボス1体分は遊べます。
+
 # 操作
 
 移動[左右キー]
