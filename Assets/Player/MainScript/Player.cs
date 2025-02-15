@@ -55,6 +55,7 @@ public class Player : MonoBehaviour, IDamageable
     public float superDashRecastTime = 0.5f;//ダッシュをまたできるまでの時間
     private bool superDashGroundRecast = false;
     public GameObject superDashDrainEffect;//スーパーダッシュで吸収できた時に出るエフェクト
+    public GameObject superDashChargedEffect;//チャージ完了時に出るエフェクト
     //エナジー関係
     public float maxEnergy = 10;
     public float energy;
@@ -218,7 +219,9 @@ public class Player : MonoBehaviour, IDamageable
     }
     public void StopInterruptPlayer()//StopPlayer()で止めたのを戻す用
     {
-        playerState = PlayerState.Idle;
+        if (playerState == PlayerState.Stop) {
+            playerState = PlayerState.Idle;
+        }
     }
     private void AnimSet()
     {
@@ -229,8 +232,9 @@ public class Player : MonoBehaviour, IDamageable
         anim.SetBool("beginDash", beginDash);
         anim.SetBool("dashing", playerState == PlayerState.Dashing);
         anim.SetBool("charging", playerState == PlayerState.SuperDashCharging);
-        anim.SetBool("charged", playerState == PlayerState.SuperDashCharged);
+        //チャージ開始のアニメーション遷移はSuperDashCharging()で行う（できればこの関数内にまとめたいのであまりよくない実装）
         anim.SetBool("superDashing", playerState == PlayerState.SuperDashing);
+        anim.SetBool("charged", playerState == PlayerState.SuperDashCharged);
     }
     private void Attack()//近距離攻撃（攻撃用の子オブジェクトの関数で）
     {
@@ -409,6 +413,10 @@ public class Player : MonoBehaviour, IDamageable
         }
         if (playerState == PlayerState.SuperDashCharging)//チャージ中の処理
         {
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                anim.SetTrigger("chargingTrigger");
+            }
             if (Input.GetKey(KeyCode.D))
             {
                 rb.velocity = Vector2.zero;//チャージ中はその場に停止させる
@@ -417,6 +425,7 @@ public class Player : MonoBehaviour, IDamageable
                 if (superDashChargeTimeCount >= superDashChargeTime)
                 {
                     playerState = PlayerState.SuperDashCharged;
+                    Instantiate(superDashChargedEffect, transform.position, transform.rotation);
                 }
             }
             else
