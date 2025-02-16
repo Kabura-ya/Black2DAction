@@ -1,7 +1,7 @@
 # UnityRoomのURL
 https://unityroom.com/games/boss_dash
 
-ここからボス1体分は遊べます。
+ここから私が1人で制作を進めた分は遊べます。
 
 # 操作
 
