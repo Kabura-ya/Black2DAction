@@ -46,23 +46,12 @@ public class LizardWarriorMove : MonoBehaviour
                     this.transform.localScale = new Vector3(-originScale.x, originScale.y, originScale.z);
                 }
             }
-            if ((lizardWarriorStatus.IsJump() || lizardWarriorStatus.IsRun()) && wallGroundChecker.IsGround())
-            {
-                if (this.transform.localScale.x < 0)
-                {
-                    this.transform.localScale = originScale;
-                }
-                else
-                {
-                    this.transform.localScale = new Vector3(-originScale.x, originScale.y, originScale.z);
-                }
-            }
         }
     }
 
     void FixedUpdate()
     {
-        if (lizardWarriorStatus.IsStand() || lizardWarriorStatus.IsDead())
+        if (lizardWarriorStatus.IsStand() || lizardWarriorStatus.IsDead() || lizardWarriorStatus.IsPreSpawn())
         {
             xSpeed = 0;
             if (bottomGroundChecker.IsGround())
@@ -71,11 +60,7 @@ public class LizardWarriorMove : MonoBehaviour
             }
             else
             {
-                ySpeed -= Time.deltaTime * lizardWarriorStatus.VerSpeed;
-                if (ySpeed < -lizardWarriorStatus.VerSpeed)
-                {
-                    ySpeed = -lizardWarriorStatus.VerSpeed;
-                }
+                ySpeed = -lizardWarriorStatus.VerSpeed;
             }
         }
         else if (lizardWarriorStatus.IsRun())

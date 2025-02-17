@@ -22,30 +22,31 @@ public class LizardWarriorPattern : MonoBehaviour
 
     void Update()
     {
-        if (lizardWarriorStatus.IsStand())
+        if (lizardWarriorStatus.IsPreSpawn())
+        {
+            if (bottomGroundChecker.IsGround())
+            {
+                lizardWarriorStatus.SpawnTrigger();
+            }
+        }
+        else if (lizardWarriorStatus.IsStand())
         {
             if (bottomGroundChecker.IsGround())
             {
                 coolTime -= Time.deltaTime;
                 if (coolTime < 0)
                 {
-                    if (runTime > 0)
-                    {
-                        lizardWarriorStatus.RunSwitch(1);
-                        coolTime = lizardWarriorStatus.CoolTime;
-                    }
-                    else
-                    {
-                        runTime = lizardWarriorStatus.RunTime;
-                        coolTime = lizardWarriorStatus.CoolTime;
-                    }
+                    //lizardWarriorStatus.RunSwitch(1);
+                    lizardWarriorStatus.SlashTrigger();
+                    runTime = lizardWarriorStatus.RunTime;
+                    coolTime = lizardWarriorStatus.CoolTime;
                 }
             }
         }
         else if (lizardWarriorStatus.IsRun())
         {
             runTime -= Time.deltaTime;
-            if (runTime < 0)
+            if (runTime < 0 || Mathf.Abs(this.transform.position.x - lizardWarriorStatus.PlayerTrans.position.x) < 4)
             {
                 lizardWarriorStatus.UpperTrigger();
                 lizardWarriorStatus.RunSwitch(0);

@@ -51,7 +51,7 @@ public class GiantSpiderMove : MonoBehaviour
                     this.transform.localScale = new Vector3(-originScale.x, originScale.y, originScale.z);
                 }
             }
-            if ((giantSpiderStatus.IsJump() || giantSpiderStatus.IsTackle()) && wallGroundChecker.IsGround())
+            else if ((giantSpiderStatus.IsJump() || giantSpiderStatus.IsTackle()) && wallGroundChecker.IsGround())
             {
                 if (this.transform.localScale.x < 0)
                 {
@@ -76,11 +76,7 @@ public class GiantSpiderMove : MonoBehaviour
             }
             else
             {
-                ySpeed -= Time.deltaTime * giantSpiderStatus.VerSpeed;
-                if (ySpeed < -giantSpiderStatus.VerSpeed)
-                {
-                    ySpeed = -giantSpiderStatus.VerSpeed;
-                }
+                ySpeed = -giantSpiderStatus.VerSpeed;
             }
         }
         else if (giantSpiderStatus.IsTackle())

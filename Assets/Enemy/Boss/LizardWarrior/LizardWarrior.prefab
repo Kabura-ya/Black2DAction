@@ -595,10 +595,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 200
-  horSpeed: 5
+  horSpeed: 10
   verSpeed: 10
   runTime: 1.5
-  coolTime: 0.3
+  coolTime: 1
   anim: {fileID: 6992060317623918466}
 --- !u!114 &7296565865100053739
 MonoBehaviour:

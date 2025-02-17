@@ -32,6 +32,14 @@ public class LizardWarriorStatus : MonoBehaviour
         cameraTrans = GameObject.Find("Main Camera").transform;
     }
 
+    public bool IsPreSpawn()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PreSpawn");
+    }
+    public void SpawnTrigger()
+    {
+        anim.SetTrigger("spawnground");
+    }
     public bool IsSpawn()
     {
         return anim.GetCurrentAnimatorStateInfo(0).IsName("Spawn");
@@ -57,6 +65,27 @@ public class LizardWarriorStatus : MonoBehaviour
             anim.SetBool("run", false);
         }
     }
+    public bool IsUpper()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Upper");
+    }
+    public void UpperTrigger()
+    {
+        anim.SetTrigger("upper");
+    }
+
+    public bool IsSlash()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Slash");
+    }
+    public void SlashTrigger()
+    {
+        anim.SetTrigger("slash");
+    }
+    public bool IsSmmersault()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Summersault");
+    }
 
     public bool IsJump()
     {
@@ -74,14 +103,6 @@ public class LizardWarriorStatus : MonoBehaviour
         }
     }
 
-    public bool IsUpper()
-    {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("Upper");
-    }
-    public void UpperTrigger()
-    {
-        anim.SetTrigger("upper");
-    }
 
     public bool IsDead()
     {
