@@ -5,17 +5,6 @@ using UnityEngine;
 public class TackleEffect : MonoBehaviour
 {
     [SerializeField] private int power = 1;
-    private Animator anim = null;
-
-    void Awake()
-    {
-        anim = GetComponent<Animator>();
-    }
-
-    void OnEnable()
-    {
-        anim.Rebind();//•\¦‚³‚ê‚½‚çÅ‰‚©‚çÄ¶‚Å‚«‚é‚æ‚¤‚É
-    }
 
     void OnTriggerEnter2D(Collider2D collider2D)
     {

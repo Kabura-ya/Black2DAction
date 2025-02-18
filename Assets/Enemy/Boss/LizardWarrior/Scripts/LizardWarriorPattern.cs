@@ -36,21 +36,38 @@ public class LizardWarriorPattern : MonoBehaviour
                 coolTime -= Time.deltaTime;
                 if (coolTime < 0)
                 {
-                    //lizardWarriorStatus.RunSwitch(1);
-                    lizardWarriorStatus.SlashTrigger();
+                    lizardWarriorStatus.RunTrigger();
                     runTime = lizardWarriorStatus.RunTime;
                     coolTime = lizardWarriorStatus.CoolTime;
+
+                    
+                    //lizardWarriorStatus.SlashTrigger();
+                    
                 }
             }
         }
         else if (lizardWarriorStatus.IsRun())
         {
             runTime -= Time.deltaTime;
-            if (runTime < 0 || Mathf.Abs(this.transform.position.x - lizardWarriorStatus.PlayerTrans.position.x) < 4)
+            if (runTime < 0 || IsClose())
             {
                 lizardWarriorStatus.UpperTrigger();
-                lizardWarriorStatus.RunSwitch(0);
             }
         }
+    }
+
+    //ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚É‚æ‚Á‚Ä‹Z‚ª•Ï‚í‚é‚æ‚¤‚É‚µ‚½‚¢
+    private bool IsClose()
+    {
+        return Mathf.Abs(this.transform.position.x - lizardWarriorStatus.PlayerTrans.position.x) <= 4;
+    }
+    private bool IsMiddle()
+    {
+        float distance = Mathf.Abs(this.transform.position.x - lizardWarriorStatus.PlayerTrans.position.x);
+        return distance > 4 && distance <= 8;
+    }
+    private bool IsFar()
+    {
+        return Mathf.Abs(this.transform.position.x - lizardWarriorStatus.PlayerTrans.position.x) > 8;
     }
 }

@@ -35,7 +35,7 @@ public class LizardWarriorMove : MonoBehaviour
     {
         if (lizardWarriorStatus.PlayerTrans != null)
         {
-            if (lizardWarriorStatus.IsStand())
+            if (lizardWarriorStatus.IsStand() || lizardWarriorStatus.IsPreRun())
             {
                 if (this.transform.position.x < lizardWarriorStatus.PlayerTrans.position.x)
                 {

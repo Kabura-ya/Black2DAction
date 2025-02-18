@@ -4,15 +4,35 @@ using UnityEngine;
 
 public class LizardWarriorAttack : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject slash = null;
+    [SerializeField] private Transform slashwaveShotTrans = null;
+    [SerializeField] private GameObject slashwave = null;
+    [SerializeField] private GameObject summersault = null;
+    [SerializeField] private GameObject upper = null;
+
+    void Awake()
     {
-        
+        UpperOff();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpperOn()
     {
-        
+        upper.SetActive(true);
+    }
+    public void UpperOff()
+    {
+        upper.SetActive(false);
+    }
+
+    public void GenerateSlashWave()
+    {
+        if (this.transform.localScale.x > 0)
+        {
+            Instantiate(slashwave, slashwaveShotTrans.position, Quaternion.Euler(0f, 0f, 0f));
+        }
+        else
+        {
+            Instantiate(slashwave, slashwaveShotTrans.position, Quaternion.Euler(0f, 0f, 180f));
+        }
     }
 }

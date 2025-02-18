@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 4081183838047520301}
   - component: {fileID: 4428150039560830020}
   - component: {fileID: 2489160195307093926}
-  - component: {fileID: 3345720266002943053}
+  - component: {fileID: 9179114532571260524}
   m_Layer: 0
   m_Name: Brake
   m_TagString: Untagged
@@ -228,7 +228,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3345720266002943053
+--- !u!114 &9179114532571260524
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4173908913676558557}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0df93808c0ed5242958013e94272627, type: 3}
+  m_Script: {fileID: 11500000, guid: 66732b1b4d501244fbd9744434fbec8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4340916396964033840
@@ -343,6 +343,7 @@ GameObject:
   - component: {fileID: 5720511735487138183}
   - component: {fileID: 2324199185757087961}
   - component: {fileID: 6755928869668133813}
+  - component: {fileID: 240408417004582673}
   m_Layer: 9
   m_Name: Tackle
   m_TagString: Untagged
@@ -493,6 +494,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0df93808c0ed5242958013e94272627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  power: 1
+--- !u!114 &240408417004582673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4527766051860696745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66732b1b4d501244fbd9744434fbec8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4860959192105878313
@@ -681,6 +695,9 @@ MonoBehaviour:
   webShot: {fileID: 7235642637931753702, guid: 0359d298b156f7f42a8a172fa29c1f22, type: 3}
   webShotTrans: {fileID: 3382495973902289720}
   webBeem: {fileID: 5820098634140277997, guid: 7e0ff238744ba0244b8abb607e5eb84a, type: 3}
+  clearEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7034140196580344411
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,6 +1040,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   giantSpiderAttack: {fileID: 8933812952085198330}
-  giantSpiderMove: {fileID: 4308700335893261284}
   web: {fileID: 7160945379962565122}
   brake: {fileID: 4173908913676558557}

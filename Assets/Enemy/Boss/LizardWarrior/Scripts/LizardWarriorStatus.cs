@@ -50,20 +50,17 @@ public class LizardWarriorStatus : MonoBehaviour
         return anim.GetCurrentAnimatorStateInfo(0).IsName("Stand");
     }
 
+    public bool IsPreRun()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PreRun");
+    }
     public bool IsRun()
     {
         return anim.GetCurrentAnimatorStateInfo(0).IsName("Run");
     }
-    public void RunSwitch(int i)
+    public void RunTrigger()
     {
-        if (i > 0)
-        {
-            anim.SetBool("run", true);
-        }
-        else
-        {
-            anim.SetBool("run", false);
-        }
+        anim.SetTrigger("run");
     }
     public bool IsUpper()
     {
