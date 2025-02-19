@@ -549,9 +549,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 200
-  horSpeed: 20
-  verSpeed: 10
+  rushCount: 3
+  runSpeed: 20
   runTime: 0.5
+  feintSpeed: 10
+  feintTime: 0.4
+  backSpeed: 7.5
+  jumpSpeed: 10
+  jumpTime: 0.5
+  meteorSpeed: 20
+  tackleSpeed: 25
+  tackleTime: 0.25
+  tailbradeXSpeed: 2
+  tailbradeYSpeed: 10
+  verSpeed: 10
   coolTime: 1
   anim: {fileID: 6992060317623918466}
 --- !u!114 &7296565865100053739
@@ -992,7 +1003,7 @@ Transform:
   m_GameObject: {fileID: 8580581392574513132}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []

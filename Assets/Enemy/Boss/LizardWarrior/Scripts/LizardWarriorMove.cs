@@ -35,7 +35,8 @@ public class LizardWarriorMove : MonoBehaviour
     {
         if (lizardWarriorStatus.PlayerTrans != null)
         {
-            if (lizardWarriorStatus.IsStand() || lizardWarriorStatus.IsPreRun())
+            if (lizardWarriorStatus.IsStand() ||
+                lizardWarriorStatus.IsPreRun())
             {
                 if (this.transform.position.x < lizardWarriorStatus.PlayerTrans.position.x)
                 {
@@ -65,17 +66,42 @@ public class LizardWarriorMove : MonoBehaviour
         }
         else if (lizardWarriorStatus.IsRun())
         {
-            xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.HorSpeed;
+            xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.RunSpeed;
             ySpeed = 0;
         }
-        else if (lizardWarriorStatus.IsJump())
+        else if (lizardWarriorStatus.IsBackSlash())
         {
-            xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.HorSpeed;
-            ySpeed -= Time.deltaTime * lizardWarriorStatus.VerSpeed;
-            if (ySpeed < -lizardWarriorStatus.VerSpeed)
-            {
-                ySpeed = -lizardWarriorStatus.VerSpeed;
-            }
+            xSpeed = -NowDerection(this.transform.localScale) * lizardWarriorStatus.BackSpeed;
+            ySpeed = 0;
+        }
+        else if (lizardWarriorStatus.IsMeteorJump() || lizardWarriorStatus.IsPunishHammerJump())
+        {
+            ySpeed -= Time.deltaTime * lizardWarriorStatus.VerSpeed / lizardWarriorStatus.JumpTime;
+        }
+        else if (lizardWarriorStatus.IsMeteor() || lizardWarriorStatus.IsPunishHammer())
+        {
+            xSpeed = 0;
+            ySpeed = -lizardWarriorStatus.MeteorSpeed;
+        }
+        else if (lizardWarriorStatus.IsFeint())
+        {
+            xSpeed = -NowDerection(this.transform.localScale) * lizardWarriorStatus.FeintSpeed;
+            ySpeed = 0;
+        }
+        else if (lizardWarriorStatus.IsPunch())
+        {
+            xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.FeintSpeed;
+            ySpeed = 0;
+        }
+        else if (lizardWarriorStatus.IsTailBrade())
+        {
+            xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.TailBradeXSpeed;
+            ySpeed = lizardWarriorStatus.TailBradeYSpeed;
+        }
+        else if (lizardWarriorStatus.IsPostTailBrade())
+        {
+            xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.TailBradeXSpeed;
+            ySpeed = -lizardWarriorStatus.TailBradeYSpeed;
         }
         else
         {
@@ -100,7 +126,24 @@ public class LizardWarriorMove : MonoBehaviour
     //ƒWƒƒƒ“ƒvŽžŒÄ‚Ño‚µ
     public void JumpUp()
     {
-        ySpeed = lizardWarriorStatus.VerSpeed;
+        ySpeed = lizardWarriorStatus.JumpSpeed;
+        if (NowDerection(this.transform.localScale) > 0)
+        {
+            xSpeed = (lizardWarriorStatus.PlayerTrans.position.x - this.transform.position.x) / lizardWarriorStatus.JumpTime;
+        }
+        else
+        {
+            xSpeed = (lizardWarriorStatus.PlayerTrans.position.x - this.transform.position.x) / lizardWarriorStatus.JumpTime;
+        }
+        this.transform.position = this.transform.position + new Vector3(0, 0.1f, 0);
+    }
+    public bool IsMaxHigh()
+    {
+        return ((lizardWarriorStatus.IsMeteorJump() || lizardWarriorStatus.IsPunishHammerJump()) && Mathf.Abs(ySpeed) < 0.1f);
+    }
+
+    public void TailBradeUp()
+    {
         this.transform.position = this.transform.position + new Vector3(0, 0.1f, 0);
     }
 }
