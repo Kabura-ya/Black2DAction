@@ -5,9 +5,7 @@ using UnityEngine;
 public class LizardWarriorPattern : MonoBehaviour
 {
     [SerializeField] private LizardWarriorStatus lizardWarriorStatus = null;
-    [SerializeField] private LizardWarriorAttack lizardWarriorAttack = null;
     [SerializeField] private GroundCheck bottomGroundChecker = null;
-    [SerializeField] private Collider2D bottomCollider2D = null;
     [SerializeField] private LizardWarriorMove lizardWarriorMove = null;
 
     private float runTime = 0;
@@ -34,27 +32,24 @@ public class LizardWarriorPattern : MonoBehaviour
                 lizardWarriorStatus.GroundTrigger();
             }
         }
-        else if (lizardWarriorStatus.IsStand())
+        else if (bottomGroundChecker.IsGround() && lizardWarriorStatus.IsStand())
         {
-            if (bottomGroundChecker.IsGround())
+            if (rushCount > 0)
             {
-                if (rushCount > 0)
+                SelectPattern();
+                rushCount--;
+                if (rushCount <= 0)
                 {
-                    SelectPattern();
-                    rushCount--;
-                    if (rushCount <= 0)
-                    {
-                        coolTime = lizardWarriorStatus.CoolTime;
-                    }
+                    coolTime = lizardWarriorStatus.CoolTime;
                 }
-                else
+            }
+            else
+            {
+                coolTime -= Time.deltaTime;
+                if (coolTime <= 0)
                 {
-                    coolTime -= Time.deltaTime;
-                    if (coolTime <= 0)
-                    {
-                        patternRoot = GenerateRoot();
-                        rushCount = lizardWarriorStatus.RushCount;
-                    }
+                    patternRoot = GenerateRoot();
+                    rushCount = lizardWarriorStatus.RushCount;
                 }
             }
         }
@@ -66,19 +61,16 @@ public class LizardWarriorPattern : MonoBehaviour
                 lizardWarriorStatus.UpperTrigger();
             }
         }
-        else if (lizardWarriorStatus.IsMeteorJump())
+        else if (lizardWarriorStatus.IsPressJump())
         {
-            if (lizardWarriorMove.IsMaxHigh())
+            if (lizardWarriorMove.IsReach())
             {
-                lizardWarriorStatus.MeteorTrigger();
+                lizardWarriorStatus.PressTrigger();
             }
         }
-        else if (lizardWarriorStatus.IsMeteor())
+        else if (bottomGroundChecker.IsGround() && lizardWarriorStatus.IsPress())
         {
-            if (bottomGroundChecker.IsGround())
-            {
-                lizardWarriorStatus.GroundTrigger();
-            }
+            lizardWarriorStatus.GroundTrigger();
         }
         else if (lizardWarriorStatus.IsFeint())
         {
@@ -89,7 +81,7 @@ public class LizardWarriorPattern : MonoBehaviour
                 feintTime = lizardWarriorStatus.FeintTime;
             }
         }
-        else if(lizardWarriorStatus.IsPunch())
+        else if (lizardWarriorStatus.IsPunch())
         {
             feintTime -= Time.deltaTime;
             if (feintTime <= 0)
@@ -97,26 +89,23 @@ public class LizardWarriorPattern : MonoBehaviour
                 lizardWarriorStatus.PunchOff();
             }
         }
-        else if (lizardWarriorStatus.IsPostTailBrade())
+        else if (lizardWarriorStatus.IsPostTailBlade())
         {
             if (bottomGroundChecker.IsGround())
             {
                 lizardWarriorStatus.GroundTrigger();
             }
         }
-        else if (lizardWarriorStatus.IsPunishHammerJump())
+        else if (lizardWarriorStatus.IsSmashJump())
         {
-            if (lizardWarriorMove.IsMaxHigh())
+            if (lizardWarriorMove.IsReach())
             {
-                lizardWarriorStatus.PunishHammerTrigger();
+                lizardWarriorStatus.SmashTrigger();
             }
         }
-        else if (lizardWarriorStatus.IsPunishHammer())
+        else if (bottomGroundChecker.IsGround() && lizardWarriorStatus.IsSmash())
         {
-            if (bottomGroundChecker.IsGround())
-            {
-                lizardWarriorStatus.GroundTrigger();
-            }
+            lizardWarriorStatus.GroundTrigger();
         }
     }
 
@@ -169,8 +158,8 @@ public class LizardWarriorPattern : MonoBehaviour
             }
             else if (randomNumber == 2)
             {
-                lizardWarriorStatus.TailBradeTrigger();
-                lizardWarriorMove.TailBradeUp();
+                lizardWarriorStatus.TailBladeTrigger();
+                lizardWarriorMove.TailBladeUp();
             }
         }
         else if (IsMiddle())
@@ -181,7 +170,7 @@ public class LizardWarriorPattern : MonoBehaviour
             }
             else if (randomNumber == 1)
             {
-                lizardWarriorStatus.MeteorJumpTrigger();
+                lizardWarriorStatus.PressJumpTrigger();
                 lizardWarriorMove.JumpUp();
             }
             else if (randomNumber == 2)
@@ -202,8 +191,7 @@ public class LizardWarriorPattern : MonoBehaviour
             }
             else if (randomNumber == 2)
             {
-                lizardWarriorStatus.PunishHammerJumpTrigger();
-                lizardWarriorMove.JumpUp();
+                lizardWarriorStatus.PreSmashTrigger();
             }
         }
     }

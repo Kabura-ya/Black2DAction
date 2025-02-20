@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class LizardWarriorAttack : MonoBehaviour
 {
-    [SerializeField] private GameObject slash = null;
     [SerializeField] private Transform slashwaveShotTrans = null;
     [SerializeField] private GameObject slashwave = null;
-    [SerializeField] private GameObject summersault = null;
     [SerializeField] private GameObject upper = null;
 
     void Awake()

@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class GuillotineAnimationEvent : MonoBehaviour
 {
-    [SerializeField] private Collider2D collider2D = null;
+    private Collider2D col2D = null;
 
     void Awake()
     {
+        col2D = GetComponent<Collider2D>();
         AttackOff();
     }
 
     void AttackOn()
     {
-        collider2D.enabled = true;
+        col2D.enabled = true;
     }
     void AttackOff()
     {
-        collider2D.enabled = false;
+        col2D.enabled = false;
     }
 
     void Finish()

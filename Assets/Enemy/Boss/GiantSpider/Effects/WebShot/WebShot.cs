@@ -6,7 +6,6 @@ public class WebShot : MonoBehaviour, IDrainable
 {
     [SerializeField] private int power = 1;
     [SerializeField] private GameObject webTrap = null;
-    [SerializeField] private GameObject breakedWeb = null;
     private Rigidbody2D rb2D = null;
     [SerializeField] private float maxSpeed = 5;
     private float holSpeed = 0;

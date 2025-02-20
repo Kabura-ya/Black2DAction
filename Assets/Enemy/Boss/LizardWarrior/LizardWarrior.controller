@@ -34,7 +34,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: punishhammerjump
+    m_ConditionEvent: presmash
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8411730546374859205}
@@ -79,7 +79,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PunishHammerJump
+  m_Name: PreSmash
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -93,7 +93,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: f7dc4efba7223f24fa6214555f8325b3, type: 2}
+  m_Motion: {fileID: 7400000, guid: 058a42cd41242f84eb01199ccbbe3be5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -259,7 +259,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: tailbrade
+    m_ConditionEvent: tailblade
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1570450629179692939}
@@ -284,7 +284,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: meteorjump
+    m_ConditionEvent: pressjump
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7733709759628996706}
@@ -357,7 +357,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TailBrade
+  m_Name: TailBlade
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -561,7 +561,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TailBrade
+  m_Name: TailBlade
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -1570450629179692939}
@@ -716,7 +716,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PreTailBrade
+  m_Name: PreTailBlade
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -743,7 +743,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PrePunishHammer
+  m_Name: SmashJump
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -757,7 +757,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 058a42cd41242f84eb01199ccbbe3be5, type: 2}
+  m_Motion: {fileID: 7400000, guid: f7dc4efba7223f24fa6214555f8325b3, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -820,7 +820,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Meteor
+  m_Name: Press
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -847,10 +847,7 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: punishhammer
-    m_EventTreshold: 0
+  m_Conditions: []
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1415475717444918040}
   m_Solo: 0
@@ -859,8 +856,8 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 0
-  m_HasExitTime: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -923,13 +920,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: meteorjump
+  - m_Name: pressjump
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: meteor
+  - m_Name: press
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -959,19 +956,19 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: tailbrade
+  - m_Name: tailblade
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: punishhammerjump
+  - m_Name: presmash
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: punishhammer
+  - m_Name: smash
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -1052,7 +1049,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PostMeteor
+  m_Name: PostPress
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1128,7 +1125,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PostPunishHammer
+  m_Name: PostSmash
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1207,7 +1204,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PostTailBrade2
+  m_Name: PostTailBlade2
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1234,7 +1231,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PunishHammer
+  m_Name: Smash
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -8411730546374859205}
@@ -1309,7 +1306,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PunishHammer
+  m_Name: Smash
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1486,7 +1483,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PreMeteor
+  m_Name: PrePress
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1537,7 +1534,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: meteor
+    m_ConditionEvent: press
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4930177748909341099}
@@ -1796,7 +1793,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MeteorJump
+  m_Name: PressJump
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1823,7 +1820,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: smash
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2486782347114709705}
   m_Solo: 0
@@ -1832,8 +1832,8 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 1
-  m_HasExitTime: 1
+  m_ExitTime: 0
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -1845,7 +1845,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Meteor
+  m_Name: Press
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 7733709759628996706}
@@ -1925,7 +1925,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PostTailBrade
+  m_Name: PostTailBlade
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:

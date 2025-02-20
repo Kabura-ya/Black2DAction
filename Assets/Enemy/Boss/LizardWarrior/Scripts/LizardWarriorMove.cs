@@ -8,8 +8,12 @@ public class LizardWarriorMove : MonoBehaviour
     private Rigidbody2D rb2D = null;
     private float xSpeed = 0;
     private float ySpeed = 0;
+
+    private float jumpTime = 0;
+    private Vector2 toJumpPos = Vector2.zero;
+    private Vector2 jumpVec = Vector2.zero;
+
     [SerializeField] private GroundCheck bottomGroundChecker = null;
-    [SerializeField] private GroundCheck wallGroundChecker = null;
 
     private Vector3 originScale = new Vector3(0, 0, 0);
 
@@ -36,7 +40,8 @@ public class LizardWarriorMove : MonoBehaviour
         if (lizardWarriorStatus.PlayerTrans != null)
         {
             if (lizardWarriorStatus.IsStand() ||
-                lizardWarriorStatus.IsPreRun())
+                lizardWarriorStatus.IsPreRun() ||
+                lizardWarriorStatus.IsPreTailBlade())
             {
                 if (this.transform.position.x < lizardWarriorStatus.PlayerTrans.position.x)
                 {
@@ -74,11 +79,13 @@ public class LizardWarriorMove : MonoBehaviour
             xSpeed = -NowDerection(this.transform.localScale) * lizardWarriorStatus.BackSpeed;
             ySpeed = 0;
         }
-        else if (lizardWarriorStatus.IsMeteorJump() || lizardWarriorStatus.IsPunishHammerJump())
+        else if (lizardWarriorStatus.IsPressJump() || lizardWarriorStatus.IsSmashJump())
         {
-            ySpeed -= Time.deltaTime * lizardWarriorStatus.VerSpeed / lizardWarriorStatus.JumpTime;
+            xSpeed = jumpVec.x * lizardWarriorStatus.JumpSpeed;
+            ySpeed = jumpVec.y * lizardWarriorStatus.JumpSpeed;
+            jumpTime -= Time.deltaTime;
         }
-        else if (lizardWarriorStatus.IsMeteor() || lizardWarriorStatus.IsPunishHammer())
+        else if (lizardWarriorStatus.IsPress() || lizardWarriorStatus.IsSmash())
         {
             xSpeed = 0;
             ySpeed = -lizardWarriorStatus.MeteorSpeed;
@@ -93,12 +100,12 @@ public class LizardWarriorMove : MonoBehaviour
             xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.FeintSpeed;
             ySpeed = 0;
         }
-        else if (lizardWarriorStatus.IsTailBrade())
+        else if (lizardWarriorStatus.IsTailBlade())
         {
             xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.TailBradeXSpeed;
             ySpeed = lizardWarriorStatus.TailBradeYSpeed;
         }
-        else if (lizardWarriorStatus.IsPostTailBrade())
+        else if (lizardWarriorStatus.IsPostTailBlade())
         {
             xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.TailBradeXSpeed;
             ySpeed = -lizardWarriorStatus.TailBradeYSpeed;
@@ -126,24 +133,23 @@ public class LizardWarriorMove : MonoBehaviour
     //ƒWƒƒƒ“ƒvŽžŒÄ‚Ño‚µ
     public void JumpUp()
     {
-        ySpeed = lizardWarriorStatus.JumpSpeed;
-        if (NowDerection(this.transform.localScale) > 0)
-        {
-            xSpeed = (lizardWarriorStatus.PlayerTrans.position.x - this.transform.position.x) / lizardWarriorStatus.JumpTime;
-        }
-        else
-        {
-            xSpeed = (lizardWarriorStatus.PlayerTrans.position.x - this.transform.position.x) / lizardWarriorStatus.JumpTime;
-        }
+        toJumpPos = new Vector2(lizardWarriorStatus.PlayerTrans.position.x, this.transform.position.y + lizardWarriorStatus.JumpHigh);
+        jumpTime = lizardWarriorStatus.JumpTime;
+        jumpVec = new Vector2(lizardWarriorStatus.PlayerTrans.position.x - this.transform.position.x, lizardWarriorStatus.JumpHigh).normalized;
+        xSpeed = jumpVec.x * lizardWarriorStatus.JumpSpeed;
+        ySpeed = jumpVec.y * lizardWarriorStatus.JumpSpeed;
         this.transform.position = this.transform.position + new Vector3(0, 0.1f, 0);
     }
-    public bool IsMaxHigh()
+    public bool IsReach()
     {
-        return ((lizardWarriorStatus.IsMeteorJump() || lizardWarriorStatus.IsPunishHammerJump()) && Mathf.Abs(ySpeed) < 0.1f);
+        return ((lizardWarriorStatus.IsPressJump() || lizardWarriorStatus.IsSmashJump()) && 
+                (jumpTime < 0 || Vector2.Distance(toJumpPos, this.transform.position) < 0.5f));
     }
 
-    public void TailBradeUp()
+    public void TailBladeUp()
     {
+        xSpeed = NowDerection(this.transform.localScale) * lizardWarriorStatus.TailBradeXSpeed;
+        ySpeed = lizardWarriorStatus.TailBradeYSpeed;
         this.transform.position = this.transform.position + new Vector3(0, 0.1f, 0);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class LizardWarriorAnimationEvent : MonoBehaviour
 {
     [SerializeField] private LizardWarriorAttack lizardWarriorAttack = null;
+    [SerializeField] private LizardWarriorMove lizardWarriorMove = null;
     [SerializeField] private GameObject run = null;
     [SerializeField] private GameObject slash = null;
     [SerializeField] private GameObject summersault = null;
@@ -50,6 +51,11 @@ public class LizardWarriorAnimationEvent : MonoBehaviour
     public void SummersaultOff()
     {
         summersault.SetActive(false);
+    }
+
+    public void JumpUp()
+    {
+        lizardWarriorMove.JumpUp();
     }
 
     void PreDead()

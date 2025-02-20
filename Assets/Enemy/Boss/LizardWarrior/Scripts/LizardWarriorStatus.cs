@@ -27,6 +27,8 @@ public class LizardWarriorStatus : MonoBehaviour
     public float JumpSpeed => jumpSpeed;//外部取得だけ可能
     [Header("ジャンプ時間"), SerializeField] private float jumpTime = 0.5f;
     public float JumpTime => jumpTime;//外部取得だけ可能
+    [Header("ジャンプの高さ"), SerializeField] private float jumpHigh = 5f;
+    public float JumpHigh => jumpHigh;//外部取得だけ可能
     [Header("落下攻撃速度"), SerializeField] private float meteorSpeed = 20;
     public float MeteorSpeed => meteorSpeed;//外部取得だけ可能
 
@@ -125,25 +127,29 @@ public class LizardWarriorStatus : MonoBehaviour
         anim.SetTrigger("backslash");
     }
 
-    public bool IsMeteorJump()
+    public bool IsPressJump()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("MeteorJump");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PressJump");
     }
-    public bool IsPreMeteor()
+    public bool IsPrePress()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("PreMeteor");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PrePress");
     }
-    public bool IsMeteor()
+    public bool IsPress()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("Meteor");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Press");
     }
-    public void MeteorJumpTrigger()
+    public bool IsPostPress()
     {
-        anim.SetTrigger("meteorjump");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PostPress");
     }
-    public void MeteorTrigger()
+    public void PressJumpTrigger()
     {
-        anim.SetTrigger("meteor");
+        anim.SetTrigger("pressjump");
+    }
+    public void PressTrigger()
+    {
+        anim.SetTrigger("press");
     }
 
     public bool IsFeint()
@@ -180,50 +186,50 @@ public class LizardWarriorStatus : MonoBehaviour
         anim.SetTrigger("claw");
     }
 
-    public bool IsPreTailBrade()
+    public bool IsPreTailBlade()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("PreTailBrade");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PreTailBlade");
     }
-    public bool IsTailBrade()
+    public bool IsTailBlade()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("TailBrade");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("TailBlade");
     }
-    public bool IsPostTailBrade()
+    public bool IsPostTailBlade()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("PostTailBrade");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PostTailBlade");
     }
-    public bool IsPostTailBrade2()
+    public bool IsPostTailBlade2()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("PostTailBrade2");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PostTailBlade2");
     }
-    public void TailBradeTrigger()
+    public void TailBladeTrigger()
     {
-        anim.SetTrigger("tailbrade");
+        anim.SetTrigger("tailblade");
     }
 
-    public bool IsPunishHammerJump()
+    public bool IsPreSmash()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("PunishHammerJump");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PreSmash");
     }
-    public bool IsPrePunishHammer()
+    public bool IsSmashJump()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("PrePunishHammer");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("SmashJump");
     }
-    public bool IsPunishHammer()
+    public bool IsSmash()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("PunishHammer");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Smash");
     }
-    public bool IsPostPunishHammer()
+    public bool IsPostSmash()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("PostPunishHammer");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PostSmash");
     }
-    public void PunishHammerJumpTrigger()
+    public void PreSmashTrigger()
     {
-        anim.SetTrigger("punishhammerjump");
+        anim.SetTrigger("presmash");
     }
-    public void PunishHammerTrigger()
+    public void SmashTrigger()
     {
-        anim.SetTrigger("punishhammer");
+        anim.SetTrigger("smash");
     }
 
     public bool IsPowerSlash()
