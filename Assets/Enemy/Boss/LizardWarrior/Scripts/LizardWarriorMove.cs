@@ -57,7 +57,10 @@ public class LizardWarriorMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (lizardWarriorStatus.IsStand() || lizardWarriorStatus.IsDead() || lizardWarriorStatus.IsPreSpawn())
+        if (lizardWarriorStatus.IsStand() || 
+            lizardWarriorStatus.IsStun() || 
+            lizardWarriorStatus.IsDead() || 
+            lizardWarriorStatus.IsPreSpawn())
         {
             xSpeed = 0;
             if (bottomGroundChecker.IsGround())

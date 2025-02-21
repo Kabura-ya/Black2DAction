@@ -5,62 +5,104 @@ using UnityEngine;
 public class LizardWarriorAnimationEvent : MonoBehaviour
 {
     [SerializeField] private LizardWarriorAttack lizardWarriorAttack = null;
+    [SerializeField] private LizardWarriorEffect lizardWarriorEffect = null;
     [SerializeField] private LizardWarriorMove lizardWarriorMove = null;
-    [SerializeField] private GameObject run = null;
-    [SerializeField] private GameObject slash = null;
-    [SerializeField] private GameObject summersault = null;
+    private Animator anim = null;
 
     void Awake()
     {
-        RunOff();
-        SlashOff();
-        SummersaultOff();
+        anim = GetComponent<Animator>();
+    }
+
+    void ClawOn()
+    {
+        lizardWarriorAttack.ClawOn();
+    }
+
+    void PreTailBladeOn()
+    {
+        lizardWarriorEffect.PreTailBladeOn();
+    }
+    void PreTailBladeOff()
+    {
+        lizardWarriorEffect.PreTailBladeOff();
+    }
+    void TailBladeOn()
+    {
+        lizardWarriorAttack.TailBladeOn();
+    }
+
+    void SummersaultOn()
+    {
+        lizardWarriorEffect.SummersaultOn();
+        lizardWarriorAttack.GenerateSlashWave();
+    }
+
+    void PrePowerSlashOn()
+    {
+        lizardWarriorEffect.PrePowerSlashOn();
+    }
+    void PrePowerSlashOff()
+    {
+        lizardWarriorEffect.PrePowerSlashOff();
+    }
+    void PowerSlashOn()
+    {
+        lizardWarriorAttack.GenerateSlashWave2();
+        lizardWarriorEffect.PowerSlashOn();
+    }
+
+    void SlashOn()
+    {
+        lizardWarriorEffect.SlashOn();
+        lizardWarriorAttack.GenerateSlashWave();
     }
 
     void RunOn()
     {
-        run.SetActive(true);
-    }
-    void RunOff()
-    {
-        run.SetActive(false);
+        lizardWarriorEffect.RunOn();
     }
     void UpperOn()
     {
         lizardWarriorAttack.UpperOn();
     }
-    void UpperOff()
+
+    void PreSmashOn()
     {
-        lizardWarriorAttack.UpperOff();
+        lizardWarriorEffect.PreSmashOn();
+    }
+    void PreSmashOff()
+    {
+        lizardWarriorEffect.PreSmashOff();
+    }
+    void SmashJumpOn()
+    {
+        lizardWarriorEffect.SmashJumpOn();
     }
 
-    public void SlashOn()
-    {
-        slash.SetActive(true);
-        lizardWarriorAttack.GenerateSlashWave();
-    }
-    public void SlashOff()
-    {
-        slash.SetActive(false);
-    }
-    public void SummersaultOn()
-    {
-        summersault.SetActive(true);
-        lizardWarriorAttack.GenerateSlashWave();
-    }
-    public void SummersaultOff()
-    {
-        summersault.SetActive(false);
-    }
-
-    public void JumpUp()
+    void JumpUp()
     {
         lizardWarriorMove.JumpUp();
     }
 
-    void PreDead()
+    void AllClear()
     {
-
+        anim.ResetTrigger("run");
+        anim.ResetTrigger("upper");
+        anim.ResetTrigger("ground");
+        anim.ResetTrigger("slash");
+        anim.ResetTrigger("prepress");
+        anim.ResetTrigger("press");
+        anim.ResetTrigger("claw");
+        anim.ResetTrigger("backslash");
+        anim.ResetTrigger("feint");
+        anim.ResetTrigger("tailblade");
+        anim.ResetTrigger("presmash");
+        anim.ResetTrigger("smash");
+        anim.ResetTrigger("powerslash");
+        anim.SetBool("punch", false);
+        lizardWarriorEffect.AllClear();
+        lizardWarriorAttack.AllClear();
     }
     void Dead()
     {

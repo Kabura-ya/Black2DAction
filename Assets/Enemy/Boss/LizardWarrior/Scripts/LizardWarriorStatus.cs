@@ -127,13 +127,13 @@ public class LizardWarriorStatus : MonoBehaviour
         anim.SetTrigger("backslash");
     }
 
-    public bool IsPressJump()
-    {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("PressJump");
-    }
     public bool IsPrePress()
     {
         return anim.GetCurrentAnimatorStateInfo(0).IsName("PrePress");
+    }
+    public bool IsPressJump()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("PressJump");
     }
     public bool IsPress()
     {
@@ -143,9 +143,9 @@ public class LizardWarriorStatus : MonoBehaviour
     {
         return anim.GetCurrentAnimatorStateInfo(0).IsName("PostPress");
     }
-    public void PressJumpTrigger()
+    public void PrePressTrigger()
     {
-        anim.SetTrigger("pressjump");
+        anim.SetTrigger("prepress");
     }
     public void PressTrigger()
     {
@@ -241,6 +241,14 @@ public class LizardWarriorStatus : MonoBehaviour
         anim.SetTrigger("powerslash");
     }
 
+    public bool IsStun()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Stun");
+    }
+    public void StunPlay()
+    {
+        anim.Play("Stun");
+    }
     public bool IsDead()
     {
         return anim.GetCurrentAnimatorStateInfo(0).IsName("Dead");

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BreakedWebAnimationEvent : MonoBehaviour
+public class BreakEffectAnimationEvent : MonoBehaviour
 {
     public void Break()
     {

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LizardWarriorPattern : MonoBehaviour
 {
+    [SerializeField] private LizardWarriorAttack lizardWarriorAttack = null;
+    [SerializeField] private LizardWarriorEffect lizardWarriorEffect = null;
     [SerializeField] private LizardWarriorStatus lizardWarriorStatus = null;
     [SerializeField] private GroundCheck bottomGroundChecker = null;
     [SerializeField] private LizardWarriorMove lizardWarriorMove = null;
@@ -59,6 +61,7 @@ public class LizardWarriorPattern : MonoBehaviour
             if (runTime <= 0 || IsClose())
             {
                 lizardWarriorStatus.UpperTrigger();
+                lizardWarriorEffect.RunOff();
             }
         }
         else if (lizardWarriorStatus.IsPressJump())
@@ -66,11 +69,13 @@ public class LizardWarriorPattern : MonoBehaviour
             if (lizardWarriorMove.IsReach())
             {
                 lizardWarriorStatus.PressTrigger();
+                lizardWarriorAttack.PressOn();
             }
         }
         else if (bottomGroundChecker.IsGround() && lizardWarriorStatus.IsPress())
         {
             lizardWarriorStatus.GroundTrigger();
+            lizardWarriorAttack.PressOff();
         }
         else if (lizardWarriorStatus.IsFeint())
         {
@@ -78,6 +83,8 @@ public class LizardWarriorPattern : MonoBehaviour
             if (feintTime <= 0)
             {
                 lizardWarriorStatus.PunchOn();
+                lizardWarriorEffect.FeintOff();
+                lizardWarriorAttack.PunchOn();
                 feintTime = lizardWarriorStatus.FeintTime;
             }
         }
@@ -87,6 +94,7 @@ public class LizardWarriorPattern : MonoBehaviour
             if (feintTime <= 0)
             {
                 lizardWarriorStatus.PunchOff();
+                lizardWarriorAttack.PunchOff();
             }
         }
         else if (lizardWarriorStatus.IsPostTailBlade())
@@ -101,11 +109,15 @@ public class LizardWarriorPattern : MonoBehaviour
             if (lizardWarriorMove.IsReach())
             {
                 lizardWarriorStatus.SmashTrigger();
+                lizardWarriorEffect.SmashJumpOff();
+                lizardWarriorAttack.SmashOn();
             }
         }
         else if (bottomGroundChecker.IsGround() && lizardWarriorStatus.IsSmash())
         {
             lizardWarriorStatus.GroundTrigger();
+            lizardWarriorAttack.SmashOff();
+            lizardWarriorAttack.SmashSlashWave2();
         }
     }
 
@@ -154,6 +166,7 @@ public class LizardWarriorPattern : MonoBehaviour
             else if (randomNumber == 1)
             {
                 lizardWarriorStatus.FeintTrigger();
+                lizardWarriorEffect.FeintOn();
                 feintTime = lizardWarriorStatus.FeintTime;
             }
             else if (randomNumber == 2)
@@ -170,8 +183,7 @@ public class LizardWarriorPattern : MonoBehaviour
             }
             else if (randomNumber == 1)
             {
-                lizardWarriorStatus.PressJumpTrigger();
-                lizardWarriorMove.JumpUp();
+                lizardWarriorStatus.PrePressTrigger();
             }
             else if (randomNumber == 2)
             {
