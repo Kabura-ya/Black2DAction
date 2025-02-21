@@ -74,6 +74,7 @@ public class GiantSpiderAttack : MonoBehaviour
     //独立している攻撃オブジェクトをすべて破壊する。
     public void AllClear()
     {
+        TackleOff();
         clearEvent.Invoke();
     }
 }

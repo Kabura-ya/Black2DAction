@@ -241,13 +241,13 @@ public class LizardWarriorStatus : MonoBehaviour
         anim.SetTrigger("powerslash");
     }
 
-    public bool IsStun()
+    public bool IsStan()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("Stun");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Stan");
     }
-    public void StunPlay()
+    public void StanPlay()
     {
-        anim.Play("Stun");
+        anim.Play("Stan");
     }
     public bool IsDead()
     {

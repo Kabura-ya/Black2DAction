@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3967426966875923992}
   - component: {fileID: 8661024702075936960}
   - component: {fileID: 6089043180982185225}
+  - component: {fileID: 3051136700491249014}
   m_Layer: 9
   m_Name: WebShot
   m_TagString: EnemyAttack
@@ -193,7 +194,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06ac4ae34f5e11542999ba7f80517c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  power: 1
   webTrap: {fileID: 3395202939295410832, guid: d730ba778a3e1bf41a5648aae79095b3, type: 3}
-  breakedWeb: {fileID: 8870546168406980266, guid: 6997397d8acc2a140b3c116f17b3fc90, type: 3}
   maxSpeed: 5
+--- !u!114 &3051136700491249014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7235642637931753702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a396d1414044844a7f9a575afd06e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  power: 1
+  hitVector: {x: 0, y: 0}
+  type: 0
+  canDrain: 1
+  canSPDrain: 1

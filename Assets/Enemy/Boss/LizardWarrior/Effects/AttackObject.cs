@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//攻撃オブジェクトの基本的な設定詰め込んだもの
+//攻撃オブジェクトの基本的な設定詰め込んだもの。ドレイン時に特殊な機能がないものならこれをつければいい。
 public class AttackObject : MonoBehaviour, IDrainable
 {
     [SerializeField] private int power = 1;

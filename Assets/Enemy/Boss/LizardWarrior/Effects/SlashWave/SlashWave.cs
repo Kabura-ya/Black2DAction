@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlashWaveMove : MonoBehaviour
+public class SlashWave : MonoBehaviour
 {
     [SerializeField] private float speed = 5;
     [SerializeField] private float distance = 10;

@@ -7,14 +7,14 @@ public class LizardWarriorDamage : MonoBehaviour, IDamageable, IDrainable
     [SerializeField] private LizardWarriorStatus lizardWarriorStatus = null;
     [SerializeField] GameObject damageEffect = null;
     private int hp = 0;
-    private int knockBackCount = 0;
-    private bool hadknockback = false;
+    private int stanCount = 0;
+    private bool hadkstunned = false;
 
     void Awake()
     {
         hp = lizardWarriorStatus.MaxHp;
-        hadknockback = false;
-        knockBackCount = hp / 2;
+        stanCount = hp / 2;
+        hadkstunned = false;
     }
 
     public void Damage(int value) { Damage(value, Vector2.zero); }
@@ -26,23 +26,23 @@ public class LizardWarriorDamage : MonoBehaviour, IDamageable, IDrainable
         if (!lizardWarriorStatus.IsDead() && !lizardWarriorStatus.IsSpawn() && !lizardWarriorStatus.IsFeint())
         {
             hp -= value;
-            knockBackCount -= value;
+            stanCount -= value;
             Instantiate(damageEffect, this.transform.position, Quaternion.Euler(0f, 0f, 80f));
             if (hp <= 0)
             {
                 Dead();
             }
-            if(knockBackCount <= 0 && !hadknockback)
+            if(stanCount <= 0 && !hadkstunned)
             {
-                Down();
-                hadknockback = true;
+                Stan();
+                hadkstunned = true;
             }
         }
     }
 
-    void Down()
+    void Stan()
     {
-        lizardWarriorStatus.StunPlay();
+        lizardWarriorStatus.StanPlay();
     }
     void Dead()
     {

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //毎フレームRayCastするので多分重い。使いすぎ厳禁。
-public class WebBeem : MonoBehaviour, IDrainable
+public class WebBeem : MonoBehaviour
 {
-    [SerializeField] private int power = 1;
     [SerializeField] private LayerMask hitLayer;
     [Header("回転限度"), SerializeField] private float maxAngle = 360;
     private float nowAngle = 0;
@@ -55,26 +54,5 @@ public class WebBeem : MonoBehaviour, IDrainable
         {
             Destroy(this.gameObject);
         }
-    }
-
-    void OnTriggerEnter2D(Collider2D collider2D)
-    {
-        if (collider2D.gameObject.tag == "Player")
-        {
-            IDamageable idamageable = collider2D.gameObject.GetComponent<IDamageable>();
-            if (idamageable != null)
-            {
-                idamageable.Damage(power);
-            }
-        }
-    }
-
-    public bool Drain()
-    {
-        return true;
-    }
-    public bool SuperDrain()
-    {
-        return true;
     }
 }

@@ -115,6 +115,14 @@ public class GiantSpiderStatus : MonoBehaviour
         anim.SetTrigger("webbeem");
     }
 
+    public bool IsStan()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Stan");
+    }
+    public void StanPlay()
+    {
+        anim.Play("Stan");
+    }
     public bool IsDead()
     {
         return anim.GetCurrentAnimatorStateInfo(0).IsName("Dead");

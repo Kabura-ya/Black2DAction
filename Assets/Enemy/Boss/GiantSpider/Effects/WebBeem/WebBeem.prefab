@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 951328338425291909}
   - component: {fileID: 9096985097232153051}
   - component: {fileID: 7069621388357386141}
+  - component: {fileID: 2513930798160817971}
   m_Layer: 0
   m_Name: WebBeem
   m_TagString: Untagged
@@ -151,3 +152,20 @@ MonoBehaviour:
   maxDistance: 20
   spriteRenderer: {fileID: 951328338425291909}
   boxCollider2D: {fileID: 9096985097232153051}
+--- !u!114 &2513930798160817971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5820098634140277997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a396d1414044844a7f9a575afd06e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  power: 1
+  hitVector: {x: 0, y: 0}
+  type: 0
+  canDrain: 1
+  canSPDrain: 1

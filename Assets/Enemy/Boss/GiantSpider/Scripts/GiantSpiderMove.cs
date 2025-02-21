@@ -67,7 +67,9 @@ public class GiantSpiderMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(giantSpiderStatus.IsStand() || giantSpiderStatus.IsDead())
+        if(giantSpiderStatus.IsStand() || 
+            giantSpiderStatus.IsStan() || 
+            giantSpiderStatus.IsDead())
         {
             xSpeed = 0;
             if (bottomGroundChecker.IsGround())
