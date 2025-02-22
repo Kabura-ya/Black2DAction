@@ -63,6 +63,6 @@ public class GiantSpiderAnimationEvent : MonoBehaviour
     }
     void Dead()
     {
-        Destroy(transform.root.gameObject);
+        Destroy(transform.parent.gameObject);
     }
 }

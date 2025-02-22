@@ -106,6 +106,6 @@ public class LizardWarriorAnimationEvent : MonoBehaviour
     }
     void Dead()
     {
-        Destroy(transform.root.gameObject);
+        Destroy(transform.parent.gameObject);
     }
 }

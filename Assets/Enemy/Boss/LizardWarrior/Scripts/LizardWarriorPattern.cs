@@ -179,11 +179,11 @@ public class LizardWarriorPattern : MonoBehaviour
         {
             if (randomNumber == 0)
             {
-                lizardWarriorStatus.BackSlashTrigger();
+                lizardWarriorStatus.PrePressTrigger();
             }
             else if (randomNumber == 1)
             {
-                lizardWarriorStatus.PrePressTrigger();
+                lizardWarriorStatus.BackSlashTrigger();
             }
             else if (randomNumber == 2)
             {
