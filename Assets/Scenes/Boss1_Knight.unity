@@ -1193,7 +1193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1840247788456419724, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       propertyPath: maxHp
-      value: 10
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 1840247788456419724, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       propertyPath: idleTime
