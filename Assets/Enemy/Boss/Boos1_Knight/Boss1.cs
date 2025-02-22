@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-public class Boss1 : MonoBehaviour, IDamageable, IDrainable, IDashHit
+public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 {
     public GameManager gameManager;//ゲームオーバーやクリアなどを処理するGamemanagerについているスクリプトの情報を取得するための関数
 
@@ -415,15 +415,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, IDashHit
         actionCoroutine = null;
         actionCoroutine = StartCoroutine(nextAction);
     }
-    public void NormalDashHit() { }//IDashHitインターフェースに入れてるからおいてるだけで何もしない
-    public void SuperDashHit()
-    {
-        if (superDashStunn)//一部の赤攻撃中などにスーパーダッシュでぶつかられるとスタンする
-        {
-            Debug.Log("SuperDashStunn");
-            Stunn();
-        }
-    }
+
     private void Stunn()
     {
         if (actionCoroutine != null){ StopCoroutine(actionCoroutine);}//現在の行動を中止させてからスタンさせる
@@ -492,6 +484,11 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable, IDashHit
     }
     public bool SuperDrain()
     {
-        return Drain();
+        if (superDashStunn)//一部の赤攻撃中などにスーパーダッシュでぶつかられるとスタンする
+        {
+            Debug.Log("SuperDashStunn");
+            Stunn();
+        }
+        return enableHit;
     }
 }

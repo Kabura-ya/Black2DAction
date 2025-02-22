@@ -533,7 +533,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             if (printLog) Debug.Log("DashDrain");
             var drainTarget = collision.gameObject.GetComponent<IDrainable>();//触れた相手にドレイン用インターフェースがあるか
-            if (drainTarget != null && drainTarget.Drain())//ドレイン可能時
+            if (drainTarget != null && drainTarget.Drain())//ドレイン可能時。Drain()内で、ぶつかった相手がスタンするなどの処理が行われる場合がある
             {
                 Instantiate(dashDrainEffect, transform.position, transform.rotation);
                 if (printLog) Debug.Log("DashDrainSucceed");
@@ -544,19 +544,11 @@ public class Player : MonoBehaviour, IDamageable
         {
             if (printLog) Debug.Log("SuperDashDrain");
             var drainTarget = collision.gameObject.GetComponent<IDrainable>();//触れた相手にドレイン用インターフェースがあるか
-            if (drainTarget != null && (drainTarget.Drain() || drainTarget.SuperDrain()))//ドレイン可能時。通常のDrain()がTrueならばSuperDrain()もTrueなはずだが、ミスがあった時のために
+            if (drainTarget != null && drainTarget.SuperDrain())//ドレイン可能時。SuperDrain()内で、ぶつかった相手がスタンするなどの処理が行われる場合がある
             {
                 Instantiate(superDashDrainEffect, transform.position, transform.rotation);
                 if (printLog) Debug.Log("SuperDashDrainSucceed");
                 recoverEnergy(getSuperEnergy);
-            }
-
-            //スーパーダッシュでぶつかった敵をスタンさせる用の処理（一部の敵や攻撃パターン中じゃないとスタンしない）
-            var stunnTarget = collision.gameObject.GetComponent<IDashHit>();
-            if (stunnTarget != null)//スタン可能時
-            {
-                if (printLog) Debug.Log("SuperDasStunnSucceed");
-                stunnTarget.SuperDashHit();
             }
         }
 

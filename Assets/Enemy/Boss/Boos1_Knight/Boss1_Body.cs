@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss1_Body : MonoBehaviour, IDamageable, IDrainable, IDashHit //ƒ{ƒX‚Ì“·‘Ì
+public class Boss1_Body : MonoBehaviour, IDamageable, IDrainable //ƒ{ƒX‚Ì“·‘Ì
 {
     // Start is called before the first frame update
     private void OnTriggerStay2D(Collider2D collision)//Body‚ÉG‚ê‚½‚à‚Ì‚ğeƒIƒuƒWƒFƒNƒg‚É“n‚·‚¾‚¯
@@ -26,13 +26,5 @@ public class Boss1_Body : MonoBehaviour, IDamageable, IDrainable, IDashHit //ƒ{ƒ
     public bool SuperDrain()
     {
         return transform.root.gameObject.GetComponent<Boss1>().SuperDrain();
-    }
-    public void NormalDashHit()
-    {
-        transform.root.gameObject.GetComponent<Boss1>().NormalDashHit();
-    }
-    public void SuperDashHit()
-    {
-        transform.root.gameObject.GetComponent<Boss1>().SuperDashHit();
     }
 }
