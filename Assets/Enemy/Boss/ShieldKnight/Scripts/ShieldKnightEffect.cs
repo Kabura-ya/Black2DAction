@@ -4,15 +4,48 @@ using UnityEngine;
 
 public class ShieldKnightEffect : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject sparkle = null;
+    [SerializeField] private GameObject guard = null;
+    [SerializeField] private GameObject powerguard = null;
+
+    void Awake()
     {
-        
+        SparkleOff();
+        GuardOff();
+        PowerGuardOff();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SparkleOn()
     {
-        
+        sparkle.SetActive(true);
+    }
+    public void SparkleOff()
+    {
+        sparkle.SetActive(false);
+    }
+
+    public void GuardOn()
+    {
+        guard.SetActive(true);
+    }
+    public void GuardOff()
+    {
+        guard.SetActive(false);
+    }
+
+    public void PowerGuardOn()
+    {
+        powerguard.SetActive(true);
+    }
+    public void PowerGuardOff()
+    {
+        powerguard.SetActive(false);
+    }
+
+    public void AllClear()
+    {
+        SparkleOff();
+        GuardOff();
+        PowerGuardOff();
     }
 }

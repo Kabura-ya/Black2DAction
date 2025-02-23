@@ -39,9 +39,9 @@ public class WebBeem : MonoBehaviour
         Vector2 colliderOffset = boxCollider2D.offset;
 
         // 新しいサイズを設定
-        rendCurrentSize.x = distance;
-        colliderSize.x = distance;
-        colliderOffset.x = distance/2;
+        rendCurrentSize.x = distance / this.transform.localScale.x;
+        colliderSize.x = distance / this.transform.localScale.x;
+        colliderOffset.x = distance / (2 * this.transform.localScale.x);
 
         // 新しいサイズをSpriteRendererに設定
         spriteRenderer.size = rendCurrentSize;

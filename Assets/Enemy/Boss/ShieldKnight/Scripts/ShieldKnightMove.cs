@@ -35,7 +35,8 @@ public class ShieldKnightMove : MonoBehaviour
     {
         if (shieldKnightStatus.PlayerTrans != null)
         {
-            if (shieldKnightStatus.IsWalk() ||
+            if (shieldKnightStatus.IsStand() ||
+                shieldKnightStatus.IsWalk() ||
                 shieldKnightStatus.IsPrePowerSlash() ||
                 shieldKnightStatus.IsGuard() ||
                 shieldKnightStatus.IsPowerGuard())

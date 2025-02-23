@@ -7,23 +7,26 @@ public class ShieldKnightStatus : MonoBehaviour
     [Header("体力"), SerializeField] private int maxHp = 200;
     public int MaxHp => maxHp;
 
+    [Header("待機時間"), SerializeField] private float coolTime = 0.3f;
+    public float CoolTime => coolTime;
+
     [Header("落下速度"), SerializeField] private float fallSpeed = 5;
     public float FallSpeed => fallSpeed;//外部取得だけ可能
 
     [Header("歩行速度"), SerializeField] private float walkSpeed = 5;
     public float WalkSpeed => walkSpeed;//外部取得だけ可能
-    [Header("歩行時間"), SerializeField] private float walkTime = 0.3f;
-    public float WalkTime => walkTime;
 
     [Header("ガード時間"), SerializeField] private float guardTime = 1.5f;
     public float GuardTime => guardTime;
+    [Header("ガードまでに受け入れる攻撃回数"), SerializeField] private int guardCount = 2;
+    public int GuardCount => guardCount;
 
     [Header("突進速度"), SerializeField] private float assaultSpeed = 10;
     public float AssaultSpeed => assaultSpeed;//外部取得だけ可能
     [Header("突進時間"), SerializeField] private float assaultTime = 1.5f;
     public float AssaultTime => assaultTime;
 
-    [Header("強切り速度"), SerializeField] private float powerslashSpeed = 10;
+    [Header("強切り前進速度"), SerializeField] private float powerslashSpeed = 10;
     public float PowerSlashSpeed => powerslashSpeed;//外部取得だけ可能
 
     [SerializeField] private Animator anim = null;
@@ -41,9 +44,22 @@ public class ShieldKnightStatus : MonoBehaviour
         return anim.GetCurrentAnimatorStateInfo(0).IsName("Spawn");
     }
 
+    public bool IsStand()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("Stand");
+    }
+
     public bool IsWalk()
     {
         return anim.GetCurrentAnimatorStateInfo(0).IsName("Walk");
+    }
+    public void WalkOn()
+    {
+        anim.SetBool("walk", true);
+    }
+    public void WalkOff()
+    {
+        anim.SetBool("walk", false);
     }
 
     public bool IsSlash()
@@ -55,13 +71,25 @@ public class ShieldKnightStatus : MonoBehaviour
         anim.SetTrigger("slash");
     }
 
-    public bool IsThunderStorm()
+    public bool IsSurroundSpear()
     {
-        return anim.GetCurrentAnimatorStateInfo(0).IsName("ThunderStorm");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("SurroundSpear");
     }
-    public void ThunderStormTrigger()
+    public bool IsSandwichSpear()
     {
-        anim.SetTrigger("thunderstorm");
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("SandwicSpear");
+    }
+    public void SurroundSpearTrigger()
+    {
+        anim.SetTrigger("surroundspear");
+    }
+    public bool IsSandwichSpearSpear()
+    {
+        return anim.GetCurrentAnimatorStateInfo(0).IsName("SandwichSpearSpear");
+    }
+    public void SandwichSpearSpearTrigger()
+    {
+        anim.SetTrigger("sandwichspear");
     }
 
     public bool IsPrePowerSlash()

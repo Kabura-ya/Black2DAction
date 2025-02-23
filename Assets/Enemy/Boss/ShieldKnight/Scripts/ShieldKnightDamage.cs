@@ -8,10 +8,12 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
     [SerializeField] private ShieldKnightPattern shieldKnightPattern = null;
     [SerializeField] GameObject damageEffect = null;
     private int hp = 0;
+    private int guardCount = 0;
 
     void Awake()
     {
         hp = shieldKnightStatus.MaxHp;
+        guardCount = shieldKnightStatus.GuardCount;
     }
 
     public void Damage(int value) { Damage(value, Vector2.zero); }
@@ -20,10 +22,13 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
     public void Damage(int value, Vector2 vector, int type)
     {
         //ガード中なら
-        if (shieldKnightStatus.IsGuard() ||
-            shieldKnightStatus.IsPowerGuard())
+        if (shieldKnightStatus.IsGuard())
         {
             shieldKnightPattern.CounterSuccess();
+        }
+        else if (shieldKnightStatus.IsPowerGuard())
+        {
+            shieldKnightPattern.PowerCounterSuccess();
         }
         //それ以外でダメージ受ける状態
         else if (!shieldKnightStatus.IsDead() && 
@@ -38,17 +43,29 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
                 Dead();
             }
 
-            //歩いている時にダメージ受けたらガードに遷移
-            if(shieldKnightStatus.IsWalk())
+            //直立か歩いている時にダメージ受けたらガードに遷移
+            if(shieldKnightStatus.IsStand() || shieldKnightStatus.IsWalk())
             {
-                shieldKnightPattern.GuardActive();
+                guardCount--;
+                if (guardCount <= 0)
+                {
+                    guardCount = shieldKnightStatus.GuardCount;
+                    if (hp > shieldKnightStatus.MaxHp / 2)
+                    {
+                        shieldKnightPattern.GuardActive();
+                    }
+                    else
+                    {
+                        shieldKnightPattern.PowerGuardActive();
+                    }
+                }
             }
         }
     }
 
     void Stan()
     {
-        shieldKnightStatus.StanPlay();
+        shieldKnightPattern.GuardBreak();
     }
     void Dead()
     {
@@ -57,10 +74,15 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
 
     public bool Drain()
     {
-        if (shieldKnightStatus.IsGuard() ||
-            shieldKnightStatus.IsPowerGuard())
+        if (shieldKnightStatus.IsGuard())
         {
-            shieldKnightStatus.StanPlay();
+            Stan();
+            return true;
+        }
+        else if(shieldKnightStatus.IsPowerGuard())
+        {
+            shieldKnightPattern.PowerCounterSuccess();
+            return false;
         }
         return true;
     }
@@ -69,7 +91,7 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
         if (shieldKnightStatus.IsGuard() ||
             shieldKnightStatus.IsPowerGuard())
         {
-            shieldKnightStatus.StanPlay();
+            Stan();
         }
         return true;
     }
