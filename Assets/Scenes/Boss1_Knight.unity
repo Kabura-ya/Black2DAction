@@ -409,6 +409,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &311562602 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 5373229470297699997, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
+  m_PrefabInstance: {fileID: 4571201538581591578}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,22 +1320,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5197061806871856772, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6686367482227124274, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 84460106}
     - target: {fileID: 6686367482227124274, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
-      propertyPath: superDashDrainEffect
+      propertyPath: drainCollider
       value: 
-      objectReference: {fileID: 1061140667664793003, guid: 8eeba0eb9d92ee94caafed65a7425a40, type: 3}
-    - target: {fileID: 6686367482227124274, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
-      propertyPath: superDashChargedEffect
-      value: 
-      objectReference: {fileID: 1379143190777953145, guid: e1a1bd190125aae4ea732bcda9879df3, type: 3}
+      objectReference: {fileID: 311562602}
     - target: {fileID: 6818972335626899105, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

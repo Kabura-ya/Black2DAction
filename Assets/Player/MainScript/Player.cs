@@ -37,6 +37,7 @@ public class Player : MonoBehaviour, IDamageable
     public bool printLog = false;//これがtrueの時に色々なLogを出力する
     public float speed = 10;
     //ダッシュ関係
+    public Collider2D drainCollider;//これにふれた相手にドレインを行う
     private bool beginDash = false;
     public float dashSpeed = 20;
     public float dashDistance = 50;
@@ -126,10 +127,14 @@ public class Player : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
-        rb.gravityScale = originagGravity;
+        rb.gravityScale = originagGravity;//ダッシュ中などで重力を0にするが、ダッシュが終了すれば勝手に重力が戻るように、Updateの最初に重力をつける
         if (playerState == PlayerState.Stop)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+        if (drainCollider.enabled == true && !(playerState == PlayerState.Dashing || playerState == PlayerState.SuperDashing))//ダッシュ中でもないのにドレイン用コライダーが有効化されていたら無効化する
+        {
+            drainCollider.enabled = false;
         }
         else{
             Jump();
@@ -371,12 +376,12 @@ public class Player : MonoBehaviour, IDamageable
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.C) && (dashTimeRecast == false))
+        if (Input.GetKeyDown(KeyCode.C) && (dashTimeRecast == false))//ダッシュ開始
         {
             beginDash = true;//アニメーション遷移用に一瞬だけtrueにする
             StartCoroutine(DashRecastCoroutine()); //ダッシュのリキャスト部分だけをやる、dashTimeRecastを一定時間trueにしてダッシュできなくしたりするコルーチン
-            actionCoroutine = StartCoroutine(DashCoroutine());//状態を一定時間Dashingにする
-        }else if (playerState == PlayerState.Dashing)
+            actionCoroutine = StartCoroutine(DashCoroutine());//状態を一定時間Dashingにしたり、ドレイン用コライダーを有効化する
+        }else if (playerState == PlayerState.Dashing)//ダッシュ中
         {
             beginDash = false;
             rb.velocity = transform.right * dashSpeed;//速度を設定
@@ -386,11 +391,13 @@ public class Player : MonoBehaviour, IDamageable
     }
     IEnumerator DashCoroutine()//ダッシュ中のコルーチン
     {
-        rb.velocity = transform.right * dashSpeed;
         playerState = PlayerState.Dashing;//ダッシュ中は状態をDashingに
+        drainCollider.enabled = true;
+        rb.velocity = transform.right * dashSpeed;
         yield return new WaitForSeconds(dashDistance / dashSpeed /*ダッシュ中の時間*/);
+        drainCollider.enabled = false;
         playerState = PlayerState.Idle;
-        rb.velocity = Vector2.zero;//ダッシュ直後に速度を0に
+        rb.velocity = Vector2.zero;
     }
     IEnumerator DashRecastCoroutine()//ダッシュのリキャスト時間が過ぎるまでtrueにするだけ
     {
@@ -462,10 +469,12 @@ public class Player : MonoBehaviour, IDamageable
     IEnumerator SuperDashCoroutine()//チャージダッシュ中のコルーチン
     {
         playerState = PlayerState.SuperDashing;
+        drainCollider.enabled = true;
         rb.velocity = transform.right * superDashSpeed;
         playerState = PlayerState.SuperDashing;
         yield return new WaitForSeconds(superDashDistance / superDashSpeed);
         playerState = PlayerState.Idle;
+        drainCollider.enabled = false;
     }
     IEnumerator SuperDashRecastCoroutine()//ダッシュのリキャスト時間が過ぎるまでtrueにするだけ
     {
@@ -526,7 +535,7 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    public void BodyEnter(Collider2D collision)//体の当たり判定用のコライダーにつけたスクリプトから呼ばれる
+    public void DrainEnter(Collider2D collision)//ドレイン用のコライダーにつけたスクリプトから呼ばれる
     {
         if(printLog) Debug.Log("Player_BodyEnter");
         if (playerState == PlayerState.Dashing)
@@ -554,6 +563,10 @@ public class Player : MonoBehaviour, IDamageable
 
         if (printLog) Debug.Log("OntrrigerEnter_Player");
     }
+
+    public void BodyEnter(Collider2D collision) {//体の当たり判定用のコライダーにつけたスクリプトから呼ばれる。現状使用していないが、触れた相手に何かする場合に使用する。
+    
+    }
     private bool JudgeInvincible()//絶対にダメージを受けない状態ならtrueを返す
     {
         return isInvincible || playerState == PlayerState.Stop;
@@ -566,7 +579,7 @@ public class Player : MonoBehaviour, IDamageable
         if (!JudgeInvincible() && JudgeGetDamageType(type))
         {
             GetDamage(damage);
-            if (type == 1) { if (printLog) { Debug.Log("Player_DamageRed"); } } ;
+            if (printLog) { if (type == 1) { Debug.Log("Player_DamageRed"); } } ;
         }
         rb.velocity = vector;
         if (vector != Vector2.zero) { rb.velocity = vector; }//ノックバック 
@@ -576,7 +589,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         return !((playerState == PlayerState.Dashing && type == 0) || (playerState == PlayerState.SuperDashing && type <= 1));
     }
-    private void GetDamage(int damage)//実際にダメージを受けてHPを減らしたり無敵時間とかの処理
+    private void GetDamage(int damage)//実際にダメージを受けてHPを減らしたりノックバックや無敵時間とかの処理
     {
         hp -= damage;//Hpを減らす
         sliderHp.value = (float)hp / maxHp;//Hpのスライダーの更新
