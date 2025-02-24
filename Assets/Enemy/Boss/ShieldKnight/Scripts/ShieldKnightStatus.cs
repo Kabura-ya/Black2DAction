@@ -29,6 +29,9 @@ public class ShieldKnightStatus : MonoBehaviour
     [Header("強切り前進速度"), SerializeField] private float powerslashSpeed = 10;
     public float PowerSlashSpeed => powerslashSpeed;//外部取得だけ可能
 
+    [Header("ノックバック速度"), SerializeField] private float knockbackSpeed = 1;
+    public float KnockBackSpeed => knockbackSpeed;//外部取得だけ可能
+
     [SerializeField] private Animator anim = null;
 
     private Transform playerTrans = null;
