@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 //using System.Drawing;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
+
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -99,9 +101,14 @@ public class Player : MonoBehaviour, IDamageable
     private bool isInvincible = false;
     Coroutine actionCoroutine;//スタン時などにコルーチンを停止させるために、行動のコルーチンの引数を入れておく
 
+    //入力関係
+    private PlayerInput playerInput_;
+    private Vector2 move;
 
     void Start()
     {
+        playerInput_ = new PlayerInput();
+        playerInput_.Enable();
         playerState = PlayerState.Idle;//最初は待機状態に
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -247,7 +254,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.X) && (countAttack <= 0))
+        if (playerInput_.Player.Attack.triggered && (countAttack <= 0))
         {
             countAttack = attack.GetComponent<Attack>().recastTime;
             //EnableAttack()をアニメーションの方で呼ぶ
@@ -280,15 +287,18 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Flip()//反転(ダッシュ中や攻撃中は反転しない)
     {
+        //InputSystemを使うように変えたが、InputSystemの仕様を正確に理解していないため良くない実装かもしれない
+        move = playerInput_.Player.Move.ReadValue<Vector2>();
+        float xAxis = move.x;
         if (JudgeFlip()) {
-            if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
+            if ((-0.5 < xAxis) && (xAxis < 0.5))
             {
                 //左右が同時に押されていたら何もしない
             }
-            else if (Input.GetKey(KeyCode.RightArrow))
+            else if (xAxis > 0)
             {
                 transform.rotation = Quaternion.Euler(0, 0, 0);//右を向く
-            } else if (Input.GetKey(KeyCode.LeftArrow))
+            } else if (xAxis < 0)
             {
                 transform.rotation = Quaternion.Euler(0, 180, 0);//左を向く
             }
@@ -302,18 +312,34 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Move()//左右移動（ジャンプ中、攻撃中でも移動できる）
     {
+        //InputSystemを使うように変えたが、InputSystemの仕様を正確に理解していないため良くない実装かもしれない
+        move = playerInput_.Player.Move.ReadValue<Vector2>();
+        float xAxis = move.x;
         if (JudgeMovable()) {
-            if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
+            /*
+            if ((-0.5 < xAxis) && (xAxis < 0.5))
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Idle; }
             }
-            else if (Input.GetKey(KeyCode.RightArrow)) {
-                rb.velocity = new Vector2(speed, rb.velocity.y);
+            else*/
+            if (xAxis != 0)
+            {
+                rb.velocity = new Vector2(move.x * speed, rb.velocity.y);
                 if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Moving; }
             }
-            else if (Input.GetKey(KeyCode.LeftArrow)) {
-                rb.velocity = new Vector2(-1 * speed, rb.velocity.y);
+            else
+            {
+                rb.velocity = new Vector2(0, rb.velocity.y);
+                if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Idle; }
+            }
+            /*
+            if (xAxis > 0) {
+                rb.velocity = new Vector2(move.x * speed, rb.velocity.y);
+                if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Moving; }
+            }
+            else if (xAxis < 0) {
+                rb.velocity = new Vector2(move.x * speed, rb.velocity.y);
                 if (isGround && playerState != PlayerState.NormalAttacking){ playerState = PlayerState.Moving;}
             }
             else
@@ -321,6 +347,7 @@ public class Player : MonoBehaviour, IDamageable
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 if (isGround && playerState != PlayerState.NormalAttacking) {playerState = PlayerState.Idle;}
             }
+            */
         }
     }
 
@@ -333,7 +360,7 @@ public class Player : MonoBehaviour, IDamageable
     {
 
         // ジャンプボタンを離したり、ダッシュとかチャージとかしたらジャンプ終了
-        if (Input.GetKeyUp(KeyCode.Z) || playerState == PlayerState.Dashing || playerState == PlayerState.SuperDashCharging)
+        if (playerInput_.Player.Jump.WasReleasedThisFrame() || playerState == PlayerState.Dashing || playerState == PlayerState.SuperDashCharging)
         {
             isJumping = false;
             jumpTimeCounter = 0;
@@ -344,7 +371,7 @@ public class Player : MonoBehaviour, IDamageable
             return;
         }
         // ジャンプ開始
-        if (isGround && Input.GetKeyDown(KeyCode.Z))
+        if (isGround && playerInput_.Player.Jump.triggered)
         {
             isJumping = true;
             playerState = PlayerState.Jumping;
@@ -354,7 +381,7 @@ public class Player : MonoBehaviour, IDamageable
         }
 
         // ジャンプボタンを押し続けた場合の処理
-        if (Input.GetKey(KeyCode.Z) && isJumping)
+        if (playerInput_.Player.Jump.IsPressed() && isJumping)
         {
             if (jumpTimeCounter > 0)
             {
@@ -376,7 +403,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.C) && (dashTimeRecast == false))//ダッシュ開始
+        if (playerInput_.Player.Dash.triggered && (dashTimeRecast == false))//ダッシュ開始
         {
             beginDash = true;//アニメーション遷移用に一瞬だけtrueにする
             StartCoroutine(DashRecastCoroutine()); //ダッシュのリキャスト部分だけをやる、dashTimeRecastを一定時間trueにしてダッシュできなくしたりするコルーチン
@@ -414,17 +441,15 @@ public class Player : MonoBehaviour, IDamageable
             return;
         }
 
-        if (JudgeNormalState() && Input.GetKey(KeyCode.D))//チャージ開始の処理
+        if (JudgeNormalState() && (superDashChargeTimeCount <= 0) && playerInput_.Player.SuperDash.IsPressed())//チャージ開始の処理
         {
             playerState = PlayerState.SuperDashCharging;
+            anim.SetTrigger("chargingTrigger");
         }
         if (playerState == PlayerState.SuperDashCharging)//チャージ中の処理
         {
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                anim.SetTrigger("chargingTrigger");
-            }
-            if (Input.GetKey(KeyCode.D))
+            
+            if (playerInput_.Player.SuperDash.IsPressed())
             {
                 rb.velocity = Vector2.zero;//チャージ中はその場に停止させる
                 rb.gravityScale = 0;
@@ -446,7 +471,7 @@ public class Player : MonoBehaviour, IDamageable
     private void SuperDashCharged()
     {
         if (playerState != PlayerState.SuperDashCharged){ return;}
-        if (Input.GetKey(KeyCode.D))
+        if (playerInput_.Player.SuperDash.IsPressed())
         {
             rb.velocity = Vector2.zero;
             rb.gravityScale = 0;
@@ -489,7 +514,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.S) && energyCost <= energy)
+        if (playerInput_.Player.EnegyAttack.triggered && energyCost <= energy)
         {
             actionCoroutine = StartCoroutine(EnergyBulletCoroutine());
         }
