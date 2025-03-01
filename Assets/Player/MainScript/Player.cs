@@ -54,11 +54,13 @@ public class Player : MonoBehaviour, IDamageable
     private float superDashChargeTimeCount = 0;//チャージ時間のカウント
     public float superDashSpeed = 20;
     public float superDashDistance = 60;
-    private float superDashY;//（今はつかっていない）チャージ中とスーパーダッシュするときに高さが変わらないように
+    public GameObject superDashChargedEffect;//チャージ完了時に出るエフェクト
     public float superDashRecastTime = 0.5f;//ダッシュをまたできるまでの時間
     private bool superDashGroundRecast = false;
+    public int superDashDamage = 10;//スーパーダッシュでぶつかった相手に与えるダメージ
+    public float superDaskNockBackSpeed = 10;//スーパーダッシュでぶつかった相手に与えるノックバックの威力
     public GameObject superDashDrainEffect;//スーパーダッシュで吸収できた時に出るエフェクト
-    public GameObject superDashChargedEffect;//チャージ完了時に出るエフェクト
+
     //エナジー関係
     public float maxEnergy = 10;
     public float energy;
@@ -583,6 +585,14 @@ public class Player : MonoBehaviour, IDamageable
                 Instantiate(superDashDrainEffect, transform.position, transform.rotation);
                 if (printLog) Debug.Log("SuperDashDrainSucceed");
                 recoverEnergy(getSuperEnergy);
+            }
+            if (collision.gameObject.tag == "Enemy")
+            {
+                var damageTarget = collision.gameObject.GetComponent<IDamageable>();
+                if (damageTarget != null)
+                {
+                    damageTarget.Damage(superDashDamage, transform.right * superDaskNockBackSpeed, 0);
+                }
             }
         }
 
