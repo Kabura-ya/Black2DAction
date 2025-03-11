@@ -52,6 +52,15 @@ public class ShieldKnightAnimationEvent : MonoBehaviour
         shieldKnightAttack.PowerCounterOn();
     }
 
+    void BrakeOn()
+    {
+        shieldKnightEffect.BrakeOn();
+    }
+    void BrakeOff()
+    {
+        shieldKnightEffect.BrakeOff();
+    }
+
     void AllClear()
     {
         anim.ResetTrigger("slash");

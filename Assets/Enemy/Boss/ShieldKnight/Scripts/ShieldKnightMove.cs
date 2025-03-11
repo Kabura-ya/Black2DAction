@@ -77,6 +77,11 @@ public class ShieldKnightMove : MonoBehaviour
             xSpeed = NowDerection(this.transform.localScale) * shieldKnightStatus.PowerSlashSpeed;
             ySpeed = 0;
         }
+        else if (shieldKnightStatus.IsStan())
+        {
+            xSpeed = -NowDerection(this.transform.localScale) * shieldKnightStatus.KnockBackSpeed;
+            ySpeed = 0;
+        }
         else
         {
             xSpeed = 0;

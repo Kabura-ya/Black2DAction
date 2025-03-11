@@ -6,6 +6,7 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
 {
     [SerializeField] private ShieldKnightStatus shieldKnightStatus = null;
     [SerializeField] private ShieldKnightPattern shieldKnightPattern = null;
+    [SerializeField] private ShieldKnightEffect shieldKnightEffect = null;
     [SerializeField] GameObject damageEffect = null;
     private int hp = 0;
     private int guardCount = 0;
@@ -25,10 +26,12 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
         if (shieldKnightStatus.IsGuard())
         {
             shieldKnightPattern.CounterSuccess();
+            shieldKnightEffect.CounterSuccess();
         }
         else if (shieldKnightStatus.IsPowerGuard())
         {
             shieldKnightPattern.PowerCounterSuccess();
+            shieldKnightEffect.PowerCounterSuccess();
         }
         //それ以外でダメージ受ける状態
         else if (!shieldKnightStatus.IsDead() && 
@@ -77,21 +80,28 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
         if (shieldKnightStatus.IsGuard())
         {
             Stan();
+            shieldKnightEffect.BrokenGuard();
             return true;
         }
         else if(shieldKnightStatus.IsPowerGuard())
         {
             shieldKnightPattern.PowerCounterSuccess();
+            shieldKnightEffect.PowerCounterSuccess();
             return false;
         }
         return true;
     }
     public bool SuperDrain()
     {
-        if (shieldKnightStatus.IsGuard() ||
-            shieldKnightStatus.IsPowerGuard())
+        if (shieldKnightStatus.IsGuard())
         {
             Stan();
+            shieldKnightEffect.BrokenGuard();
+        }
+        else if (shieldKnightStatus.IsPowerGuard())
+        {
+            Stan();
+            shieldKnightEffect.BrokenPowerGuard();
         }
         return true;
     }
