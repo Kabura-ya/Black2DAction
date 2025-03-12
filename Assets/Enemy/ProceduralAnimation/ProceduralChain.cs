@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+//参考元URL
 public class ProceduralChain : MonoBehaviour
 {
     public Rigidbody2D firstChainRb;
@@ -21,6 +22,7 @@ public class ProceduralChain : MonoBehaviour
     public float endWidth = 1.0f;
     public int chainNum = 10;//鎖の点の数
     public float chainLimit = 10;//各鎖の間の長さ
+    public float chainAngleConstraint = 120;//各鎖はこの角度以上曲がらない（単位は度）
     // Start is called before the first frame update
     int lineRenNum = 0;
     public LineRenderer lineRenderer;
@@ -48,7 +50,10 @@ public class ProceduralChain : MonoBehaviour
             bodyWidth[i] = (firstWidth * (chainNum - 1 - i) + endWidth * i) / (chainNum - 1);
             Debug.Log(bodyWidth[i]);
         }
-        
+        for (int i = 1; i <= chainNum; i++)
+        {
+            chain[i].localScale = new Vector3(1, 1, 1) * bodyWidth[i] * 2;
+        }
     }
 
     // Update is called once per frame
@@ -67,6 +72,7 @@ public class ProceduralChain : MonoBehaviour
                 //i番目の鎖を、前の鎖からchainLimitの距離に移動させる
                 chain[i].position = chain[i-1].position + (chain[i].position - chain[i-1].position) * (chainLimit / chainDist);
             }
+            SetAngleLimit(i);
             SetSidePos(i);
             Debug.Log(i);
             Debug.Log(chain[i].position);
@@ -100,12 +106,48 @@ public class ProceduralChain : MonoBehaviour
         //Debug.DrawLine(new Vector2(0, 0), new Vector2(100, 100), Color.red);
     }
 
-    void SetHeadVector()
+
+    void SetAngleLimit(int n)//n番目の鎖の位置が、制限よりも角度が狭い位置なら制限角度の位置に動かす
+    {
+        if (n <= 0) return;
+        //cosθを求める
+        Vector3 firstVector;
+        Vector3 secondVector;
+        if (n == 1) {
+            firstVector = headVector.normalized;
+        }
+        else
+        {
+            firstVector = (chain[n - 2].position - chain[n - 1].position).normalized;
+        }
+        secondVector = (chain[n].position - chain[n - 1].position).normalized;
+        float cos = Vector3.Dot(firstVector, secondVector);//内積を用いてcosθを計算
+        // しきい値の cos 値を求める
+        float cosThreshold = Mathf.Cos(chainAngleConstraint * Mathf.Deg2Rad);
+
+        if (cos < cosThreshold) return;//角度が十分大きければ何もしない
+
+        Vector3 normal = Vector3.Cross(firstVector, secondVector).normalized;//回転軸とするため外積を求める
+
+        // A を +C° 回転
+        Vector3 A1 = Quaternion.AngleAxis(chainAngleConstraint, normal) * firstVector;
+        // A を -C° 回転
+        Vector3 A2 = Quaternion.AngleAxis(chainAngleConstraint, normal) * firstVector;
+
+        // B との角度を計算
+        float angle1 = Vector3.Angle(A1, secondVector);
+        float angle2 = Vector3.Angle(A2, secondVector);
+
+        // 角度が小さい方を選ぶ
+        Vector3 newSecondVector = (angle1 < angle2) ? A1.normalized : A2.normalized;//角度制限を繁栄したベクトル
+        chain[n].position = newSecondVector * chainLimit + chain[n-1].position;
+    }
+    void SetHeadVector()//頭の方向を計算する
     {
         if (firstChainRb.velocity == Vector2.zero) return;
         headVector = firstChainRb.velocity.normalized;
     }
-    void LineHead()
+    void LineHead()//頭の線を引く
     {
         lineRenderer.SetPosition(lineRenNum++, leftPos[1]);
         Vector3 headLeft = new Vector2(-1 * headVector.y, headVector.x);
