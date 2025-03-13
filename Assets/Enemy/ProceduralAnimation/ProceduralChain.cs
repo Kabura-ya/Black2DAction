@@ -139,7 +139,7 @@ public class ProceduralChain : MonoBehaviour
         float angle2 = Vector3.Angle(A2, secondVector);
 
         // 角度が小さい方を選ぶ
-        Vector3 newSecondVector = (angle1 < angle2) ? A1.normalized : A2.normalized;//角度制限を繁栄したベクトル
+        Vector3 newSecondVector = (angle1 < angle2) ? A1.normalized : A2.normalized;//角度制限を反映したベクトル
         chain[n].position = newSecondVector * chainLimit + chain[n-1].position;
     }
     void SetHeadVector()//頭の方向を計算する

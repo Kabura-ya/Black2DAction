@@ -1028,7 +1028,7 @@ MonoBehaviour:
   endWidth: 0.3
   chainNum: 8
   chainLimit: 1
-  chainAngleConstraint: 120
+  chainAngleConstraint: 90
   lineRenderer: {fileID: 1266627628345906826}
 --- !u!120 &2425831869927264818
 LineRenderer:
