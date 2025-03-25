@@ -674,7 +674,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     public void Death()
     {
-        gameManager.GameOver();
+        GameManager.instance.GameOver();
         Destroy(this.gameObject);
     }
 
