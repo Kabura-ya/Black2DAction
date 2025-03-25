@@ -357,10 +357,11 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             moving = false;
         }
     }
-    public void Damage(int value) { Damage(value, Vector2.zero); }
-    public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
+    //public void Damage(int value) { Damage(value, Vector2.zero); }
+    //public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
     public void Damage(int value, Vector2 vector, int type)
     {
+        Debug.Log("Damage(int value, Vector2 vector, int type)"); 
         if (enableHit)
         {
             hp -= value;

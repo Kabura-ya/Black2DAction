@@ -606,8 +606,8 @@ public class Player : MonoBehaviour, IDamageable
     {
         return isInvincible || playerState == PlayerState.Stop;
     }
-    public void Damage(int value) { Damage(value, Vector2.zero); }
-    public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
+    //public void Damage(int value) { Damage(value, Vector2.zero); }
+    //public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
     public void Damage(int damage, Vector2 vector, int type)
     {
         if (printLog) Debug.Log("PlayerDamage");

@@ -10,8 +10,8 @@ public class Boss1_Body : MonoBehaviour, IDamageable, IDrainable //ƒ{ƒX‚Ì“·‘Ì
         transform.root.gameObject.GetComponent<Boss1>().BodyStay(collision);
     }
 
-    public void Damage(int value) { Damage(value, Vector2.zero); }
-    public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
+    //public void Damage(int value) { Damage(value, Vector2.zero); }
+    //public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
 
     public void Damage(int value, Vector2 vector, int type)
     {
