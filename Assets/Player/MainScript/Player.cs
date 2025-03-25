@@ -16,7 +16,6 @@ using static Player;
 public class Player : MonoBehaviour, IDamageable
 {
     // Start is called before the first frame update
-    public GameManager gameManager;//ゲームオーバーやクリアなどを処理するGamemanagerについているスクリプトの情報を取得するための関数
 
     public enum PlayerState//プレイヤーの状態
     {
@@ -30,7 +29,8 @@ public class Player : MonoBehaviour, IDamageable
         SuperDashCharging,//スーパーダッシュをチャージ中
         SuperDashCharged,//スーパーダッシュをチャージ完了
         SuperDashing,//スーパーダッシュ中
-        Stunned     // スタン中、ダメージを受けた直後一瞬操作できない
+        Stunned,     // スタン中、ダメージを受けた直後一瞬操作できない
+        Dead        //死んでいる、操作はできず攻撃を受けても動かない。4秒後にシーンが読み込まれる。
     }
 
     PlayerState playerState = PlayerState.Idle;
@@ -604,7 +604,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     private bool JudgeInvincible()//絶対にダメージを受けない状態ならtrueを返す
     {
-        return isInvincible || playerState == PlayerState.Stop;
+        return isInvincible || playerState == PlayerState.Stop || playerState == PlayerState.Dead;
     }
     //public void Damage(int value) { Damage(value, Vector2.zero); }
     //public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
@@ -674,8 +674,9 @@ public class Player : MonoBehaviour, IDamageable
     }
     public void Death()
     {
+        playerState = PlayerState.Dead;
+        anim.SetTrigger("death");
         GameManager.instance.GameOver();
-        Destroy(this.gameObject);
     }
 
 }
