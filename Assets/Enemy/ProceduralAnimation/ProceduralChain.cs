@@ -31,7 +31,7 @@ public class ProceduralChain : MonoBehaviour
     {
         // 頂点の数を設定
         lineRenderer.positionCount = 2 * chainNum + 8;
-        initializeBodyWidth();
+        //initializeBodyWidth();
         // 各点の座標を設定
         /*
         for (int i = 0; i <= chainNum; i++)
@@ -39,6 +39,7 @@ public class ProceduralChain : MonoBehaviour
             chain[i].position = this.transform.position;
         }
         */
+        initializeBodyColWidth();
     }
 
     void initializeBodyWidth()
@@ -50,6 +51,14 @@ public class ProceduralChain : MonoBehaviour
             bodyWidth[i] = (firstWidth * (chainNum - 1 - i) + endWidth * i) / (chainNum - 1);
             Debug.Log(bodyWidth[i]);
         }
+        for (int i = 1; i <= chainNum; i++)
+        {
+            chain[i].localScale = new Vector3(1, 1, 1) * bodyWidth[i] * 2;
+        }
+    }
+
+    void initializeBodyColWidth()
+    {
         for (int i = 1; i <= chainNum; i++)
         {
             chain[i].localScale = new Vector3(1, 1, 1) * bodyWidth[i] * 2;
