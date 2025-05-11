@@ -47,6 +47,7 @@ public class GiantSpiderDamage : MonoBehaviour, IDamageable, IDrainable
     void Dead()
     {
         giantSpiderStatus.DeadPlay();
+        GameManager.instance.GameClear(2);
     }
 
     public bool Drain()

@@ -73,6 +73,7 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
     void Dead()
     {
         shieldKnightStatus.DeadPlay();
+        GameManager.instance.GameClear(4);
     }
 
     public bool Drain()
