@@ -155,6 +155,7 @@ public class Player : MonoBehaviour, IDamageable
             SuperDash();
             Move();
             EnergyBullet();
+            Dead();
         }
         AnimSet();//アニメーション用なので上の色々な関数の下である必要がある
         PrintPlayerState();
@@ -672,9 +673,17 @@ public class Player : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(damagedTime);
         playerState = PlayerState.Idle;
     }
+
+    public void Dead()//死んだら完全に停止させるだけ
+    {
+        if (playerState != PlayerState.Dead) return;
+        rb.velocity = new Vector3(0, 0, 0);
+        rb.gravityScale = 0;
+    }
     public void Death()
     {
         playerState = PlayerState.Dead;
+        rb.velocity = new Vector3(0,0,0);
         anim.SetTrigger("death");
         GameManager.instance.GameOver();
     }
