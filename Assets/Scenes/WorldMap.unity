@@ -834,7 +834,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: LizardWarrior
   guide: {fileID: 703524857}
-  openBossnum: 2
+  openBossnum: -1
 --- !u!61 &1186879199
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -941,7 +941,7 @@ Transform:
   m_GameObject: {fileID: 1186879197}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.48, y: -2.31, z: 0}
+  m_LocalPosition: {x: 5.2, y: -2.44, z: 0}
   m_LocalScale: {x: 1.5601, y: 2.1202, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -966,15 +966,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6788968786094441564, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: openBossnum
-      value: 1
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 8357314161775889599, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.9952743
+      value: -2.36
       objectReference: {fileID: 0}
     - target: {fileID: 8357314161775889599, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.3633308
+      value: -2.51
       objectReference: {fileID: 0}
     - target: {fileID: 8357314161775889599, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1031,15 +1031,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6788968786094441564, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: openBossnum
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 8357314161775889599, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.143524
+      value: -0.04
       objectReference: {fileID: 0}
     - target: {fileID: 8357314161775889599, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.2657328
+      value: -2.42
       objectReference: {fileID: 0}
     - target: {fileID: 8357314161775889599, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1222,11 +1222,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8357314161775889599, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.49
+      value: 2.68
       objectReference: {fileID: 0}
     - target: {fileID: 8357314161775889599, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.51
+      value: -2.46
       objectReference: {fileID: 0}
     - target: {fileID: 8357314161775889599, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_LocalPosition.z
