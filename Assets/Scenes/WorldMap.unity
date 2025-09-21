@@ -367,6 +367,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6686367482227124274, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
+      propertyPath: superDashBeginEffect
+      value: 
+      objectReference: {fileID: 5718717380930559103, guid: 395c111bb53ffe5468459412fbb6e1a3, type: 3}
     - target: {fileID: 7361475703432624726, guid: d2b8b87ab20297241aead25444e8359a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

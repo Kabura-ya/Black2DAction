@@ -47,6 +47,7 @@ public class Player : MonoBehaviour, IDamageable
     public float dashRecastTime = 0.3f;//ダッシュをまたできるまでの時間
     private bool dashTimeRecast = false;
     private bool dashGroundRecast = false;
+    public GameObject dashBeginEffect;//ダッシュ開始時に出るエフェクト
     public GameObject dashDrainEffect;//吸収できた時に出るエフェクト
 
     //スーパーダッシュ（チャージダッシュ）関係
@@ -60,6 +61,7 @@ public class Player : MonoBehaviour, IDamageable
     public int superDashDamage = 10;//スーパーダッシュでぶつかった相手に与えるダメージ
     public float superDaskNockBackSpeed = 10;//スーパーダッシュでぶつかった相手に与えるノックバックの威力
     public GameObject superDashDrainEffect;//スーパーダッシュで吸収できた時に出るエフェクト
+    public GameObject superDashBeginEffect;//スーパーダッシュ開始時に出るエフェクト
 
     //エナジー関係
     public float maxEnergy = 10;
@@ -408,10 +410,13 @@ public class Player : MonoBehaviour, IDamageable
         }
         if (playerInput_.Player.Dash.triggered && (dashTimeRecast == false))//ダッシュ開始
         {
+            anim.SetTrigger("beginDashTri");
             beginDash = true;//アニメーション遷移用に一瞬だけtrueにする
             StartCoroutine(DashRecastCoroutine()); //ダッシュのリキャスト部分だけをやる、dashTimeRecastを一定時間trueにしてダッシュできなくしたりするコルーチン
             actionCoroutine = StartCoroutine(DashCoroutine());//状態を一定時間Dashingにしたり、ドレイン用コライダーを有効化する
-        }else if (playerState == PlayerState.Dashing)//ダッシュ中
+            Instantiate(dashBeginEffect, transform.position, transform.rotation);
+        }
+        else if (playerState == PlayerState.Dashing)//ダッシュ中
         {
             beginDash = false;
             rb.velocity = transform.right * dashSpeed;//速度を設定
@@ -496,6 +501,7 @@ public class Player : MonoBehaviour, IDamageable
     }
     IEnumerator SuperDashCoroutine()//チャージダッシュ中のコルーチン
     {
+        Instantiate(superDashBeginEffect, transform.position + Vector3.up * 0.5f, transform.rotation);
         playerState = PlayerState.SuperDashing;
         drainCollider.enabled = true;
         rb.velocity = transform.right * superDashSpeed;
