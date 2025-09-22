@@ -47,6 +47,7 @@ public class LizardWarriorDamage : MonoBehaviour, IDamageable, IDrainable
     void Dead()
     {
         lizardWarriorStatus.DeadPlay();
+        GameManager.instance.GameClear(3);
     }
 
     public bool Drain()

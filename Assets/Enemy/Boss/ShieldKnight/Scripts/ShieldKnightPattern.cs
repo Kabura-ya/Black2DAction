@@ -127,9 +127,13 @@ public class ShieldKnightPattern : MonoBehaviour
         float randomValue = Random.Range(0f, 1f);
         if (IsClose())
         {
-            if (randomValue >= 0.3f)
+            if (randomValue < 0.5f)
             {
                 shieldKnightStatus.SlashTrigger();
+            }
+            else if(randomValue >= 0.5f && randomValue < 0.8f)
+            {
+                shieldKnightStatus.PowerSlashTrigger();
             }
             else
             {
@@ -138,7 +142,7 @@ public class ShieldKnightPattern : MonoBehaviour
         }
         else if(IsMiddle())
         {
-            if (randomValue >= 0.3f)
+            if (randomValue < 0.7f)
             {
                 shieldKnightStatus.PowerSlashTrigger();
             }
@@ -150,7 +154,7 @@ public class ShieldKnightPattern : MonoBehaviour
         }
         else if(IsFar())
         {
-            if (randomValue >= 0.3f)
+            if (randomValue < 0.5f)
             {
                 shieldKnightStatus.SurroundSpearTrigger();
             }
