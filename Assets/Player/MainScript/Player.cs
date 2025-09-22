@@ -620,10 +620,10 @@ public class Player : MonoBehaviour, IDamageable
         if (!JudgeInvincible() && JudgeGetDamageType(type))
         {
             GetDamage(damage);
+            rb.velocity = vector;
+            if (vector != Vector2.zero) { rb.velocity = vector; }//ノックバック 
             if (printLog) { if (type == 1) { Debug.Log("Player_DamageRed"); } } ;
         }
-        rb.velocity = vector;
-        if (vector != Vector2.zero) { rb.velocity = vector; }//ノックバック 
     }
 
     private bool JudgeGetDamageType(int type)//ダメージの種類とプレイヤーのダッシュなどの状態から、ダメージを受ける状態ならtrueを返す
