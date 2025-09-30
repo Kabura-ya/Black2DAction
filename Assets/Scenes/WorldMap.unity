@@ -567,6 +567,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 108944987824983245, guid: c60cba56aea9f3642b197596ca265941, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 108944987824983245, guid: c60cba56aea9f3642b197596ca265941, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 108944987824983245, guid: c60cba56aea9f3642b197596ca265941, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 108944987824983245, guid: c60cba56aea9f3642b197596ca265941, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.186
+      objectReference: {fileID: 0}
+    - target: {fileID: 108944987824983245, guid: c60cba56aea9f3642b197596ca265941, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.434
+      objectReference: {fileID: 0}
     - target: {fileID: 664756017426770591, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -579,6 +599,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss_Gate_LizardWarrior
       objectReference: {fileID: 0}
+    - target: {fileID: 5132465912992984919, guid: c60cba56aea9f3642b197596ca265941, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6317040668365557420, guid: c60cba56aea9f3642b197596ca265941, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6317040668365557420, guid: c60cba56aea9f3642b197596ca265941, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1084c1e9d4f10f14d95c61abe8ed36a3, type: 3}
     - target: {fileID: 6969480046833999351, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: sceneName
       value: LizardWarrior
