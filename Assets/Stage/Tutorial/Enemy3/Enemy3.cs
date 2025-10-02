@@ -33,8 +33,8 @@ public class Enemy3 : MonoBehaviour, IDrainable
 
     public bool SuperDrain()
     {
-        //nextObject1.SetActive(true);
-        //nextObject2.SetActive(true);
+        nextObject1.SetActive(true);
+        nextObject2.SetActive(true);
         Destroy(destroyObject);
         Destroy(gameObject);
         return true;
