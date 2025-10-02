@@ -9,6 +9,7 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
     [SerializeField] private ShieldKnightPattern shieldKnightPattern = null;
     [SerializeField] private ShieldKnightEffect shieldKnightEffect = null;
     [SerializeField] GameObject damageEffect = null;
+    [SerializeField] GameObject defeatEffect;//倒したときのエフェクト
     private int hp = 0;
     public Slider sliderHp;//HPバー
     private int guardCount = 0;
@@ -76,6 +77,7 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
     }
     void Dead()
     {
+        Instantiate(defeatEffect, transform.position, transform.rotation);
         shieldKnightStatus.DeadPlay();
         GameManager.instance.GameClear(4);
     }

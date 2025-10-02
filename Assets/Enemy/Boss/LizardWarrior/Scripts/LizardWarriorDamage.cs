@@ -7,6 +7,7 @@ public class LizardWarriorDamage : MonoBehaviour, IDamageable, IDrainable
 {
     [SerializeField] private LizardWarriorStatus lizardWarriorStatus = null;
     [SerializeField] GameObject damageEffect = null;
+    [SerializeField] GameObject defeatEffect;//倒したときのエフェクト
     private int hp = 0;
     public Slider sliderHp;//HPバー
     private int stanCount = 0;
@@ -50,6 +51,7 @@ public class LizardWarriorDamage : MonoBehaviour, IDamageable, IDrainable
     }
     void Dead()
     {
+        Instantiate(defeatEffect, transform.position, transform.rotation);
         lizardWarriorStatus.DeadPlay();
         GameManager.instance.GameClear(3);
     }

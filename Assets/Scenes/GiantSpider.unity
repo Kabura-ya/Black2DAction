@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: sliderHp
       value: 
       objectReference: {fileID: 1076470308}
+    - target: {fileID: 810785382847369774, guid: eb74f6baa50582d4396af7f50075e059, type: 3}
+      propertyPath: defeatEffect
+      value: 
+      objectReference: {fileID: 2772992349487112764, guid: 381925703bfbc1741ad93b005b116d00, type: 3}
     - target: {fileID: 2657950067605750736, guid: eb74f6baa50582d4396af7f50075e059, type: 3}
       propertyPath: m_LocalScale.x
       value: 180

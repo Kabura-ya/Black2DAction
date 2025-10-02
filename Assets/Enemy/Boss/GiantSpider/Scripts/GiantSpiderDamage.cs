@@ -7,6 +7,7 @@ public class GiantSpiderDamage : MonoBehaviour, IDamageable, IDrainable
 {
     [SerializeField] private GiantSpiderStatus giantSpiderStatus = null;
     [SerializeField] GameObject damageEffect = null;
+    [SerializeField] GameObject defeatEffect;//倒したときのエフェクト
     private int hp = 0;
     public Slider sliderHp;//HPバー
     private int stanCount = 0;
@@ -50,6 +51,7 @@ public class GiantSpiderDamage : MonoBehaviour, IDamageable, IDrainable
     }
     void Dead()
     {
+        Instantiate(defeatEffect, transform.position, transform.rotation);
         giantSpiderStatus.DeadPlay();
         GameManager.instance.GameClear(2);
     }

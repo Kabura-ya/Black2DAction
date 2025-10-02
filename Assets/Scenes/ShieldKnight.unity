@@ -201,6 +201,10 @@ PrefabInstance:
       propertyPath: sliderHp
       value: 
       objectReference: {fileID: 414463963}
+    - target: {fileID: 6921981657515360891, guid: 3d2c3549ab78f1c4e9c480fdcca677a0, type: 3}
+      propertyPath: defeatEffect
+      value: 
+      objectReference: {fileID: 2772992349487112764, guid: 381925703bfbc1741ad93b005b116d00, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
