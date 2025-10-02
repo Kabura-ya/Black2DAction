@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
 {
@@ -9,11 +10,13 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
     [SerializeField] private ShieldKnightEffect shieldKnightEffect = null;
     [SerializeField] GameObject damageEffect = null;
     private int hp = 0;
+    public Slider sliderHp;//HPバー
     private int guardCount = 0;
 
     void Awake()
     {
         hp = shieldKnightStatus.MaxHp;
+        sliderHp.value = shieldKnightStatus.MaxHp;
         guardCount = shieldKnightStatus.GuardCount;
     }
 
@@ -40,6 +43,7 @@ public class ShieldKnightDamage : MonoBehaviour, IDamageable, IDrainable
                  !shieldKnightStatus.IsPowerCounter())
         {
             hp -= value;
+            sliderHp.value = (float)hp / shieldKnightStatus.MaxHp;//Hpのスライダーの更新
             Instantiate(damageEffect, this.transform.position, Quaternion.Euler(0f, 0f, 80f));
             if (hp <= 0)
             {
