@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 //using System.Drawing;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
+
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -14,7 +16,6 @@ using static Player;
 public class Player : MonoBehaviour, IDamageable
 {
     // Start is called before the first frame update
-    public GameManager gameManager;//ゲームオーバーやクリアなどを処理するGamemanagerについているスクリプトの情報を取得するための関数
 
     public enum PlayerState//プレイヤーの状態
     {
@@ -28,7 +29,8 @@ public class Player : MonoBehaviour, IDamageable
         SuperDashCharging,//スーパーダッシュをチャージ中
         SuperDashCharged,//スーパーダッシュをチャージ完了
         SuperDashing,//スーパーダッシュ中
-        Stunned     // スタン中、ダメージを受けた直後一瞬操作できない
+        Stunned,     // スタン中、ダメージを受けた直後一瞬操作できない
+        Dead        //死んでいる、操作はできず攻撃を受けても動かない。4秒後にシーンが読み込まれる。
     }
 
     PlayerState playerState = PlayerState.Idle;
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour, IDamageable
     public bool printLog = false;//これがtrueの時に色々なLogを出力する
     public float speed = 10;
     //ダッシュ関係
+    public Collider2D drainCollider;//これにふれた相手にドレインを行う
     private bool beginDash = false;
     public float dashSpeed = 20;
     public float dashDistance = 50;
@@ -44,6 +47,7 @@ public class Player : MonoBehaviour, IDamageable
     public float dashRecastTime = 0.3f;//ダッシュをまたできるまでの時間
     private bool dashTimeRecast = false;
     private bool dashGroundRecast = false;
+    public GameObject dashBeginEffect;//ダッシュ開始時に出るエフェクト
     public GameObject dashDrainEffect;//吸収できた時に出るエフェクト
 
     //スーパーダッシュ（チャージダッシュ）関係
@@ -51,11 +55,14 @@ public class Player : MonoBehaviour, IDamageable
     private float superDashChargeTimeCount = 0;//チャージ時間のカウント
     public float superDashSpeed = 20;
     public float superDashDistance = 60;
-    private float superDashY;//（今はつかっていない）チャージ中とスーパーダッシュするときに高さが変わらないように
+    public GameObject superDashChargedEffect;//チャージ完了時に出るエフェクト
     public float superDashRecastTime = 0.5f;//ダッシュをまたできるまでの時間
     private bool superDashGroundRecast = false;
+    public int superDashDamage = 10;//スーパーダッシュでぶつかった相手に与えるダメージ
+    public float superDaskNockBackSpeed = 10;//スーパーダッシュでぶつかった相手に与えるノックバックの威力
     public GameObject superDashDrainEffect;//スーパーダッシュで吸収できた時に出るエフェクト
-    public GameObject superDashChargedEffect;//チャージ完了時に出るエフェクト
+    public GameObject superDashBeginEffect;//スーパーダッシュ開始時に出るエフェクト
+
     //エナジー関係
     public float maxEnergy = 10;
     public float energy;
@@ -98,9 +105,14 @@ public class Player : MonoBehaviour, IDamageable
     private bool isInvincible = false;
     Coroutine actionCoroutine;//スタン時などにコルーチンを停止させるために、行動のコルーチンの引数を入れておく
 
+    //入力関係
+    private PlayerInput playerInput_;
+    private Vector2 move;
 
     void Start()
     {
+        playerInput_ = new PlayerInput();
+        playerInput_.Enable();
         playerState = PlayerState.Idle;//最初は待機状態に
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -126,10 +138,14 @@ public class Player : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
-        rb.gravityScale = originagGravity;
+        rb.gravityScale = originagGravity;//ダッシュ中などで重力を0にするが、ダッシュが終了すれば勝手に重力が戻るように、Updateの最初に重力をつける
         if (playerState == PlayerState.Stop)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+        if (drainCollider.enabled == true && !(playerState == PlayerState.Dashing || playerState == PlayerState.SuperDashing))//ダッシュ中でもないのにドレイン用コライダーが有効化されていたら無効化する
+        {
+            drainCollider.enabled = false;
         }
         else{
             Jump();
@@ -141,6 +157,7 @@ public class Player : MonoBehaviour, IDamageable
             SuperDash();
             Move();
             EnergyBullet();
+            Dead();
         }
         AnimSet();//アニメーション用なので上の色々な関数の下である必要がある
         PrintPlayerState();
@@ -242,7 +259,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.X) && (countAttack <= 0))
+        if (playerInput_.Player.Attack.triggered && (countAttack <= 0))
         {
             countAttack = attack.GetComponent<Attack>().recastTime;
             //EnableAttack()をアニメーションの方で呼ぶ
@@ -275,15 +292,18 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Flip()//反転(ダッシュ中や攻撃中は反転しない)
     {
+        //InputSystemを使うように変えたが、InputSystemの仕様を正確に理解していないため良くない実装かもしれない
+        move = playerInput_.Player.Move.ReadValue<Vector2>();
+        float xAxis = move.x;
         if (JudgeFlip()) {
-            if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
+            if ((-0.5 < xAxis) && (xAxis < 0.5))
             {
                 //左右が同時に押されていたら何もしない
             }
-            else if (Input.GetKey(KeyCode.RightArrow))
+            else if (xAxis > 0)
             {
                 transform.rotation = Quaternion.Euler(0, 0, 0);//右を向く
-            } else if (Input.GetKey(KeyCode.LeftArrow))
+            } else if (xAxis < 0)
             {
                 transform.rotation = Quaternion.Euler(0, 180, 0);//左を向く
             }
@@ -297,18 +317,34 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Move()//左右移動（ジャンプ中、攻撃中でも移動できる）
     {
+        //InputSystemを使うように変えたが、InputSystemの仕様を正確に理解していないため良くない実装かもしれない
+        move = playerInput_.Player.Move.ReadValue<Vector2>();
+        float xAxis = move.x;
         if (JudgeMovable()) {
-            if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
+            /*
+            if ((-0.5 < xAxis) && (xAxis < 0.5))
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Idle; }
             }
-            else if (Input.GetKey(KeyCode.RightArrow)) {
-                rb.velocity = new Vector2(speed, rb.velocity.y);
+            else*/
+            if (xAxis != 0)
+            {
+                rb.velocity = new Vector2(move.x * speed, rb.velocity.y);
                 if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Moving; }
             }
-            else if (Input.GetKey(KeyCode.LeftArrow)) {
-                rb.velocity = new Vector2(-1 * speed, rb.velocity.y);
+            else
+            {
+                rb.velocity = new Vector2(0, rb.velocity.y);
+                if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Idle; }
+            }
+            /*
+            if (xAxis > 0) {
+                rb.velocity = new Vector2(move.x * speed, rb.velocity.y);
+                if (isGround && playerState != PlayerState.NormalAttacking) { playerState = PlayerState.Moving; }
+            }
+            else if (xAxis < 0) {
+                rb.velocity = new Vector2(move.x * speed, rb.velocity.y);
                 if (isGround && playerState != PlayerState.NormalAttacking){ playerState = PlayerState.Moving;}
             }
             else
@@ -316,6 +352,7 @@ public class Player : MonoBehaviour, IDamageable
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 if (isGround && playerState != PlayerState.NormalAttacking) {playerState = PlayerState.Idle;}
             }
+            */
         }
     }
 
@@ -328,7 +365,7 @@ public class Player : MonoBehaviour, IDamageable
     {
 
         // ジャンプボタンを離したり、ダッシュとかチャージとかしたらジャンプ終了
-        if (Input.GetKeyUp(KeyCode.Z) || playerState == PlayerState.Dashing || playerState == PlayerState.SuperDashCharging)
+        if (playerInput_.Player.Jump.WasReleasedThisFrame() || playerState == PlayerState.Dashing || playerState == PlayerState.SuperDashCharging)
         {
             isJumping = false;
             jumpTimeCounter = 0;
@@ -339,7 +376,7 @@ public class Player : MonoBehaviour, IDamageable
             return;
         }
         // ジャンプ開始
-        if (isGround && Input.GetKeyDown(KeyCode.Z))
+        if (isGround && playerInput_.Player.Jump.triggered)
         {
             isJumping = true;
             playerState = PlayerState.Jumping;
@@ -349,7 +386,7 @@ public class Player : MonoBehaviour, IDamageable
         }
 
         // ジャンプボタンを押し続けた場合の処理
-        if (Input.GetKey(KeyCode.Z) && isJumping)
+        if (playerInput_.Player.Jump.IsPressed() && isJumping)
         {
             if (jumpTimeCounter > 0)
             {
@@ -371,12 +408,15 @@ public class Player : MonoBehaviour, IDamageable
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.C) && (dashTimeRecast == false))
+        if (playerInput_.Player.Dash.triggered && (dashTimeRecast == false))//ダッシュ開始
         {
+            anim.SetTrigger("beginDashTri");
             beginDash = true;//アニメーション遷移用に一瞬だけtrueにする
             StartCoroutine(DashRecastCoroutine()); //ダッシュのリキャスト部分だけをやる、dashTimeRecastを一定時間trueにしてダッシュできなくしたりするコルーチン
-            actionCoroutine = StartCoroutine(DashCoroutine());//状態を一定時間Dashingにする
-        }else if (playerState == PlayerState.Dashing)
+            actionCoroutine = StartCoroutine(DashCoroutine());//状態を一定時間Dashingにしたり、ドレイン用コライダーを有効化する
+            Instantiate(dashBeginEffect, transform.position, transform.rotation);
+        }
+        else if (playerState == PlayerState.Dashing)//ダッシュ中
         {
             beginDash = false;
             rb.velocity = transform.right * dashSpeed;//速度を設定
@@ -386,11 +426,13 @@ public class Player : MonoBehaviour, IDamageable
     }
     IEnumerator DashCoroutine()//ダッシュ中のコルーチン
     {
-        rb.velocity = transform.right * dashSpeed;
         playerState = PlayerState.Dashing;//ダッシュ中は状態をDashingに
+        drainCollider.enabled = true;
+        rb.velocity = transform.right * dashSpeed;
         yield return new WaitForSeconds(dashDistance / dashSpeed /*ダッシュ中の時間*/);
+        drainCollider.enabled = false;
         playerState = PlayerState.Idle;
-        rb.velocity = Vector2.zero;//ダッシュ直後に速度を0に
+        rb.velocity = Vector2.zero;
     }
     IEnumerator DashRecastCoroutine()//ダッシュのリキャスト時間が過ぎるまでtrueにするだけ
     {
@@ -407,17 +449,15 @@ public class Player : MonoBehaviour, IDamageable
             return;
         }
 
-        if (JudgeNormalState() && Input.GetKey(KeyCode.D))//チャージ開始の処理
+        if (JudgeNormalState() && (superDashChargeTimeCount <= 0) && playerInput_.Player.SuperDash.IsPressed())//チャージ開始の処理
         {
             playerState = PlayerState.SuperDashCharging;
+            anim.SetTrigger("chargingTrigger");
         }
         if (playerState == PlayerState.SuperDashCharging)//チャージ中の処理
         {
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                anim.SetTrigger("chargingTrigger");
-            }
-            if (Input.GetKey(KeyCode.D))
+            
+            if (playerInput_.Player.SuperDash.IsPressed())
             {
                 rb.velocity = Vector2.zero;//チャージ中はその場に停止させる
                 rb.gravityScale = 0;
@@ -439,7 +479,7 @@ public class Player : MonoBehaviour, IDamageable
     private void SuperDashCharged()
     {
         if (playerState != PlayerState.SuperDashCharged){ return;}
-        if (Input.GetKey(KeyCode.D))
+        if (playerInput_.Player.SuperDash.IsPressed())
         {
             rb.velocity = Vector2.zero;
             rb.gravityScale = 0;
@@ -461,11 +501,14 @@ public class Player : MonoBehaviour, IDamageable
     }
     IEnumerator SuperDashCoroutine()//チャージダッシュ中のコルーチン
     {
+        Instantiate(superDashBeginEffect, transform.position + Vector3.up * 0.5f, transform.rotation);
         playerState = PlayerState.SuperDashing;
+        drainCollider.enabled = true;
         rb.velocity = transform.right * superDashSpeed;
         playerState = PlayerState.SuperDashing;
         yield return new WaitForSeconds(superDashDistance / superDashSpeed);
         playerState = PlayerState.Idle;
+        drainCollider.enabled = false;
     }
     IEnumerator SuperDashRecastCoroutine()//ダッシュのリキャスト時間が過ぎるまでtrueにするだけ
     {
@@ -480,7 +523,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.S) && energyCost <= energy)
+        if (playerInput_.Player.EnegyAttack.triggered && energyCost <= energy)
         {
             actionCoroutine = StartCoroutine(EnergyBulletCoroutine());
         }
@@ -526,7 +569,7 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    public void BodyEnter(Collider2D collision)//体の当たり判定用のコライダーにつけたスクリプトから呼ばれる
+    public void DrainEnter(Collider2D collision)//ドレイン用のコライダーにつけたスクリプトから呼ばれる
     {
         if(printLog) Debug.Log("Player_BodyEnter");
         if (playerState == PlayerState.Dashing)
@@ -550,33 +593,44 @@ public class Player : MonoBehaviour, IDamageable
                 if (printLog) Debug.Log("SuperDashDrainSucceed");
                 recoverEnergy(getSuperEnergy);
             }
+            if (collision.gameObject.tag == "Enemy")
+            {
+                var damageTarget = collision.gameObject.GetComponent<IDamageable>();
+                if (damageTarget != null)
+                {
+                    damageTarget.Damage(superDashDamage, transform.right * superDaskNockBackSpeed, 0);
+                }
+            }
         }
 
         if (printLog) Debug.Log("OntrrigerEnter_Player");
     }
+
+    public void BodyEnter(Collider2D collision) {//体の当たり判定用のコライダーにつけたスクリプトから呼ばれる。現状使用していないが、触れた相手に何かする場合に使用する。
+    
+    }
     private bool JudgeInvincible()//絶対にダメージを受けない状態ならtrueを返す
     {
-        return isInvincible || playerState == PlayerState.Stop;
+        return isInvincible || playerState == PlayerState.Stop || playerState == PlayerState.Dead;
     }
-    public void Damage(int value) { Damage(value, Vector2.zero); }
-    public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
+
     public void Damage(int damage, Vector2 vector, int type)
     {
         if (printLog) Debug.Log("PlayerDamage");
         if (!JudgeInvincible() && JudgeGetDamageType(type))
         {
             GetDamage(damage);
-            if (type == 1) { if (printLog) { Debug.Log("Player_DamageRed"); } } ;
+            rb.velocity = vector;
+            if (vector != Vector2.zero) { rb.velocity = vector; }//ノックバック 
+            if (printLog) { if (type == 1) { Debug.Log("Player_DamageRed"); } } ;
         }
-        rb.velocity = vector;
-        if (vector != Vector2.zero) { rb.velocity = vector; }//ノックバック 
     }
 
     private bool JudgeGetDamageType(int type)//ダメージの種類とプレイヤーのダッシュなどの状態から、ダメージを受ける状態ならtrueを返す
     {
         return !((playerState == PlayerState.Dashing && type == 0) || (playerState == PlayerState.SuperDashing && type <= 1));
     }
-    private void GetDamage(int damage)//実際にダメージを受けてHPを減らしたり無敵時間とかの処理
+    private void GetDamage(int damage)//実際にダメージを受けてHPを減らしたりノックバックや無敵時間とかの処理
     {
         hp -= damage;//Hpを減らす
         sliderHp.value = (float)hp / maxHp;//Hpのスライダーの更新
@@ -624,10 +678,19 @@ public class Player : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(damagedTime);
         playerState = PlayerState.Idle;
     }
+
+    public void Dead()//死んだら完全に停止させるだけ
+    {
+        if (playerState != PlayerState.Dead) return;
+        rb.velocity = new Vector3(0, 0, 0);
+        rb.gravityScale = 0;
+    }
     public void Death()
     {
-        gameManager.GameOver();
-        Destroy(this.gameObject);
+        playerState = PlayerState.Dead;
+        rb.velocity = new Vector3(0,0,0);
+        anim.SetTrigger("death");
+        GameManager.instance.GameOver();
     }
 
 }

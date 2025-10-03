@@ -43,9 +43,14 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        SceneManager.LoadScene(loseLoadSceneName);
+        StartCoroutine(GameOverC());
     }
 
+    IEnumerator GameOverC()
+    {
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene(loseLoadSceneName);
+    }
     public void GameClear(int bossNum)//ボスを倒したら各ボスの番号を引数としてこの関数が呼ばれる
     {
         DefeatedBosses[bossNum] =true;//
@@ -56,7 +61,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ClearC()
     {
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(3);
         SceneManager.LoadScene(winLoadSceneName);
     }
 }

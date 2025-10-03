@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 {
@@ -56,6 +56,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     public float blinkInterval = 0.1f;  // 点滅の間隔
     private SpriteRenderer spriteRenderer;
     public Material whiteFlashMaterial; // 白く点滅させるためのマテリアル
+    public Slider sliderHp;//HPバー
 
     public float stunnTime = 3;//スタン時間
     public int stunnMaxCount = 1;//体力を削ることによりスタンさせられる回数
@@ -71,6 +72,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     {
         hp = maxHp;
         rigidbody2d = GetComponent<Rigidbody2D>();//自身のRigidbodyを変数に入れる
+        sliderHp.value = maxHp;
         //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = GameObject.Find("Player");
         playerScript = player.GetComponent<Player>();//プレイヤーのスクリプトに対して操作できるようにする
@@ -357,15 +359,16 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
             moving = false;
         }
     }
-    public void Damage(int value) { Damage(value, Vector2.zero); }
-    public void Damage(int value, Vector2 vector) { Damage(value, vector, 0); }
+
     public void Damage(int value, Vector2 vector, int type)
     {
+        Debug.Log("Damage(int value, Vector2 vector, int type)"); 
         if (enableHit)
         {
             hp -= value;
+            if(hp < 0) hp = 0;
             Instantiate(damageEffect, transform.position, transform.rotation);
-
+            sliderHp.value = (float)hp / maxHp;//Hpのスライダーの更新
             if (hp <= 0)
             {
                 Death();

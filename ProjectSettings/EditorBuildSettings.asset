@@ -6,15 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/WorldMap.unity
+    guid: 9399d98bc0e36304da3a680528a02931
+  - enabled: 1
     path: Assets/Scenes/Boss1_Knight.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/Title.unity
     guid: 5a2b1400d0fe6d84787d18ccc0c52591
   - enabled: 1
-    path: Assets/Scenes/WorldMap.unity
-    guid: 9399d98bc0e36304da3a680528a02931
-  - enabled: 1
-    path: Assets/Scenes/TanemaruTestStage.unity
+    path: Assets/Scenes/GiantSpider.unity
     guid: af0067aacb24d3b44b8852553e18de78
+  - enabled: 1
+    path: Assets/Scenes/LizardWarrior.unity
+    guid: 31021b898b1af7a4fbba95aa55d2e16d
+  - enabled: 1
+    path: Assets/Scenes/ShieldKnight.unity
+    guid: 6f660a02d3f0fdd48bdf711413215453
+  - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: f0ed537b7d910be47a0abe01daccb582
   m_configObjects: {}

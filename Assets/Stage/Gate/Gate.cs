@@ -10,16 +10,20 @@ public class Gate : MonoBehaviour
     private bool playerEnter = false;
     public GameObject guide;//どのボタンを押すとボス戦が始まるかの案内とかボスの画像とか
     public int openBossnum = 1;//この番号のボスが倒されていれば扉が解放される(-1ならば最初から解放)
+
+    //入力関係
+    private PlayerInput playerInput_;
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerInput_ = new PlayerInput();
+        playerInput_.Enable();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerEnter && Input.GetKeyDown(KeyCode.E)) { SceneManager.LoadScene(sceneName); }
+        if (playerEnter && playerInput_.Player.GateIn.triggered) { SceneManager.LoadScene(sceneName); }
     }
 
     
