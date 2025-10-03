@@ -1033,6 +1033,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1936678175}
   - component: {fileID: 1936678174}
+  - component: {fileID: 1936678176}
   m_Layer: 0
   m_Name: BackGround_Knight
   m_TagString: Untagged
@@ -1107,6 +1108,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1936678176
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936678173}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &236231579431403636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1243,6 +1265,10 @@ PrefabInstance:
       propertyPath: dashDistance
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 1840247788456419724, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
+      propertyPath: fallAfterAttack
+      value: 
+      objectReference: {fileID: 1136855804761988704, guid: 8d5cf12be1cf1fb4193d2cf9c114ca14, type: 3}
     - target: {fileID: 1840247788456419724, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       propertyPath: slashIdleTimeMlutiply
       value: 0.7

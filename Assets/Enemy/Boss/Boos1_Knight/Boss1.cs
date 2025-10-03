@@ -42,6 +42,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
 
     public AttackEnemy sword;//剣攻撃用のクラス
     public AttackEnemy swordFall;//落下攻撃の時の当たり判定
+    public GameObject fallAfterAttack;
     public SightEnemy swordSight;
 
     public AttackEnemy redSword;//赤攻撃用
@@ -239,6 +240,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         rigidbody2d.velocity = new Vector2(0, -1 * fallSpeed);
         moving = true;
         yield return new WaitForSeconds(0.2f);
+        Instantiate(fallAfterAttack, transform.position, transform.rotation);
         yield return new WaitForSeconds(idleTime);
         //アニメーションの方でも、着地した際のアニメーションでコライダーを無効化している
         swordFall.DisableAttack();
