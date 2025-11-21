@@ -1094,6 +1094,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tutorial_Gate
       objectReference: {fileID: 0}
+    - target: {fileID: 8885101637124251911, guid: 6591805c17e01ce429f8ef3f7f4d55e0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: bb8c1dd964b84894c93da745f22d0a0c, type: 3}
     - target: {fileID: 8931275311198969321, guid: 6591805c17e01ce429f8ef3f7f4d55e0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6
