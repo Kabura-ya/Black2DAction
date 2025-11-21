@@ -232,12 +232,12 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
         yield return new WaitForSeconds(idleTime);
         onGround = false;
         transform.position = new Vector2(playerTrans.position.x, fallHight);
-        swordFall.EnableAttack();
         enableHit = true;
         rigidbody2d.velocity = new Vector2(0, 0);
         moving = false;
         yield return new WaitForSeconds(idleTime);
         rigidbody2d.velocity = new Vector2(0, -1 * fallSpeed);
+        swordFall.EnableAttack();
         moving = true;
         yield return new WaitForSeconds(0.2f);
         Instantiate(fallAfterAttack, transform.position, transform.rotation);
@@ -288,6 +288,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IDrainable
     {
         FlipToPlayer();
         yield return new WaitForSeconds(idleTime);
+        yield return new WaitForSeconds(0.5f);
         moving = true;
         //このへんでアニメーションの方からFlipToPlyayerとLongRangeSpawn();が呼ばれて弾が出る
         yield return new WaitForSeconds(idleTime);
