@@ -1977,6 +1977,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1590599562177998228, guid: 9db08c4bc2fa4834d9cde300cbe27aab, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2688042223792210734, guid: 9db08c4bc2fa4834d9cde300cbe27aab, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2064,6 +2068,30 @@ PrefabInstance:
     - target: {fileID: 4201401772561300227, guid: 9db08c4bc2fa4834d9cde300cbe27aab, type: 3}
       propertyPath: m_Name
       value: CanvasBossHp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652583130708024995, guid: 9db08c4bc2fa4834d9cde300cbe27aab, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652583130708024995, guid: 9db08c4bc2fa4834d9cde300cbe27aab, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652583130708024995, guid: 9db08c4bc2fa4834d9cde300cbe27aab, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 794.5211
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652583130708024995, guid: 9db08c4bc2fa4834d9cde300cbe27aab, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 31.0968
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652583130708024995, guid: 9db08c4bc2fa4834d9cde300cbe27aab, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -2.7394
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652583130708024995, guid: 9db08c4bc2fa4834d9cde300cbe27aab, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 15.5479
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
