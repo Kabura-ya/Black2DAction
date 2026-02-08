@@ -1,7 +1,5 @@
 # UnityRoomのURL
-https://unityroom.com/games/boss_dash
-
-ここから遊べるのは私が1人で制作を進めた分です。
+Black Sword - https://unityroom.com/games/black_sword
 
 # 操作
 
