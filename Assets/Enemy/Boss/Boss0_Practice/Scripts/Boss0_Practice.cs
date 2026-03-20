@@ -30,6 +30,7 @@ public class Boss0_Practice : MonoBehaviour, IDamageable, IDrainable
     int action = 0;
 
     public GameObject redDashEffect;//突進を開始した時の衝撃波のエフェクト
+    public GameObject sparkObj;//
 
     public GameObject damageEffect;
     public GameObject defeatEffect;//倒したときのエフェクト
@@ -88,25 +89,44 @@ public class Boss0_Practice : MonoBehaviour, IDamageable, IDrainable
 
     private void ChooseAction()
     {
-        if (actionCoroutine != null) { StopCoroutine(actionCoroutine); }//現在の行動を中止させてからスタンさせる
-        actionCoroutine = null;
+
+        if (actionCoroutine != null) { StopCoroutine(actionCoroutine); actionCoroutine = null; }
+        if (0.7 < Random.value)//3/10の確率で放電攻撃
+        {
+            actionCoroutine = StartCoroutine(Spark());
+            return;
+        }
         actionCoroutine = StartCoroutine(Dash());
     }
 
-    private IEnumerator Dash()//突進攻撃、なぜか終わり際にスーパーダッシュでぶつかるとスタンしない上にダッシュし続けるバグがある
+    private IEnumerator Spark()//突進攻撃、なぜか終わり際にスーパーダッシュでぶつかるとスタンしない上にダッシュし続けるバグがある
     {
-        Debug.Log("DashRedBegin");
+        //Debug.Log("DashBegin");
         FlipToPlayer();
+        anim.SetTrigger("sparkTri");
+        Instantiate(sparkObj, transform.position, transform.rotation);
         yield return new WaitForSeconds(idleTime);
         yield return new WaitForSeconds(0.8f);
+        anim.SetTrigger("idleTri");
+        yield return new WaitForSeconds(0.4f);
+        ChooseAction();
+    }
+    private IEnumerator Dash()//突進攻撃、なぜか終わり際にスーパーダッシュでぶつかるとスタンしない上にダッシュし続けるバグがある
+    {
+        //Debug.Log("DashBegin");
+        FlipToPlayer();
+        anim.SetTrigger("runBeforeTri");
+        yield return new WaitForSeconds(idleTime);
+        yield return new WaitForSeconds(0.8f);
+        anim.SetTrigger("runTri");
         superDashStunn = true;
-        Instantiate(redDashEffect, transform.position, transform.rotation);
         rigidbody2d.velocity = transform.right * dashSpeed;
         sword.EnableAttack();
         moving = true;
         yield return new WaitForSeconds(dashDistance / dashSpeed);
         rigidbody2d.velocity = new Vector2(0, 0);
         sword.DisableAttack();
+        anim.SetTrigger("idleTri");
         moving = false;
         superDashStunn = false;
         action = 0;
@@ -168,7 +188,7 @@ public class Boss0_Practice : MonoBehaviour, IDamageable, IDrainable
 
     private void DisableAllAttack()//スタン時などに全ての攻撃用コライダーを無効化する
     {
-
+        sword.DisableAttack();
     }
 
     private void Stunn()
@@ -183,6 +203,7 @@ public class Boss0_Practice : MonoBehaviour, IDamageable, IDrainable
         Debug.Log("StunnCoroutine");
 
         //スタン時に様々な要素をリセット
+        anim.SetTrigger("stunnTri");
         superDashStunn = false;
         DisableAllAttack();
         action = -1;
@@ -202,11 +223,14 @@ public class Boss0_Practice : MonoBehaviour, IDamageable, IDrainable
         action = 0;
         yield return new WaitForSeconds(0.1f);
         stunn = false;
+        anim.SetTrigger("idleTri");
         ChooseAction();
     }
 
     IEnumerator DeathC()
     {
+
+        anim.SetTrigger("deathTri");
         FlipToPlayer();
         DisableAllAttack();
         Instantiate(defeatEffect, transform.position, transform.rotation);

@@ -825,7 +825,7 @@ PrefabInstance:
     - target: {fileID: 664756017426770591, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 38a6950a69d10ec428137497292688e4, type: 3}
+      objectReference: {fileID: 21300000, guid: 4d1417fd56805364795e765523b46038, type: 3}
     - target: {fileID: 5108987790076456040, guid: c60cba56aea9f3642b197596ca265941, type: 3}
       propertyPath: m_Name
       value: Boss_Gate_Practice
