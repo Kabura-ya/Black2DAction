@@ -662,7 +662,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4860959192105878313, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
   m_PrefabInstance: {fileID: 236231579431403636}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1582107232
+--- !u!114 &1582107239
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -671,11 +671,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1582107226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dca5d22d8f0d7d4998d01b59ceece85, type: 3}
+  m_Script: {fileID: 11500000, guid: 024e6da9736e9e349a37ca8eab39a9e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 84460106}
-  thisBossNum: 5
+  thisBossNum: 0
   attack: 1
   maxHp: 30
   hp: 30
@@ -684,7 +684,7 @@ MonoBehaviour:
   idleTime: 1
   startTime: 2
   stunnTime: 3
-  redDashEffect: {fileID: 0}
+  redDashEffect: {fileID: 8642240612658193472, guid: df92cd8cd469fb746a06a183bdb1bfe8, type: 3}
   damageEffect: {fileID: 8495619054844228353, guid: 7fa56603d4b6cf3448e0a44b41ea5267, type: 3}
   defeatEffect: {fileID: 2772992349487112764, guid: 381925703bfbc1741ad93b005b116d00, type: 3}
   invincibleTime: 0.1
@@ -967,7 +967,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7034140196580344411, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
   m_PrefabInstance: {fileID: 236231579431403636}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2123068625
+--- !u!114 &2123068628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -976,7 +976,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2123068621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55bba73d994c06845b1b89e0c56169e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 262b9eecf4fd1d745b3454779aac24da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &236231579431403636
@@ -1153,7 +1153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2657950067605750736, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.79
+      value: -2.8
       objectReference: {fileID: 0}
     - target: {fileID: 2657950067605750736, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1214,7 +1214,7 @@ PrefabInstance:
     - target: {fileID: 5058038640306836736, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       propertyPath: col
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 236231579431403639}
     - target: {fileID: 5058038640306836736, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       propertyPath: vector.x
       value: 10
@@ -1235,6 +1235,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ff56486a7d627b04d983f7e221045445, type: 3}
+    - target: {fileID: 7551322793463990918, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8191697009318269543, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1840247788456419724, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
     - {fileID: 7031077096715132148, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
@@ -1245,13 +1253,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4860959192105878313, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       insertIndex: 4
-      addedObject: {fileID: 1582107232}
+      addedObject: {fileID: 1582107239}
     - targetCorrespondingSourceObject: {fileID: 7551322793463990918, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 236231579431403639}
     - targetCorrespondingSourceObject: {fileID: 7034140196580344411, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2123068625}
+      addedObject: {fileID: 2123068628}
   m_SourcePrefab: {fileID: 100100000, guid: 34723d2a3dd41a349bc5f28feb5d975e, type: 3}
 --- !u!1 &236231579431403637 stripped
 GameObject:
